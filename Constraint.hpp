@@ -5,7 +5,6 @@
 
 #include "isl/Aff.hpp"
 #include "isl/LocalSpace.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Space.hpp"
 #include "isl/Val.hpp"
 #include "isl/Bool.h"
@@ -29,7 +28,7 @@ inline Constraint &Constraint::operator=(const Constraint &Other) {
   return *this;
 }
 inline Constraint Constraint::allocEquality(const LocalSpace &ls) {
-  Ctx _ctx = ls.Context();
+  const Ctx &_ctx = ls.Context();
   _ctx.lock();
   LocalSpace _cast_ls = ls.asLocalSpace();
   isl_constraint *That = isl_constraint_alloc_equality((_cast_ls).Give());
@@ -43,7 +42,7 @@ inline Constraint Constraint::allocEquality(const LocalSpace &ls) {
 }
 
 inline Constraint Constraint::allocInequality(const LocalSpace &ls) {
-  Ctx _ctx = ls.Context();
+  const Ctx &_ctx = ls.Context();
   _ctx.lock();
   LocalSpace _cast_ls = ls.asLocalSpace();
   isl_constraint *That = isl_constraint_alloc_inequality((_cast_ls).Give());
@@ -74,15 +73,9 @@ inline isl_constraint *Constraint::Give() {
 /// \returns A the wrapped isl object.
 inline isl_constraint *Constraint::Get() const {  return (isl_constraint *)This;
 }
-inline std::string Constraint::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printConstraint(*this);
-  return p.getStr();
-}
 
 inline Constraint Constraint::asConstraint() const {
-  return Constraint(GetCopy());
+  return Constraint(ctx, GetCopy());
 }
 
 inline int Constraint::dim(DimType type) const {
@@ -109,7 +102,7 @@ inline Aff Constraint::getAff() const {
   if (ctx.hasError()) {
     handleError("isl_constraint_get_aff returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Constraint::getBound(DimType type, int pos) const {
@@ -124,7 +117,7 @@ inline Aff Constraint::getBound(DimType type, int pos) const {
   if (ctx.hasError()) {
     handleError("isl_constraint_get_bound returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Val Constraint::getCoefficientVal(DimType type, int pos) const {
@@ -139,7 +132,7 @@ inline Val Constraint::getCoefficientVal(DimType type, int pos) const {
   if (ctx.hasError()) {
     handleError("isl_constraint_get_coefficient_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Constraint::getConstantVal() const {
@@ -154,7 +147,7 @@ inline Val Constraint::getConstantVal() const {
   if (ctx.hasError()) {
     handleError("isl_constraint_get_constant_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline std::string Constraint::getDimName(DimType type, unsigned int pos) const {
@@ -186,7 +179,7 @@ inline Aff Constraint::getDiv(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_constraint_get_div returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline LocalSpace Constraint::getLocalSpace() const {
@@ -201,7 +194,7 @@ inline LocalSpace Constraint::getLocalSpace() const {
   if (ctx.hasError()) {
     handleError("isl_constraint_get_local_space returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline Space Constraint::getSpace() const {
@@ -216,7 +209,7 @@ inline Space Constraint::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_constraint_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Bool Constraint::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -291,7 +284,7 @@ inline Constraint Constraint::negate() const {
   if (ctx.hasError()) {
     handleError("isl_constraint_negate returned a NULL pointer.");
   }
-  return Constraint(res);
+  return Constraint(ctx, res);
 }
 
 inline Constraint Constraint::setCoefficientSi(DimType type, int pos, int v) const {
@@ -306,7 +299,7 @@ inline Constraint Constraint::setCoefficientSi(DimType type, int pos, int v) con
   if (ctx.hasError()) {
     handleError("isl_constraint_set_coefficient_si returned a NULL pointer.");
   }
-  return Constraint(res);
+  return Constraint(ctx, res);
 }
 
 inline Constraint Constraint::setCoefficientVal(DimType type, int pos, const Val &v) const {
@@ -322,7 +315,7 @@ inline Constraint Constraint::setCoefficientVal(DimType type, int pos, const Val
   if (ctx.hasError()) {
     handleError("isl_constraint_set_coefficient_val returned a NULL pointer.");
   }
-  return Constraint(res);
+  return Constraint(ctx, res);
 }
 
 inline Constraint Constraint::setConstantVal(const Val &v) const {
@@ -338,7 +331,7 @@ inline Constraint Constraint::setConstantVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_constraint_set_constant_val returned a NULL pointer.");
   }
-  return Constraint(res);
+  return Constraint(ctx, res);
 }
 
 } // namespace isl

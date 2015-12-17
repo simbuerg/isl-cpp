@@ -3,7 +3,6 @@
 
 #include "isl/Id.h"
 
-#include "isl/Printer.hpp"
 #include "isl/Ctx.hpp"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
@@ -24,7 +23,7 @@ inline Id &Id::operator=(const Id &Other) {
   return *this;
 }
 inline Id Id::alloc(const Ctx &ctx, std::string name, void * user) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_id *That = isl_id_alloc((ctx.Get()), name.c_str(), user);
   ctx.unlock();
@@ -55,15 +54,9 @@ inline isl_id *Id::Give() {
 /// \returns A the wrapped isl object.
 inline isl_id *Id::Get() const {  return (isl_id *)This;
 }
-inline std::string Id::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printId(*this);
-  return p.getStr();
-}
 
 inline Id Id::asId() const {
-  return Id(GetCopy());
+  return Id(ctx, GetCopy());
 }
 
 inline std::string Id::getName() const {

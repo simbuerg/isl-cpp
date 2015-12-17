@@ -5,7 +5,6 @@
 
 #include "isl/BasicMap.hpp"
 #include "isl/Map.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
 #include "isl/UnionPwQpolynomialFold.hpp"
@@ -34,7 +33,7 @@ inline UnionMap &UnionMap::operator=(const UnionMap &Other) {
   return *this;
 }
 inline UnionMap UnionMap::fromBasicMap(const BasicMap &bmap) {
-  Ctx _ctx = bmap.Context();
+  const Ctx &_ctx = bmap.Context();
   _ctx.lock();
   BasicMap _cast_bmap = bmap.asBasicMap();
   isl_union_map *That = isl_union_map_from_basic_map((_cast_bmap).Give());
@@ -48,7 +47,7 @@ inline UnionMap UnionMap::fromBasicMap(const BasicMap &bmap) {
 }
 
 inline UnionMap UnionMap::fromMap(const Map &map) {
-  Ctx _ctx = map.Context();
+  const Ctx &_ctx = map.Context();
   _ctx.lock();
   Map _cast_map = map.asMap();
   isl_union_map *That = isl_union_map_from_map((_cast_map).Give());
@@ -62,7 +61,7 @@ inline UnionMap UnionMap::fromMap(const Map &map) {
 }
 
 inline UnionMap UnionMap::empty(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_union_map *That = isl_union_map_empty((_cast_dim).Give());
@@ -76,7 +75,7 @@ inline UnionMap UnionMap::empty(const Space &dim) {
 }
 
 inline UnionMap UnionMap::universe(const UnionMap &umap) {
-  Ctx _ctx = umap.Context();
+  const Ctx &_ctx = umap.Context();
   _ctx.lock();
   UnionMap _cast_umap = umap.asUnionMap();
   isl_union_map *That = isl_union_map_universe((_cast_umap).Give());
@@ -90,7 +89,7 @@ inline UnionMap UnionMap::universe(const UnionMap &umap) {
 }
 
 inline UnionMap UnionMap::fromDomain(const UnionSet &uset) {
-  Ctx _ctx = uset.Context();
+  const Ctx &_ctx = uset.Context();
   _ctx.lock();
   UnionSet _cast_uset = uset.asUnionSet();
   isl_union_map *That = isl_union_map_from_domain((_cast_uset).Give());
@@ -104,7 +103,7 @@ inline UnionMap UnionMap::fromDomain(const UnionSet &uset) {
 }
 
 inline UnionMap UnionMap::fromRange(const UnionSet &uset) {
-  Ctx _ctx = uset.Context();
+  const Ctx &_ctx = uset.Context();
   _ctx.lock();
   UnionSet _cast_uset = uset.asUnionSet();
   isl_union_map *That = isl_union_map_from_range((_cast_uset).Give());
@@ -118,7 +117,7 @@ inline UnionMap UnionMap::fromRange(const UnionSet &uset) {
 }
 
 inline UnionMap UnionMap::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_map *That = isl_union_map_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -149,15 +148,9 @@ inline isl_union_map *UnionMap::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_map *UnionMap::Get() const {  return (isl_union_map *)This;
 }
-inline std::string UnionMap::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printUnionMap(*this);
-  return p.getStr();
-}
 
 inline UnionMap UnionMap::asUnionMap() const {
-  return UnionMap(GetCopy());
+  return UnionMap(ctx, GetCopy());
 }
 
 inline UnionMap UnionMap::affineHull() const {
@@ -172,7 +165,7 @@ inline UnionMap UnionMap::affineHull() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_affine_hull returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::alignParams(const Space &model) const {
@@ -188,7 +181,7 @@ inline UnionMap UnionMap::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_align_params returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::applyDomain(const UnionMap &umap2) const {
@@ -204,7 +197,7 @@ inline UnionMap UnionMap::applyDomain(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_apply_domain returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::applyRange(const UnionMap &umap2) const {
@@ -220,7 +213,7 @@ inline UnionMap UnionMap::applyRange(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_apply_range returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionMap::applyUnionPwQpolynomialFold(const UnionPwQpolynomialFold &upwf, int * tight) const {
@@ -236,7 +229,7 @@ inline UnionPwQpolynomialFold UnionMap::applyUnionPwQpolynomialFold(const UnionP
   if (ctx.hasError()) {
     handleError("isl_union_map_apply_union_pw_qpolynomial_fold returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionMap UnionMap::coalesce() const {
@@ -251,7 +244,7 @@ inline UnionMap UnionMap::coalesce() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_coalesce returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::computeDivs() const {
@@ -266,7 +259,7 @@ inline UnionMap UnionMap::computeDivs() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_compute_divs returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline int UnionMap::computeFlow(const UnionMap &must_source, const UnionMap &may_source, const UnionMap &schedule, std::unique_ptr<UnionMap> * must_dep, std::unique_ptr<UnionMap> * may_dep, std::unique_ptr<UnionMap> * must_no_source, std::unique_ptr<UnionMap> * may_no_source) const {
@@ -287,28 +280,28 @@ inline int UnionMap::computeFlow(const UnionMap &must_source, const UnionMap &ma
   if (ctx.hasError()) {
     handleError("must_dep became a NULL pointer.");
   }
-    UnionMap _tmp_must_dep = UnionMap (_must_dep);
+    UnionMap _tmp_must_dep = UnionMap(ctx, _must_dep);
     must_dep->reset(new UnionMap(_tmp_must_dep));
   }
   if(may_dep) {
   if (ctx.hasError()) {
     handleError("may_dep became a NULL pointer.");
   }
-    UnionMap _tmp_may_dep = UnionMap (_may_dep);
+    UnionMap _tmp_may_dep = UnionMap(ctx, _may_dep);
     may_dep->reset(new UnionMap(_tmp_may_dep));
   }
   if(must_no_source) {
   if (ctx.hasError()) {
     handleError("must_no_source became a NULL pointer.");
   }
-    UnionMap _tmp_must_no_source = UnionMap (_must_no_source);
+    UnionMap _tmp_must_no_source = UnionMap(ctx, _must_no_source);
     must_no_source->reset(new UnionMap(_tmp_must_no_source));
   }
   if(may_no_source) {
   if (ctx.hasError()) {
     handleError("may_no_source became a NULL pointer.");
   }
-    UnionMap _tmp_may_no_source = UnionMap (_may_no_source);
+    UnionMap _tmp_may_no_source = UnionMap(ctx, _may_no_source);
     may_no_source->reset(new UnionMap(_tmp_may_no_source));
   }
   ctx.unlock();
@@ -341,7 +334,7 @@ inline UnionMap UnionMap::curry() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_curry returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionSet UnionMap::deltas() const {
@@ -356,7 +349,7 @@ inline UnionSet UnionMap::deltas() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_deltas returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionMap UnionMap::detectEqualities() const {
@@ -371,7 +364,7 @@ inline UnionMap UnionMap::detectEqualities() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_detect_equalities returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionSet UnionMap::domain() const {
@@ -386,7 +379,7 @@ inline UnionSet UnionMap::domain() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_domain returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionMap UnionMap::domainMap() const {
@@ -401,7 +394,7 @@ inline UnionMap UnionMap::domainMap() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_domain_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline Map UnionMap::extractMap(const Space &dim) const {
@@ -417,7 +410,7 @@ inline Map UnionMap::extractMap(const Space &dim) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_extract_map returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline UnionMap UnionMap::fixedPowerVal(const Val &exp) const {
@@ -433,7 +426,7 @@ inline UnionMap UnionMap::fixedPowerVal(const Val &exp) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_fixed_power_val returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline Stat UnionMap::foreachMap(const std::function<isl_stat(isl_map *, void *)> && fn, void * user) const {
@@ -460,7 +453,7 @@ inline Space UnionMap::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline UnionMap UnionMap::gist(const UnionMap &context) const {
@@ -476,7 +469,7 @@ inline UnionMap UnionMap::gist(const UnionMap &context) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_gist returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::gistDomain(const UnionSet &uset) const {
@@ -492,7 +485,7 @@ inline UnionMap UnionMap::gistDomain(const UnionSet &uset) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_gist_domain returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::gistParams(const Set &set) const {
@@ -508,7 +501,7 @@ inline UnionMap UnionMap::gistParams(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_gist_params returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::gistRange(const UnionSet &uset) const {
@@ -524,7 +517,7 @@ inline UnionMap UnionMap::gistRange(const UnionSet &uset) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_gist_range returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::intersect(const UnionMap &umap2) const {
@@ -540,7 +533,7 @@ inline UnionMap UnionMap::intersect(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_intersect returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::intersectDomain(const UnionSet &uset) const {
@@ -556,7 +549,7 @@ inline UnionMap UnionMap::intersectDomain(const UnionSet &uset) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_intersect_domain returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::intersectParams(const Set &set) const {
@@ -572,7 +565,7 @@ inline UnionMap UnionMap::intersectParams(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_intersect_params returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::intersectRange(const UnionSet &uset) const {
@@ -588,7 +581,7 @@ inline UnionMap UnionMap::intersectRange(const UnionSet &uset) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_intersect_range returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline Bool UnionMap::isBijective() const {
@@ -691,7 +684,7 @@ inline UnionMap UnionMap::lexGeUnionMap(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_lex_ge_union_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::lexGtUnionMap(const UnionMap &umap2) const {
@@ -707,7 +700,7 @@ inline UnionMap UnionMap::lexGtUnionMap(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_lex_gt_union_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::lexLeUnionMap(const UnionMap &umap2) const {
@@ -723,7 +716,7 @@ inline UnionMap UnionMap::lexLeUnionMap(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_lex_le_union_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::lexLtUnionMap(const UnionMap &umap2) const {
@@ -739,7 +732,7 @@ inline UnionMap UnionMap::lexLtUnionMap(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_lex_lt_union_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::lexmax() const {
@@ -754,7 +747,7 @@ inline UnionMap UnionMap::lexmax() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_lexmax returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::lexmin() const {
@@ -769,7 +762,7 @@ inline UnionMap UnionMap::lexmin() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_lexmin returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline int UnionMap::nMap() const {
@@ -796,7 +789,7 @@ inline Set UnionMap::params() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_params returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline UnionMap UnionMap::polyhedralHull() const {
@@ -811,7 +804,7 @@ inline UnionMap UnionMap::polyhedralHull() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_polyhedral_hull returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::power(int * exact) const {
@@ -826,7 +819,7 @@ inline UnionMap UnionMap::power(int * exact) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_power returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionSet UnionMap::range() const {
@@ -841,7 +834,7 @@ inline UnionSet UnionMap::range() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_range returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionMap UnionMap::rangeMap() const {
@@ -856,7 +849,7 @@ inline UnionMap UnionMap::rangeMap() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_range_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::reverse() const {
@@ -871,7 +864,7 @@ inline UnionMap UnionMap::reverse() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_reverse returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline BasicMap UnionMap::sample() const {
@@ -886,7 +879,7 @@ inline BasicMap UnionMap::sample() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_sample returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline UnionMap UnionMap::subtract(const UnionMap &umap2) const {
@@ -902,7 +895,7 @@ inline UnionMap UnionMap::subtract(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_subtract returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::subtractDomain(const UnionSet &dom) const {
@@ -918,7 +911,7 @@ inline UnionMap UnionMap::subtractDomain(const UnionSet &dom) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_subtract_domain returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::subtractRange(const UnionSet &dom) const {
@@ -934,7 +927,7 @@ inline UnionMap UnionMap::subtractRange(const UnionSet &dom) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_subtract_range returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::transitiveClosure(int * exact) const {
@@ -949,7 +942,7 @@ inline UnionMap UnionMap::transitiveClosure(int * exact) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_transitive_closure returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::uncurry() const {
@@ -964,7 +957,7 @@ inline UnionMap UnionMap::uncurry() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_uncurry returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionMap::union_(const UnionMap &umap2) const {
@@ -980,7 +973,7 @@ inline UnionMap UnionMap::union_(const UnionMap &umap2) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_union returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionSet UnionMap::wrap() const {
@@ -995,7 +988,7 @@ inline UnionSet UnionMap::wrap() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_wrap returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionMap UnionMap::zip() const {
@@ -1010,7 +1003,7 @@ inline UnionMap UnionMap::zip() const {
   if (ctx.hasError()) {
     handleError("isl_union_map_zip returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 } // namespace isl

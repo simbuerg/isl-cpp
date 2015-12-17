@@ -5,7 +5,6 @@
 
 #include "isl/Id.hpp"
 #include "isl/IdToAstExpr.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Val.hpp"
 #include "isl/AstExprType.h"
 #include "isl/AstOpType.h"
@@ -28,7 +27,7 @@ inline AstExpr &AstExpr::operator=(const AstExpr &Other) {
   return *this;
 }
 inline AstExpr AstExpr::fromVal(const Val &v) {
-  Ctx _ctx = v.Context();
+  const Ctx &_ctx = v.Context();
   _ctx.lock();
   Val _cast_v = v.asVal();
   isl_ast_expr *That = isl_ast_expr_from_val((_cast_v).Give());
@@ -42,7 +41,7 @@ inline AstExpr AstExpr::fromVal(const Val &v) {
 }
 
 inline AstExpr AstExpr::fromId(const Id &id) {
-  Ctx _ctx = id.Context();
+  const Ctx &_ctx = id.Context();
   _ctx.lock();
   Id _cast_id = id.asId();
   isl_ast_expr *That = isl_ast_expr_from_id((_cast_id).Give());
@@ -73,15 +72,9 @@ inline isl_ast_expr *AstExpr::Give() {
 /// \returns A the wrapped isl object.
 inline isl_ast_expr *AstExpr::Get() const {  return (isl_ast_expr *)This;
 }
-inline std::string AstExpr::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printAstExpr(*this);
-  return p.getStr();
-}
 
 inline AstExpr AstExpr::asAstExpr() const {
-  return AstExpr(GetCopy());
+  return AstExpr(ctx, GetCopy());
 }
 
 inline AstExpr AstExpr::add(const AstExpr &expr2) const {
@@ -97,7 +90,7 @@ inline AstExpr AstExpr::add(const AstExpr &expr2) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_add returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstExpr::and_(const AstExpr &expr2) const {
@@ -113,7 +106,7 @@ inline AstExpr AstExpr::and_(const AstExpr &expr2) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_and returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstExpr::div(const AstExpr &expr2) const {
@@ -129,7 +122,7 @@ inline AstExpr AstExpr::div(const AstExpr &expr2) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_div returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline Id AstExpr::getId() const {
@@ -144,7 +137,7 @@ inline Id AstExpr::getId() const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_get_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline AstExpr AstExpr::getOpArg(int pos) const {
@@ -159,7 +152,7 @@ inline AstExpr AstExpr::getOpArg(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_get_op_arg returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline int AstExpr::getOpNArg() const {
@@ -210,7 +203,7 @@ inline Val AstExpr::getVal() const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_get_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline AstExpr AstExpr::mul(const AstExpr &expr2) const {
@@ -226,7 +219,7 @@ inline AstExpr AstExpr::mul(const AstExpr &expr2) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_mul returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstExpr::neg() const {
@@ -241,7 +234,7 @@ inline AstExpr AstExpr::neg() const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_neg returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstExpr::or_(const AstExpr &expr2) const {
@@ -257,7 +250,7 @@ inline AstExpr AstExpr::or_(const AstExpr &expr2) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_or returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstExpr::setOpArg(int pos, const AstExpr &arg) const {
@@ -273,7 +266,7 @@ inline AstExpr AstExpr::setOpArg(int pos, const AstExpr &arg) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_set_op_arg returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstExpr::sub(const AstExpr &expr2) const {
@@ -289,7 +282,7 @@ inline AstExpr AstExpr::sub(const AstExpr &expr2) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_sub returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstExpr::substituteIds(const IdToAstExpr &id2expr) const {
@@ -305,7 +298,7 @@ inline AstExpr AstExpr::substituteIds(const IdToAstExpr &id2expr) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_substitute_ids returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 } // namespace isl

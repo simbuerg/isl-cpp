@@ -16,20 +16,13 @@ class BasicMap;
 
 class BasicMapList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit BasicMapList(Ctx ctx, isl_basic_map_list *That) : ctx(ctx), This((void *)That) {}
   explicit BasicMapList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_basic_map_list we want to wrap.
-  explicit BasicMapList(isl_basic_map_list *That) : BasicMapList(Ctx(isl_basic_map_list_get_ctx(That)), That) {}
   isl_basic_map_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new BasicMapList
   BasicMapList add(const BasicMap &el) const;
-  BasicMapList(const BasicMapList &Other) : BasicMapList(Other.Context(), Other.GetCopy()) {}
+  BasicMapList(const BasicMapList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicMapList &operator=(const BasicMapList &Other);
-  BasicMapList (BasicMapList && Other) : BasicMapList(Other.Context(), Other.This) {}
+  BasicMapList (BasicMapList && Other) : ctx(Other.Context()), This(Other.This) {}
   BasicMapList &operator=(BasicMapList && Other) {
     isl_basic_map_list *New = Other.Give();
     isl_basic_map_list_free((isl_basic_map_list *)This);

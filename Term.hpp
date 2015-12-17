@@ -42,7 +42,7 @@ inline isl_term *Term::Get() const {  return (isl_term *)This;
 }
 
 inline Term Term::asTerm() const {
-  return Term(GetCopy());
+  return Term(ctx, GetCopy());
 }
 
 inline unsigned int Term::dim(DimType type) const {
@@ -69,7 +69,7 @@ inline Aff Term::getDiv(unsigned int pos) const {
   if (ctx.hasError()) {
     handleError("isl_term_get_div returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline int Term::getExp(DimType type, unsigned int pos) const {

@@ -23,7 +23,7 @@ inline AstExprList &AstExprList::operator=(const AstExprList &Other) {
   return *this;
 }
 inline AstExprList AstExprList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_ast_expr_list *That = isl_ast_expr_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_ast_expr_list *AstExprList::Get() const {  return (isl_ast_expr_list 
 }
 
 inline AstExprList AstExprList::asAstExprList() const {
-  return AstExprList(GetCopy());
+  return AstExprList(ctx, GetCopy());
 }
 
 inline AstExprList AstExprList::add(const AstExpr &el) const {
@@ -72,7 +72,7 @@ inline AstExprList AstExprList::add(const AstExpr &el) const {
   if (ctx.hasError()) {
     handleError("isl_ast_expr_list_add returned a NULL pointer.");
   }
-  return AstExprList(res);
+  return AstExprList(ctx, res);
 }
 
 } // namespace isl

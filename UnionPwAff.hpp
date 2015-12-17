@@ -40,7 +40,7 @@ inline isl_union_pw_aff *UnionPwAff::Get() const {  return (isl_union_pw_aff *)T
 }
 
 inline UnionPwAff UnionPwAff::asUnionPwAff() const {
-  return UnionPwAff(GetCopy());
+  return UnionPwAff(ctx, GetCopy());
 }
 
 } // namespace isl

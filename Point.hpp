@@ -3,7 +3,6 @@
 
 #include "isl/Point.h"
 
-#include "isl/Printer.hpp"
 #include "isl/Space.hpp"
 #include "isl/Val.hpp"
 #include "isl/Bool.h"
@@ -27,7 +26,7 @@ inline Point &Point::operator=(const Point &Other) {
   return *this;
 }
 inline Point Point::zero(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_point *That = isl_point_zero((_cast_dim).Give());
@@ -41,7 +40,7 @@ inline Point Point::zero(const Space &dim) {
 }
 
 inline Point Point::void_(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_point *That = isl_point_void((_cast_dim).Give());
@@ -72,15 +71,9 @@ inline isl_point *Point::Give() {
 /// \returns A the wrapped isl object.
 inline isl_point *Point::Get() const {  return (isl_point *)This;
 }
-inline std::string Point::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printPoint(*this);
-  return p.getStr();
-}
 
 inline Point Point::asPoint() const {
-  return Point(GetCopy());
+  return Point(ctx, GetCopy());
 }
 
 inline Val Point::getCoordinateVal(DimType type, int pos) const {
@@ -95,7 +88,7 @@ inline Val Point::getCoordinateVal(DimType type, int pos) const {
   if (ctx.hasError()) {
     handleError("isl_point_get_coordinate_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Space Point::getSpace() const {
@@ -110,7 +103,7 @@ inline Space Point::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_point_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Bool Point::isVoid() const {
@@ -138,7 +131,7 @@ inline Point Point::setCoordinateVal(DimType type, int pos, const Val &v) const 
   if (ctx.hasError()) {
     handleError("isl_point_set_coordinate_val returned a NULL pointer.");
   }
-  return Point(res);
+  return Point(ctx, res);
 }
 
 } // namespace isl

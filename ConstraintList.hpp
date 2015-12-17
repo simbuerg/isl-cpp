@@ -23,7 +23,7 @@ inline ConstraintList &ConstraintList::operator=(const ConstraintList &Other) {
   return *this;
 }
 inline ConstraintList ConstraintList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_constraint_list *That = isl_constraint_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_constraint_list *ConstraintList::Get() const {  return (isl_constrain
 }
 
 inline ConstraintList ConstraintList::asConstraintList() const {
-  return ConstraintList(GetCopy());
+  return ConstraintList(ctx, GetCopy());
 }
 
 inline ConstraintList ConstraintList::add(const Constraint &el) const {
@@ -72,7 +72,7 @@ inline ConstraintList ConstraintList::add(const Constraint &el) const {
   if (ctx.hasError()) {
     handleError("isl_constraint_list_add returned a NULL pointer.");
   }
-  return ConstraintList(res);
+  return ConstraintList(ctx, res);
 }
 
 } // namespace isl

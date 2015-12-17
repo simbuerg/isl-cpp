@@ -24,7 +24,7 @@ inline AstPrintOptions &AstPrintOptions::operator=(const AstPrintOptions &Other)
   return *this;
 }
 inline AstPrintOptions AstPrintOptions::alloc(const Ctx &ctx) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_ast_print_options *That = isl_ast_print_options_alloc((ctx.Get()));
   ctx.unlock();
@@ -57,7 +57,7 @@ inline isl_ast_print_options *AstPrintOptions::Get() const {  return (isl_ast_pr
 }
 
 inline AstPrintOptions AstPrintOptions::asAstPrintOptions() const {
-  return AstPrintOptions(GetCopy());
+  return AstPrintOptions(ctx, GetCopy());
 }
 
 inline AstPrintOptions AstPrintOptions::setPrintFor(const std::function<isl_printer *(isl_printer *, isl_ast_print_options *, isl_ast_node *, void *)> && print_for, void * user) const {
@@ -72,7 +72,7 @@ inline AstPrintOptions AstPrintOptions::setPrintFor(const std::function<isl_prin
   if (ctx.hasError()) {
     handleError("isl_ast_print_options_set_print_for returned a NULL pointer.");
   }
-  return AstPrintOptions(res);
+  return AstPrintOptions(ctx, res);
 }
 
 inline AstPrintOptions AstPrintOptions::setPrintUser(const std::function<isl_printer *(isl_printer *, isl_ast_print_options *, isl_ast_node *, void *)> && print_user, void * user) const {
@@ -87,7 +87,7 @@ inline AstPrintOptions AstPrintOptions::setPrintUser(const std::function<isl_pri
   if (ctx.hasError()) {
     handleError("isl_ast_print_options_set_print_user returned a NULL pointer.");
   }
-  return AstPrintOptions(res);
+  return AstPrintOptions(ctx, res);
 }
 
 } // namespace isl

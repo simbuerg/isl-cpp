@@ -23,7 +23,7 @@ inline BasicMapList &BasicMapList::operator=(const BasicMapList &Other) {
   return *this;
 }
 inline BasicMapList BasicMapList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_basic_map_list *That = isl_basic_map_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_basic_map_list *BasicMapList::Get() const {  return (isl_basic_map_li
 }
 
 inline BasicMapList BasicMapList::asBasicMapList() const {
-  return BasicMapList(GetCopy());
+  return BasicMapList(ctx, GetCopy());
 }
 
 inline BasicMapList BasicMapList::add(const BasicMap &el) const {
@@ -72,7 +72,7 @@ inline BasicMapList BasicMapList::add(const BasicMap &el) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_list_add returned a NULL pointer.");
   }
-  return BasicMapList(res);
+  return BasicMapList(ctx, res);
 }
 
 } // namespace isl

@@ -23,7 +23,7 @@ inline UnionMapList &UnionMapList::operator=(const UnionMapList &Other) {
   return *this;
 }
 inline UnionMapList UnionMapList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_map_list *That = isl_union_map_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_union_map_list *UnionMapList::Get() const {  return (isl_union_map_li
 }
 
 inline UnionMapList UnionMapList::asUnionMapList() const {
-  return UnionMapList(GetCopy());
+  return UnionMapList(ctx, GetCopy());
 }
 
 inline UnionMapList UnionMapList::add(const UnionMap &el) const {
@@ -72,7 +72,7 @@ inline UnionMapList UnionMapList::add(const UnionMap &el) const {
   if (ctx.hasError()) {
     handleError("isl_union_map_list_add returned a NULL pointer.");
   }
-  return UnionMapList(res);
+  return UnionMapList(ctx, res);
 }
 
 } // namespace isl

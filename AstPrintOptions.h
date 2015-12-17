@@ -17,20 +17,13 @@ namespace isl {
 
 class AstPrintOptions {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit AstPrintOptions(Ctx ctx, isl_ast_print_options *That) : ctx(ctx), This((void *)That) {}
   explicit AstPrintOptions(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_ast_print_options we want to wrap.
-  explicit AstPrintOptions(isl_ast_print_options *That) : AstPrintOptions(Ctx(isl_ast_print_options_get_ctx(That)), That) {}
   isl_ast_print_options *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -66,9 +59,9 @@ public:
   ///
   /// \returns A new AstPrintOptions
   AstPrintOptions setPrintUser(const std::function<isl_printer *(isl_printer *, isl_ast_print_options *, isl_ast_node *, void *)> && print_user, void * user) const;
-  AstPrintOptions(const AstPrintOptions &Other) : AstPrintOptions(Other.Context(), Other.GetCopy()) {}
+  AstPrintOptions(const AstPrintOptions &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstPrintOptions &operator=(const AstPrintOptions &Other);
-  AstPrintOptions (AstPrintOptions && Other) : AstPrintOptions(Other.Context(), Other.This) {}
+  AstPrintOptions (AstPrintOptions && Other) : ctx(Other.Context()), This(Other.This) {}
   AstPrintOptions &operator=(AstPrintOptions && Other) {
     isl_ast_print_options *New = Other.Give();
     isl_ast_print_options_free((isl_ast_print_options *)This);

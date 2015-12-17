@@ -18,7 +18,6 @@
 
 namespace isl {
 class Point;
-class Printer;
 class PwQpolynomial;
 class Set;
 class Space;
@@ -28,20 +27,13 @@ class Val;
 
 class UnionPwQpolynomial {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionPwQpolynomial(Ctx ctx, isl_union_pw_qpolynomial *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwQpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_pw_qpolynomial we want to wrap.
-  explicit UnionPwQpolynomial(isl_union_pw_qpolynomial *That) : UnionPwQpolynomial(Ctx(isl_union_pw_qpolynomial_get_ctx(That)), That) {}
   isl_union_pw_qpolynomial *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -68,7 +60,6 @@ public:
   /// \param str
   static UnionPwQpolynomial readFromStr(const Ctx &ctx, std::string str);
   virtual ~UnionPwQpolynomial();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual UnionPwQpolynomial asUnionPwQpolynomial() const;
 
@@ -203,9 +194,9 @@ public:
   ///
   /// \returns A new UnionPwQpolynomial
   UnionPwQpolynomial toPolynomial(int sign) const;
-  UnionPwQpolynomial(const UnionPwQpolynomial &Other) : UnionPwQpolynomial(Other.Context(), Other.GetCopy()) {}
+  UnionPwQpolynomial(const UnionPwQpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwQpolynomial &operator=(const UnionPwQpolynomial &Other);
-  UnionPwQpolynomial (UnionPwQpolynomial && Other) : UnionPwQpolynomial(Other.Context(), Other.This) {}
+  UnionPwQpolynomial (UnionPwQpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionPwQpolynomial &operator=(UnionPwQpolynomial && Other) {
     isl_union_pw_qpolynomial *New = Other.Give();
     isl_union_pw_qpolynomial_free((isl_union_pw_qpolynomial *)This);

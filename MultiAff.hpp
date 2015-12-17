@@ -5,7 +5,6 @@
 
 #include "isl/Aff.hpp"
 #include "isl/LocalSpace.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
 #include "isl/Bool.h"
@@ -29,7 +28,7 @@ inline MultiAff &MultiAff::operator=(const MultiAff &Other) {
   return *this;
 }
 inline MultiAff MultiAff::fromAff(const Aff &aff) {
-  Ctx _ctx = aff.Context();
+  const Ctx &_ctx = aff.Context();
   _ctx.lock();
   Aff _cast_aff = aff.asAff();
   isl_multi_aff *That = isl_multi_aff_from_aff((_cast_aff).Give());
@@ -43,7 +42,7 @@ inline MultiAff MultiAff::fromAff(const Aff &aff) {
 }
 
 inline MultiAff MultiAff::identity(const Space &space) {
-  Ctx _ctx = space.Context();
+  const Ctx &_ctx = space.Context();
   _ctx.lock();
   Space _cast_space = space.asSpace();
   isl_multi_aff *That = isl_multi_aff_identity((_cast_space).Give());
@@ -57,7 +56,7 @@ inline MultiAff MultiAff::identity(const Space &space) {
 }
 
 inline MultiAff MultiAff::domainMap(const Space &space) {
-  Ctx _ctx = space.Context();
+  const Ctx &_ctx = space.Context();
   _ctx.lock();
   Space _cast_space = space.asSpace();
   isl_multi_aff *That = isl_multi_aff_domain_map((_cast_space).Give());
@@ -71,7 +70,7 @@ inline MultiAff MultiAff::domainMap(const Space &space) {
 }
 
 inline MultiAff MultiAff::rangeMap(const Space &space) {
-  Ctx _ctx = space.Context();
+  const Ctx &_ctx = space.Context();
   _ctx.lock();
   Space _cast_space = space.asSpace();
   isl_multi_aff *That = isl_multi_aff_range_map((_cast_space).Give());
@@ -85,7 +84,7 @@ inline MultiAff MultiAff::rangeMap(const Space &space) {
 }
 
 inline MultiAff MultiAff::projectOutMap(const Space &space, DimType type, unsigned int first, unsigned int n) {
-  Ctx _ctx = space.Context();
+  const Ctx &_ctx = space.Context();
   _ctx.lock();
   Space _cast_space = space.asSpace();
   isl_multi_aff *That = isl_multi_aff_project_out_map((_cast_space).Give(), (enum isl_dim_type)type, first, n);
@@ -116,15 +115,9 @@ inline isl_multi_aff *MultiAff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_multi_aff *MultiAff::Get() const {  return (isl_multi_aff *)This;
 }
-inline std::string MultiAff::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printMultiAff(*this);
-  return p.getStr();
-}
 
 inline MultiAff MultiAff::asMultiAff() const {
-  return MultiAff(GetCopy());
+  return MultiAff(ctx, GetCopy());
 }
 
 inline MultiAff MultiAff::flattenDomain() const {
@@ -139,7 +132,7 @@ inline MultiAff MultiAff::flattenDomain() const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_flatten_domain returned a NULL pointer.");
   }
-  return MultiAff(res);
+  return MultiAff(ctx, res);
 }
 
 inline MultiAff MultiAff::floor() const {
@@ -154,7 +147,7 @@ inline MultiAff MultiAff::floor() const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_floor returned a NULL pointer.");
   }
-  return MultiAff(res);
+  return MultiAff(ctx, res);
 }
 
 inline MultiAff MultiAff::gist(const Set &context) const {
@@ -170,7 +163,7 @@ inline MultiAff MultiAff::gist(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_gist returned a NULL pointer.");
   }
-  return MultiAff(res);
+  return MultiAff(ctx, res);
 }
 
 inline MultiAff MultiAff::gistParams(const Set &context) const {
@@ -186,7 +179,7 @@ inline MultiAff MultiAff::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_gist_params returned a NULL pointer.");
   }
-  return MultiAff(res);
+  return MultiAff(ctx, res);
 }
 
 inline Set MultiAff::lexGeSet(const MultiAff &ma2) const {
@@ -202,7 +195,7 @@ inline Set MultiAff::lexGeSet(const MultiAff &ma2) const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_lex_ge_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set MultiAff::lexLeSet(const MultiAff &ma2) const {
@@ -218,7 +211,7 @@ inline Set MultiAff::lexLeSet(const MultiAff &ma2) const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_lex_le_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline MultiAff MultiAff::lift(std::unique_ptr<LocalSpace> * ls) const {
@@ -233,7 +226,7 @@ inline MultiAff MultiAff::lift(std::unique_ptr<LocalSpace> * ls) const {
   if (ctx.hasError()) {
     handleError("ls became a NULL pointer.");
   }
-    LocalSpace _tmp_ls = LocalSpace (_ls);
+    LocalSpace _tmp_ls = LocalSpace(ctx, _ls);
     ls->reset(new LocalSpace(_tmp_ls));
   }
   ctx.unlock();
@@ -241,7 +234,7 @@ inline MultiAff MultiAff::lift(std::unique_ptr<LocalSpace> * ls) const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_lift returned a NULL pointer.");
   }
-  return MultiAff(res);
+  return MultiAff(ctx, res);
 }
 
 inline Bool MultiAff::plainIsEqual(const MultiAff &multi2) const {
@@ -270,7 +263,7 @@ inline MultiAff MultiAff::pullbackMultiAff(const MultiAff &ma2) const {
   if (ctx.hasError()) {
     handleError("isl_multi_aff_pullback_multi_aff returned a NULL pointer.");
   }
-  return MultiAff(res);
+  return MultiAff(ctx, res);
 }
 
 } // namespace isl

@@ -16,20 +16,13 @@ class UnionSet;
 
 class UnionSetList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionSetList(Ctx ctx, isl_union_set_list *That) : ctx(ctx), This((void *)That) {}
   explicit UnionSetList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_set_list we want to wrap.
-  explicit UnionSetList(isl_union_set_list *That) : UnionSetList(Ctx(isl_union_set_list_get_ctx(That)), That) {}
   isl_union_set_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new UnionSetList
   UnionSetList add(const UnionSet &el) const;
-  UnionSetList(const UnionSetList &Other) : UnionSetList(Other.Context(), Other.GetCopy()) {}
+  UnionSetList(const UnionSetList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionSetList &operator=(const UnionSetList &Other);
-  UnionSetList (UnionSetList && Other) : UnionSetList(Other.Context(), Other.This) {}
+  UnionSetList (UnionSetList && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionSetList &operator=(UnionSetList && Other) {
     isl_union_set_list *New = Other.Give();
     isl_union_set_list_free((isl_union_set_list *)This);

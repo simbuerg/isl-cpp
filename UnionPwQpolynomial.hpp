@@ -4,7 +4,6 @@
 #include "isl/UnionPwQpolynomial.h"
 
 #include "isl/Point.hpp"
-#include "isl/Printer.hpp"
 #include "isl/PwQpolynomial.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
@@ -35,7 +34,7 @@ inline UnionPwQpolynomial &UnionPwQpolynomial::operator=(const UnionPwQpolynomia
   return *this;
 }
 inline UnionPwQpolynomial UnionPwQpolynomial::fromPwQpolynomial(const PwQpolynomial &pwqp) {
-  Ctx _ctx = pwqp.Context();
+  const Ctx &_ctx = pwqp.Context();
   _ctx.lock();
   PwQpolynomial _cast_pwqp = pwqp.asPwQpolynomial();
   isl_union_pw_qpolynomial *That = isl_union_pw_qpolynomial_from_pw_qpolynomial((_cast_pwqp).Give());
@@ -49,7 +48,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::fromPwQpolynomial(const PwQpolynom
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::zero(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_union_pw_qpolynomial *That = isl_union_pw_qpolynomial_zero((_cast_dim).Give());
@@ -63,7 +62,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::zero(const Space &dim) {
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_pw_qpolynomial *That = isl_union_pw_qpolynomial_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -94,15 +93,9 @@ inline isl_union_pw_qpolynomial *UnionPwQpolynomial::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_pw_qpolynomial *UnionPwQpolynomial::Get() const {  return (isl_union_pw_qpolynomial *)This;
 }
-inline std::string UnionPwQpolynomial::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printUnionPwQpolynomial(*this);
-  return p.getStr();
-}
 
 inline UnionPwQpolynomial UnionPwQpolynomial::asUnionPwQpolynomial() const {
-  return UnionPwQpolynomial(GetCopy());
+  return UnionPwQpolynomial(ctx, GetCopy());
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::add(const UnionPwQpolynomial &upwqp2) const {
@@ -118,7 +111,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::add(const UnionPwQpolynomial &upwq
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_add returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::addPwQpolynomial(const PwQpolynomial &pwqp) const {
@@ -134,7 +127,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::addPwQpolynomial(const PwQpolynomi
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_add_pw_qpolynomial returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::alignParams(const Space &model) const {
@@ -150,7 +143,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::alignParams(const Space &model) co
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_align_params returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomial::bound(Fold type, int * tight) const {
@@ -165,7 +158,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomial::bound(Fold type, int * tight) 
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_bound returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::coalesce() const {
@@ -180,7 +173,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::coalesce() const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_coalesce returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionSet UnionPwQpolynomial::domain() const {
@@ -195,7 +188,7 @@ inline UnionSet UnionPwQpolynomial::domain() const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_domain returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline Val UnionPwQpolynomial::eval(const Point &pnt) const {
@@ -211,7 +204,7 @@ inline Val UnionPwQpolynomial::eval(const Point &pnt) const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_eval returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline PwQpolynomial UnionPwQpolynomial::extractPwQpolynomial(const Space &dim) const {
@@ -227,7 +220,7 @@ inline PwQpolynomial UnionPwQpolynomial::extractPwQpolynomial(const Space &dim) 
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_extract_pw_qpolynomial returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline Stat UnionPwQpolynomial::foreachPwQpolynomial(const std::function<isl_stat(isl_pw_qpolynomial *, void *)> && fn, void * user) const {
@@ -254,7 +247,7 @@ inline Space UnionPwQpolynomial::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::gist(const UnionSet &context) const {
@@ -270,7 +263,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::gist(const UnionSet &context) cons
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_gist returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::gistParams(const Set &context) const {
@@ -286,7 +279,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::gistParams(const Set &context) con
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_gist_params returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::intersectDomain(const UnionSet &uset) const {
@@ -302,7 +295,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::intersectDomain(const UnionSet &us
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_intersect_domain returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::intersectParams(const Set &set) const {
@@ -318,7 +311,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::intersectParams(const Set &set) co
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_intersect_params returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::mul(const UnionPwQpolynomial &upwqp2) const {
@@ -334,7 +327,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::mul(const UnionPwQpolynomial &upwq
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_mul returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline Bool UnionPwQpolynomial::plainIsEqual(const UnionPwQpolynomial &upwqp2) const {
@@ -363,7 +356,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::scaleVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_scale_val returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::sub(const UnionPwQpolynomial &upwqp2) const {
@@ -379,7 +372,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::sub(const UnionPwQpolynomial &upwq
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_sub returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 inline UnionPwQpolynomial UnionPwQpolynomial::toPolynomial(int sign) const {
@@ -394,7 +387,7 @@ inline UnionPwQpolynomial UnionPwQpolynomial::toPolynomial(int sign) const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_to_polynomial returned a NULL pointer.");
   }
-  return UnionPwQpolynomial(res);
+  return UnionPwQpolynomial(ctx, res);
 }
 
 } // namespace isl

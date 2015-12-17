@@ -16,20 +16,13 @@ class AstExpr;
 
 class AstExprList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit AstExprList(Ctx ctx, isl_ast_expr_list *That) : ctx(ctx), This((void *)That) {}
   explicit AstExprList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_ast_expr_list we want to wrap.
-  explicit AstExprList(isl_ast_expr_list *That) : AstExprList(Ctx(isl_ast_expr_list_get_ctx(That)), That) {}
   isl_ast_expr_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new AstExprList
   AstExprList add(const AstExpr &el) const;
-  AstExprList(const AstExprList &Other) : AstExprList(Other.Context(), Other.GetCopy()) {}
+  AstExprList(const AstExprList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstExprList &operator=(const AstExprList &Other);
-  AstExprList (AstExprList && Other) : AstExprList(Other.Context(), Other.This) {}
+  AstExprList (AstExprList && Other) : ctx(Other.Context()), This(Other.This) {}
   AstExprList &operator=(AstExprList && Other) {
     isl_ast_expr_list *New = Other.Give();
     isl_ast_expr_list_free((isl_ast_expr_list *)This);

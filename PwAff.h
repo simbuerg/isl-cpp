@@ -21,7 +21,6 @@ class Aff;
 class Id;
 class LocalSpace;
 class MultiAff;
-class Printer;
 class PwMultiAff;
 class Set;
 class Space;
@@ -29,20 +28,13 @@ class Val;
 
 class PwAff {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit PwAff(Ctx ctx, isl_pw_aff *That) : ctx(ctx), This((void *)That) {}
   explicit PwAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_pw_aff we want to wrap.
-  explicit PwAff(isl_pw_aff *That) : PwAff(Ctx(isl_pw_aff_get_ctx(That)), That) {}
   isl_pw_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -79,7 +71,6 @@ public:
   /// \param pos
   static PwAff varOnDomain(const LocalSpace &ls, DimType type, unsigned int pos);
   virtual ~PwAff();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual PwAff asPwAff() const;
 
@@ -485,9 +476,9 @@ public:
   ///
   /// \returns A new Set
   Set zeroSet() const;
-  PwAff(const PwAff &Other) : PwAff(Other.Context(), Other.GetCopy()) {}
+  PwAff(const PwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwAff &operator=(const PwAff &Other);
-  PwAff (PwAff && Other) : PwAff(Other.Context(), Other.This) {}
+  PwAff (PwAff && Other) : ctx(Other.Context()), This(Other.This) {}
   PwAff &operator=(PwAff && Other) {
     isl_pw_aff *New = Other.Give();
     isl_pw_aff_free((isl_pw_aff *)This);

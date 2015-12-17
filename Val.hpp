@@ -3,7 +3,6 @@
 
 #include "isl/Val.h"
 
-#include "isl/Printer.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
 #include "isl/Format.h"
@@ -25,7 +24,7 @@ inline Val &Val::operator=(const Val &Other) {
   return *this;
 }
 inline Val Val::zero(const Ctx &ctx) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val *That = isl_val_zero((ctx.Get()));
   ctx.unlock();
@@ -39,7 +38,7 @@ inline Val Val::zero(const Ctx &ctx) {
 }
 
 inline Val Val::one(const Ctx &ctx) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val *That = isl_val_one((ctx.Get()));
   ctx.unlock();
@@ -53,7 +52,7 @@ inline Val Val::one(const Ctx &ctx) {
 }
 
 inline Val Val::negone(const Ctx &ctx) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val *That = isl_val_negone((ctx.Get()));
   ctx.unlock();
@@ -67,7 +66,7 @@ inline Val Val::negone(const Ctx &ctx) {
 }
 
 inline Val Val::nan(const Ctx &ctx) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val *That = isl_val_nan((ctx.Get()));
   ctx.unlock();
@@ -81,7 +80,7 @@ inline Val Val::nan(const Ctx &ctx) {
 }
 
 inline Val Val::infty(const Ctx &ctx) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val *That = isl_val_infty((ctx.Get()));
   ctx.unlock();
@@ -95,7 +94,7 @@ inline Val Val::infty(const Ctx &ctx) {
 }
 
 inline Val Val::neginfty(const Ctx &ctx) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val *That = isl_val_neginfty((ctx.Get()));
   ctx.unlock();
@@ -109,7 +108,7 @@ inline Val Val::neginfty(const Ctx &ctx) {
 }
 
 inline Val Val::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val *That = isl_val_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -140,15 +139,9 @@ inline isl_val *Val::Give() {
 /// \returns A the wrapped isl object.
 inline isl_val *Val::Get() const {  return (isl_val *)This;
 }
-inline std::string Val::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printVal(*this);
-  return p.getStr();
-}
 
 inline Val Val::asVal() const {
-  return Val(GetCopy());
+  return Val(ctx, GetCopy());
 }
 
 inline MultiVal Val::asMultiVal() const {
@@ -167,7 +160,7 @@ inline Val Val::abs() const {
   if (ctx.hasError()) {
     handleError("isl_val_abs returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Bool Val::absEq(const Val &v2) const {
@@ -196,7 +189,7 @@ inline Val Val::add(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_add returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::ceil() const {
@@ -211,7 +204,7 @@ inline Val Val::ceil() const {
   if (ctx.hasError()) {
     handleError("isl_val_ceil returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::div(const Val &v2) const {
@@ -227,7 +220,7 @@ inline Val Val::div(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_div returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Bool Val::eq(const Val &v2) const {
@@ -255,7 +248,7 @@ inline Val Val::floor() const {
   if (ctx.hasError()) {
     handleError("isl_val_floor returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::gcd(const Val &v2) const {
@@ -271,7 +264,7 @@ inline Val Val::gcd(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_gcd returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Bool Val::ge(const Val &v2) const {
@@ -496,7 +489,7 @@ inline Val Val::max(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_max returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::min(const Val &v2) const {
@@ -512,7 +505,7 @@ inline Val Val::min(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_min returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::mod(const Val &v2) const {
@@ -528,7 +521,7 @@ inline Val Val::mod(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_mod returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::mul(const Val &v2) const {
@@ -544,7 +537,7 @@ inline Val Val::mul(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_mul returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::mulUi(unsigned long v2) const {
@@ -559,7 +552,7 @@ inline Val Val::mulUi(unsigned long v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_mul_ui returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Bool Val::ne(const Val &v2) const {
@@ -587,7 +580,7 @@ inline Val Val::neg() const {
   if (ctx.hasError()) {
     handleError("isl_val_neg returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline int Val::sgn() const {
@@ -615,7 +608,7 @@ inline Val Val::sub(const Val &v2) const {
   if (ctx.hasError()) {
     handleError("isl_val_sub returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Val::trunc() const {
@@ -630,7 +623,7 @@ inline Val Val::trunc() const {
   if (ctx.hasError()) {
     handleError("isl_val_trunc returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 } // namespace isl

@@ -16,20 +16,13 @@ class UnionPwMultiAff;
 
 class UnionPwMultiAffList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionPwMultiAffList(Ctx ctx, isl_union_pw_multi_aff_list *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwMultiAffList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_pw_multi_aff_list we want to wrap.
-  explicit UnionPwMultiAffList(isl_union_pw_multi_aff_list *That) : UnionPwMultiAffList(Ctx(isl_union_pw_multi_aff_list_get_ctx(That)), That) {}
   isl_union_pw_multi_aff_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new UnionPwMultiAffList
   UnionPwMultiAffList add(const UnionPwMultiAff &el) const;
-  UnionPwMultiAffList(const UnionPwMultiAffList &Other) : UnionPwMultiAffList(Other.Context(), Other.GetCopy()) {}
+  UnionPwMultiAffList(const UnionPwMultiAffList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwMultiAffList &operator=(const UnionPwMultiAffList &Other);
-  UnionPwMultiAffList (UnionPwMultiAffList && Other) : UnionPwMultiAffList(Other.Context(), Other.This) {}
+  UnionPwMultiAffList (UnionPwMultiAffList && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionPwMultiAffList &operator=(UnionPwMultiAffList && Other) {
     isl_union_pw_multi_aff_list *New = Other.Give();
     isl_union_pw_multi_aff_list_free((isl_union_pw_multi_aff_list *)This);

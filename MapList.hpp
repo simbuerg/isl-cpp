@@ -23,7 +23,7 @@ inline MapList &MapList::operator=(const MapList &Other) {
   return *this;
 }
 inline MapList MapList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_map_list *That = isl_map_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_map_list *MapList::Get() const {  return (isl_map_list *)This;
 }
 
 inline MapList MapList::asMapList() const {
-  return MapList(GetCopy());
+  return MapList(ctx, GetCopy());
 }
 
 inline MapList MapList::add(const Map &el) const {
@@ -72,7 +72,7 @@ inline MapList MapList::add(const Map &el) const {
   if (ctx.hasError()) {
     handleError("isl_map_list_add returned a NULL pointer.");
   }
-  return MapList(res);
+  return MapList(ctx, res);
 }
 
 } // namespace isl

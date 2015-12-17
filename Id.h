@@ -13,24 +13,16 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Printer;
 
 class Id {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Id(Ctx ctx, isl_id *That) : ctx(ctx), This((void *)That) {}
   explicit Id(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_id we want to wrap.
-  explicit Id(isl_id *That) : Id(Ctx(isl_id_get_ctx(That)), That) {}
   isl_id *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -50,7 +42,6 @@ public:
   /// \param user
   static Id alloc(const Ctx &ctx, std::string name, void * user);
   virtual ~Id();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Id asId() const;
 
@@ -59,9 +50,9 @@ public:
   ///
   /// \returns A new std::string
   std::string getName() const;
-  Id(const Id &Other) : Id(Other.Context(), Other.GetCopy()) {}
+  Id(const Id &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Id &operator=(const Id &Other);
-  Id (Id && Other) : Id(Other.Context(), Other.This) {}
+  Id (Id && Other) : ctx(Other.Context()), This(Other.This) {}
   Id &operator=(Id && Other) {
     isl_id *New = Other.Give();
     isl_id_free((isl_id *)This);

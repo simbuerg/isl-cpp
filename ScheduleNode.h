@@ -18,7 +18,6 @@ namespace isl {
 class Id;
 class MultiUnionPwAff;
 class MultiVal;
-class Printer;
 class Schedule;
 class Set;
 class Space;
@@ -29,20 +28,13 @@ class UnionSetList;
 
 class ScheduleNode {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit ScheduleNode(Ctx ctx, isl_schedule_node *That) : ctx(ctx), This((void *)That) {}
   explicit ScheduleNode(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_schedule_node we want to wrap.
-  explicit ScheduleNode(isl_schedule_node *That) : ScheduleNode(Ctx(isl_schedule_node_get_ctx(That)), That) {}
   isl_schedule_node *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -64,7 +56,6 @@ public:
   /// \param extension
   static ScheduleNode fromExtension(const UnionMap &extension);
   virtual ~ScheduleNode();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual ScheduleNode asScheduleNode() const;
 
@@ -588,9 +579,9 @@ public:
   ///
   /// \returns A new ScheduleNode
   ScheduleNode root() const;
-  ScheduleNode(const ScheduleNode &Other) : ScheduleNode(Other.Context(), Other.GetCopy()) {}
+  ScheduleNode(const ScheduleNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ScheduleNode &operator=(const ScheduleNode &Other);
-  ScheduleNode (ScheduleNode && Other) : ScheduleNode(Other.Context(), Other.This) {}
+  ScheduleNode (ScheduleNode && Other) : ctx(Other.Context()), This(Other.This) {}
   ScheduleNode &operator=(ScheduleNode && Other) {
     isl_schedule_node *New = Other.Give();
     isl_schedule_node_free((isl_schedule_node *)This);

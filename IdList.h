@@ -16,20 +16,13 @@ class Id;
 
 class IdList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit IdList(Ctx ctx, isl_id_list *That) : ctx(ctx), This((void *)That) {}
   explicit IdList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_id_list we want to wrap.
-  explicit IdList(isl_id_list *That) : IdList(Ctx(isl_id_list_get_ctx(That)), That) {}
   isl_id_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new IdList
   IdList add(const Id &el) const;
-  IdList(const IdList &Other) : IdList(Other.Context(), Other.GetCopy()) {}
+  IdList(const IdList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   IdList &operator=(const IdList &Other);
-  IdList (IdList && Other) : IdList(Other.Context(), Other.This) {}
+  IdList (IdList && Other) : ctx(Other.Context()), This(Other.This) {}
   IdList &operator=(IdList && Other) {
     isl_id_list *New = Other.Give();
     isl_id_list_free((isl_id_list *)This);

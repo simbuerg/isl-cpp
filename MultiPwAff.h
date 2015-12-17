@@ -13,24 +13,16 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Printer;
 
 class MultiPwAff {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit MultiPwAff(Ctx ctx, isl_multi_pw_aff *That) : ctx(ctx), This((void *)That) {}
   explicit MultiPwAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_multi_pw_aff we want to wrap.
-  explicit MultiPwAff(isl_multi_pw_aff *That) : MultiPwAff(Ctx(isl_multi_pw_aff_get_ctx(That)), That) {}
   isl_multi_pw_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -44,7 +36,6 @@ public:
   isl_multi_pw_aff *Get() const;
 
   virtual ~MultiPwAff();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual MultiPwAff asMultiPwAff() const;
 
@@ -54,9 +45,9 @@ public:
   ///
   /// \returns A new Bool
   Bool plainIsEqual(const MultiPwAff &multi2) const;
-  MultiPwAff(const MultiPwAff &Other) : MultiPwAff(Other.Context(), Other.GetCopy()) {}
+  MultiPwAff(const MultiPwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiPwAff &operator=(const MultiPwAff &Other);
-  MultiPwAff (MultiPwAff && Other) : MultiPwAff(Other.Context(), Other.This) {}
+  MultiPwAff (MultiPwAff && Other) : ctx(Other.Context()), This(Other.This) {}
   MultiPwAff &operator=(MultiPwAff && Other) {
     isl_multi_pw_aff *New = Other.Give();
     isl_multi_pw_aff_free((isl_multi_pw_aff *)This);

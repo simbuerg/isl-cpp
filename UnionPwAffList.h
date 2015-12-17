@@ -16,20 +16,13 @@ class UnionPwAff;
 
 class UnionPwAffList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionPwAffList(Ctx ctx, isl_union_pw_aff_list *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwAffList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_pw_aff_list we want to wrap.
-  explicit UnionPwAffList(isl_union_pw_aff_list *That) : UnionPwAffList(Ctx(isl_union_pw_aff_list_get_ctx(That)), That) {}
   isl_union_pw_aff_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new UnionPwAffList
   UnionPwAffList add(const UnionPwAff &el) const;
-  UnionPwAffList(const UnionPwAffList &Other) : UnionPwAffList(Other.Context(), Other.GetCopy()) {}
+  UnionPwAffList(const UnionPwAffList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwAffList &operator=(const UnionPwAffList &Other);
-  UnionPwAffList (UnionPwAffList && Other) : UnionPwAffList(Other.Context(), Other.This) {}
+  UnionPwAffList (UnionPwAffList && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionPwAffList &operator=(UnionPwAffList && Other) {
     isl_union_pw_aff_list *New = Other.Give();
     isl_union_pw_aff_list_free((isl_union_pw_aff_list *)This);

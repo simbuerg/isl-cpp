@@ -18,27 +18,19 @@ class BasicSet;
 class Id;
 class LocalSpace;
 class MultiAff;
-class Printer;
 class Set;
 class Space;
 class Val;
 
 class Aff {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Aff(Ctx ctx, isl_aff *That) : ctx(ctx), This((void *)That) {}
   explicit Aff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_aff we want to wrap.
-  explicit Aff(isl_aff *That) : Aff(Ctx(isl_aff_get_ctx(That)), That) {}
   isl_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -67,7 +59,6 @@ public:
   /// \param pos
   static Aff varOnDomain(const LocalSpace &ls, DimType type, unsigned int pos);
   virtual ~Aff();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Aff asAff() const;
 
@@ -439,9 +430,9 @@ public:
   ///
   /// \returns A new BasicSet
   BasicSet zeroBasicSet() const;
-  Aff(const Aff &Other) : Aff(Other.Context(), Other.GetCopy()) {}
+  Aff(const Aff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Aff &operator=(const Aff &Other);
-  Aff (Aff && Other) : Aff(Other.Context(), Other.This) {}
+  Aff (Aff && Other) : ctx(Other.Context()), This(Other.This) {}
   Aff &operator=(Aff && Other) {
     isl_aff *New = Other.Give();
     isl_aff_free((isl_aff *)This);

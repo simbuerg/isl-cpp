@@ -5,7 +5,6 @@
 
 #include "isl/AstExpr.hpp"
 #include "isl/Id.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
 #include "isl/Format.h"
@@ -30,7 +29,7 @@ inline IdToAstExpr &IdToAstExpr::operator=(const IdToAstExpr &Other) {
   return *this;
 }
 inline IdToAstExpr IdToAstExpr::alloc(const Ctx &ctx, int min_size) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_id_to_ast_expr *That = isl_id_to_ast_expr_alloc((ctx.Get()), min_size);
   ctx.unlock();
@@ -61,15 +60,9 @@ inline isl_id_to_ast_expr *IdToAstExpr::Give() {
 /// \returns A the wrapped isl object.
 inline isl_id_to_ast_expr *IdToAstExpr::Get() const {  return (isl_id_to_ast_expr *)This;
 }
-inline std::string IdToAstExpr::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printIdToAstExpr(*this);
-  return p.getStr();
-}
 
 inline IdToAstExpr IdToAstExpr::asIdToAstExpr() const {
-  return IdToAstExpr(GetCopy());
+  return IdToAstExpr(ctx, GetCopy());
 }
 
 inline Stat IdToAstExpr::foreach_(const std::function<isl_stat(isl_id *, isl_ast_expr *, void *)> && fn, void * user) const {
@@ -97,7 +90,7 @@ inline AstExpr IdToAstExpr::get(const Id &key) const {
   if (ctx.hasError()) {
     handleError("isl_id_to_ast_expr_get returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline Bool IdToAstExpr::has(const Id &key) const {
@@ -127,7 +120,7 @@ inline IdToAstExpr IdToAstExpr::set(const Id &key, const AstExpr &val) const {
   if (ctx.hasError()) {
     handleError("isl_id_to_ast_expr_set returned a NULL pointer.");
   }
-  return IdToAstExpr(res);
+  return IdToAstExpr(ctx, res);
 }
 
 } // namespace isl

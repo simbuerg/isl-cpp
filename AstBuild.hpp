@@ -30,7 +30,7 @@ inline AstBuild &AstBuild::operator=(const AstBuild &Other) {
   return *this;
 }
 inline AstBuild AstBuild::fromContext(const Set &set) {
-  Ctx _ctx = set.Context();
+  const Ctx &_ctx = set.Context();
   _ctx.lock();
   Set _cast_set = set.asSet();
   isl_ast_build *That = isl_ast_build_from_context((_cast_set).Give());
@@ -63,7 +63,7 @@ inline isl_ast_build *AstBuild::Get() const {  return (isl_ast_build *)This;
 }
 
 inline AstBuild AstBuild::asAstBuild() const {
-  return AstBuild(GetCopy());
+  return AstBuild(ctx, GetCopy());
 }
 
 inline AstExpr AstBuild::accessFromMultiPwAff(const MultiPwAff &mpa) const {
@@ -79,7 +79,7 @@ inline AstExpr AstBuild::accessFromMultiPwAff(const MultiPwAff &mpa) const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_access_from_multi_pw_aff returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstBuild::accessFromPwMultiAff(const PwMultiAff &pma) const {
@@ -95,7 +95,7 @@ inline AstExpr AstBuild::accessFromPwMultiAff(const PwMultiAff &pma) const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_access_from_pw_multi_aff returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstNode AstBuild::astFromSchedule(const UnionMap &schedule) const {
@@ -111,7 +111,7 @@ inline AstNode AstBuild::astFromSchedule(const UnionMap &schedule) const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_ast_from_schedule returned a NULL pointer.");
   }
-  return AstNode(res);
+  return AstNode(ctx, res);
 }
 
 inline AstExpr AstBuild::callFromMultiPwAff(const MultiPwAff &mpa) const {
@@ -127,7 +127,7 @@ inline AstExpr AstBuild::callFromMultiPwAff(const MultiPwAff &mpa) const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_call_from_multi_pw_aff returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstBuild::callFromPwMultiAff(const PwMultiAff &pma) const {
@@ -143,7 +143,7 @@ inline AstExpr AstBuild::callFromPwMultiAff(const PwMultiAff &pma) const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_call_from_pw_multi_aff returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline AstExpr AstBuild::exprFromPwAff(const PwAff &pa) const {
@@ -159,7 +159,7 @@ inline AstExpr AstBuild::exprFromPwAff(const PwAff &pa) const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_expr_from_pw_aff returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 inline UnionMap AstBuild::getSchedule() const {
@@ -174,7 +174,7 @@ inline UnionMap AstBuild::getSchedule() const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_get_schedule returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline Space AstBuild::getScheduleSpace() const {
@@ -189,7 +189,7 @@ inline Space AstBuild::getScheduleSpace() const {
   if (ctx.hasError()) {
     handleError("isl_ast_build_get_schedule_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline AstBuild AstBuild::setAtEachDomain(const std::function<isl_ast_node *(isl_ast_node *, isl_ast_build *, void *)> && fn, void * user) const {
@@ -204,7 +204,7 @@ inline AstBuild AstBuild::setAtEachDomain(const std::function<isl_ast_node *(isl
   if (ctx.hasError()) {
     handleError("isl_ast_build_set_at_each_domain returned a NULL pointer.");
   }
-  return AstBuild(res);
+  return AstBuild(ctx, res);
 }
 
 } // namespace isl

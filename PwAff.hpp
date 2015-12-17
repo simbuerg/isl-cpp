@@ -7,7 +7,6 @@
 #include "isl/Id.hpp"
 #include "isl/LocalSpace.hpp"
 #include "isl/MultiAff.hpp"
-#include "isl/Printer.hpp"
 #include "isl/PwMultiAff.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
@@ -36,7 +35,7 @@ inline PwAff &PwAff::operator=(const PwAff &Other) {
   return *this;
 }
 inline PwAff PwAff::fromAff(const Aff &aff) {
-  Ctx _ctx = aff.Context();
+  const Ctx &_ctx = aff.Context();
   _ctx.lock();
   Aff _cast_aff = aff.asAff();
   isl_pw_aff *That = isl_pw_aff_from_aff((_cast_aff).Give());
@@ -50,7 +49,7 @@ inline PwAff PwAff::fromAff(const Aff &aff) {
 }
 
 inline PwAff PwAff::empty(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_pw_aff *That = isl_pw_aff_empty((_cast_dim).Give());
@@ -64,7 +63,7 @@ inline PwAff PwAff::empty(const Space &dim) {
 }
 
 inline PwAff PwAff::alloc(const Set &set, const Aff &aff) {
-  Ctx _ctx = aff.Context();
+  const Ctx &_ctx = aff.Context();
   _ctx.lock();
   Set _cast_set = set.asSet();
   Aff _cast_aff = aff.asAff();
@@ -79,7 +78,7 @@ inline PwAff PwAff::alloc(const Set &set, const Aff &aff) {
 }
 
 inline PwAff PwAff::zeroOnDomain(const LocalSpace &ls) {
-  Ctx _ctx = ls.Context();
+  const Ctx &_ctx = ls.Context();
   _ctx.lock();
   LocalSpace _cast_ls = ls.asLocalSpace();
   isl_pw_aff *That = isl_pw_aff_zero_on_domain((_cast_ls).Give());
@@ -93,7 +92,7 @@ inline PwAff PwAff::zeroOnDomain(const LocalSpace &ls) {
 }
 
 inline PwAff PwAff::varOnDomain(const LocalSpace &ls, DimType type, unsigned int pos) {
-  Ctx _ctx = ls.Context();
+  const Ctx &_ctx = ls.Context();
   _ctx.lock();
   LocalSpace _cast_ls = ls.asLocalSpace();
   isl_pw_aff *That = isl_pw_aff_var_on_domain((_cast_ls).Give(), (enum isl_dim_type)type, pos);
@@ -124,15 +123,9 @@ inline isl_pw_aff *PwAff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_pw_aff *PwAff::Get() const {  return (isl_pw_aff *)This;
 }
-inline std::string PwAff::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printPwAff(*this);
-  return p.getStr();
-}
 
 inline PwAff PwAff::asPwAff() const {
-  return PwAff(GetCopy());
+  return PwAff(ctx, GetCopy());
 }
 
 inline PwAff PwAff::add(const PwAff &pwaff2) const {
@@ -148,7 +141,7 @@ inline PwAff PwAff::add(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_add returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::addDims(DimType type, unsigned int n) const {
@@ -163,7 +156,7 @@ inline PwAff PwAff::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_add_dims returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::alignParams(const Space &model) const {
@@ -179,7 +172,7 @@ inline PwAff PwAff::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_align_params returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::ceil() const {
@@ -194,7 +187,7 @@ inline PwAff PwAff::ceil() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_ceil returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::coalesce() const {
@@ -209,7 +202,7 @@ inline PwAff PwAff::coalesce() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_coalesce returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::cond(const PwAff &pwaff_true, const PwAff &pwaff_false) const {
@@ -226,7 +219,7 @@ inline PwAff PwAff::cond(const PwAff &pwaff_true, const PwAff &pwaff_false) cons
   if (ctx.hasError()) {
     handleError("isl_pw_aff_cond returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline unsigned int PwAff::dim(DimType type) const {
@@ -254,7 +247,7 @@ inline PwAff PwAff::div(const PwAff &pa2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_div returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set PwAff::domain() const {
@@ -269,7 +262,7 @@ inline Set PwAff::domain() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_domain returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwAff PwAff::dropDims(DimType type, unsigned int first, unsigned int n) const {
@@ -284,7 +277,7 @@ inline PwAff PwAff::dropDims(DimType type, unsigned int first, unsigned int n) c
   if (ctx.hasError()) {
     handleError("isl_pw_aff_drop_dims returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set PwAff::eqSet(const PwAff &pwaff2) const {
@@ -300,7 +293,7 @@ inline Set PwAff::eqSet(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_eq_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwAff PwAff::floor() const {
@@ -315,7 +308,7 @@ inline PwAff PwAff::floor() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_floor returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Stat PwAff::foreachPiece(const std::function<isl_stat(isl_set *, isl_aff *, void *)> && fn, void * user) const {
@@ -342,7 +335,7 @@ inline PwAff PwAff::fromRange() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_from_range returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set PwAff::geSet(const PwAff &pwaff2) const {
@@ -358,7 +351,7 @@ inline Set PwAff::geSet(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_ge_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Id PwAff::getDimId(DimType type, unsigned int pos) const {
@@ -373,7 +366,7 @@ inline Id PwAff::getDimId(DimType type, unsigned int pos) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_get_dim_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline std::string PwAff::getDimName(DimType type, unsigned int pos) const {
@@ -405,7 +398,7 @@ inline Space PwAff::getDomainSpace() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_get_domain_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space PwAff::getSpace() const {
@@ -420,7 +413,7 @@ inline Space PwAff::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline PwAff PwAff::gist(const Set &context) const {
@@ -436,7 +429,7 @@ inline PwAff PwAff::gist(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_gist returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::gistParams(const Set &context) const {
@@ -452,7 +445,7 @@ inline PwAff PwAff::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_gist_params returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set PwAff::gtSet(const PwAff &pwaff2) const {
@@ -468,7 +461,7 @@ inline Set PwAff::gtSet(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_gt_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Bool PwAff::hasDimId(DimType type, unsigned int pos) const {
@@ -507,7 +500,7 @@ inline PwAff PwAff::insertDims(DimType type, unsigned int first, unsigned int n)
   if (ctx.hasError()) {
     handleError("isl_pw_aff_insert_dims returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::intersectDomain(const Set &set) const {
@@ -523,7 +516,7 @@ inline PwAff PwAff::intersectDomain(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_intersect_domain returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::intersectParams(const Set &set) const {
@@ -539,7 +532,7 @@ inline PwAff PwAff::intersectParams(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_intersect_params returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Bool PwAff::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -604,7 +597,7 @@ inline Set PwAff::leSet(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_le_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set PwAff::ltSet(const PwAff &pwaff2) const {
@@ -620,7 +613,7 @@ inline Set PwAff::ltSet(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_lt_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwAff PwAff::max(const PwAff &pwaff2) const {
@@ -636,7 +629,7 @@ inline PwAff PwAff::max(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_max returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::min(const PwAff &pwaff2) const {
@@ -652,7 +645,7 @@ inline PwAff PwAff::min(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_min returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::modVal(const Val &mod) const {
@@ -668,7 +661,7 @@ inline PwAff PwAff::modVal(const Val &mod) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_mod_val returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_type, unsigned int src_pos, unsigned int n) const {
@@ -683,7 +676,7 @@ inline PwAff PwAff::moveDims(DimType dst_type, unsigned int dst_pos, DimType src
   if (ctx.hasError()) {
     handleError("isl_pw_aff_move_dims returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::mul(const PwAff &pwaff2) const {
@@ -699,7 +692,7 @@ inline PwAff PwAff::mul(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_mul returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline int PwAff::nPiece() const {
@@ -727,7 +720,7 @@ inline Set PwAff::neSet(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_ne_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwAff PwAff::neg() const {
@@ -742,7 +735,7 @@ inline PwAff PwAff::neg() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_neg returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set PwAff::nonZeroSet() const {
@@ -757,7 +750,7 @@ inline Set PwAff::nonZeroSet() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_non_zero_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set PwAff::nonnegSet() const {
@@ -772,7 +765,7 @@ inline Set PwAff::nonnegSet() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_nonneg_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set PwAff::params() const {
@@ -787,7 +780,7 @@ inline Set PwAff::params() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_params returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwAff PwAff::pullbackMultiAff(const MultiAff &ma) const {
@@ -803,7 +796,7 @@ inline PwAff PwAff::pullbackMultiAff(const MultiAff &ma) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_pullback_multi_aff returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::pullbackPwMultiAff(const PwMultiAff &pma) const {
@@ -819,7 +812,7 @@ inline PwAff PwAff::pullbackPwMultiAff(const PwMultiAff &pma) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_pullback_pw_multi_aff returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::scaleDownVal(const Val &f) const {
@@ -835,7 +828,7 @@ inline PwAff PwAff::scaleDownVal(const Val &f) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_scale_down_val returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::scaleVal(const Val &v) const {
@@ -851,7 +844,7 @@ inline PwAff PwAff::scaleVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_scale_val returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::setDimId(DimType type, unsigned int pos, const Id &id) const {
@@ -867,7 +860,7 @@ inline PwAff PwAff::setDimId(DimType type, unsigned int pos, const Id &id) const
   if (ctx.hasError()) {
     handleError("isl_pw_aff_set_dim_id returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::setTupleId(DimType type, const Id &id) const {
@@ -883,7 +876,7 @@ inline PwAff PwAff::setTupleId(DimType type, const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_set_tuple_id returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::sub(const PwAff &pwaff2) const {
@@ -899,7 +892,7 @@ inline PwAff PwAff::sub(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_sub returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::tdivQ(const PwAff &pa2) const {
@@ -915,7 +908,7 @@ inline PwAff PwAff::tdivQ(const PwAff &pa2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_tdiv_q returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::tdivR(const PwAff &pa2) const {
@@ -931,7 +924,7 @@ inline PwAff PwAff::tdivR(const PwAff &pa2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_tdiv_r returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::unionAdd(const PwAff &pwaff2) const {
@@ -947,7 +940,7 @@ inline PwAff PwAff::unionAdd(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_union_add returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::unionMax(const PwAff &pwaff2) const {
@@ -963,7 +956,7 @@ inline PwAff PwAff::unionMax(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_union_max returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff PwAff::unionMin(const PwAff &pwaff2) const {
@@ -979,7 +972,7 @@ inline PwAff PwAff::unionMin(const PwAff &pwaff2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_union_min returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set PwAff::zeroSet() const {
@@ -994,7 +987,7 @@ inline Set PwAff::zeroSet() const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_zero_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 } // namespace isl

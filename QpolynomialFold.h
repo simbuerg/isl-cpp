@@ -17,7 +17,6 @@
 
 namespace isl {
 class Point;
-class Printer;
 class Qpolynomial;
 class Set;
 class Space;
@@ -25,20 +24,13 @@ class Val;
 
 class QpolynomialFold {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit QpolynomialFold(Ctx ctx, isl_qpolynomial_fold *That) : ctx(ctx), This((void *)That) {}
   explicit QpolynomialFold(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_qpolynomial_fold we want to wrap.
-  explicit QpolynomialFold(isl_qpolynomial_fold *That) : QpolynomialFold(Ctx(isl_qpolynomial_fold_get_ctx(That)), That) {}
   isl_qpolynomial_fold *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -62,7 +54,6 @@ public:
   /// \param qp
   static QpolynomialFold alloc(Fold type, const Qpolynomial &qp);
   virtual ~QpolynomialFold();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual QpolynomialFold asQpolynomialFold() const;
 
@@ -154,9 +145,9 @@ public:
   ///
   /// \returns A new QpolynomialFold
   QpolynomialFold substitute(DimType type, unsigned int first, unsigned int n, std::unique_ptr<Qpolynomial> * subs) const;
-  QpolynomialFold(const QpolynomialFold &Other) : QpolynomialFold(Other.Context(), Other.GetCopy()) {}
+  QpolynomialFold(const QpolynomialFold &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   QpolynomialFold &operator=(const QpolynomialFold &Other);
-  QpolynomialFold (QpolynomialFold && Other) : QpolynomialFold(Other.Context(), Other.This) {}
+  QpolynomialFold (QpolynomialFold && Other) : ctx(Other.Context()), This(Other.This) {}
   QpolynomialFold &operator=(QpolynomialFold && Other) {
     isl_qpolynomial_fold *New = Other.Give();
     isl_qpolynomial_fold_free((isl_qpolynomial_fold *)This);

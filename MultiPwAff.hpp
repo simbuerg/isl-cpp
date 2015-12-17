@@ -3,7 +3,6 @@
 
 #include "isl/MultiPwAff.h"
 
-#include "isl/Printer.hpp"
 #include "isl/Bool.h"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
@@ -41,15 +40,9 @@ inline isl_multi_pw_aff *MultiPwAff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_multi_pw_aff *MultiPwAff::Get() const {  return (isl_multi_pw_aff *)This;
 }
-inline std::string MultiPwAff::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printMultiPwAff(*this);
-  return p.getStr();
-}
 
 inline MultiPwAff MultiPwAff::asMultiPwAff() const {
-  return MultiPwAff(GetCopy());
+  return MultiPwAff(ctx, GetCopy());
 }
 
 inline Bool MultiPwAff::plainIsEqual(const MultiPwAff &multi2) const {

@@ -18,7 +18,6 @@
 
 namespace isl {
 class BasicSet;
-class Printer;
 class Schedule;
 class Set;
 class Space;
@@ -27,20 +26,13 @@ class UnionPwQpolynomialFold;
 
 class UnionSet {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionSet(Ctx ctx, isl_union_set *That) : ctx(ctx), This((void *)That) {}
   explicit UnionSet(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_set we want to wrap.
-  explicit UnionSet(isl_union_set *That) : UnionSet(Ctx(isl_union_set_get_ctx(That)), That) {}
   isl_union_set *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -75,7 +67,6 @@ public:
   /// \param str
   static UnionSet readFromStr(const Ctx &ctx, std::string str);
   virtual ~UnionSet();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual UnionSet asUnionSet() const;
 
@@ -338,9 +329,9 @@ public:
   ///
   /// \returns A new UnionMap
   UnionMap unwrap() const;
-  UnionSet(const UnionSet &Other) : UnionSet(Other.Context(), Other.GetCopy()) {}
+  UnionSet(const UnionSet &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionSet &operator=(const UnionSet &Other);
-  UnionSet (UnionSet && Other) : UnionSet(Other.Context(), Other.This) {}
+  UnionSet (UnionSet && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionSet &operator=(UnionSet && Other) {
     isl_union_set *New = Other.Give();
     isl_union_set_free((isl_union_set *)This);

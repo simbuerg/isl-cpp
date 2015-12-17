@@ -8,7 +8,6 @@
 #include "isl/Id.hpp"
 #include "isl/Mat.hpp"
 #include "isl/Point.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Space.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
@@ -34,7 +33,7 @@ inline BasicSet &BasicSet::operator=(const BasicSet &Other) {
   return *this;
 }
 inline BasicSet BasicSet::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_basic_set *That = isl_basic_set_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -48,7 +47,7 @@ inline BasicSet BasicSet::readFromStr(const Ctx &ctx, std::string str) {
 }
 
 inline BasicSet BasicSet::fromPoint(const Point &pnt) {
-  Ctx _ctx = pnt.Context();
+  const Ctx &_ctx = pnt.Context();
   _ctx.lock();
   Point _cast_pnt = pnt.asPoint();
   isl_basic_set *That = isl_basic_set_from_point((_cast_pnt).Give());
@@ -62,7 +61,7 @@ inline BasicSet BasicSet::fromPoint(const Point &pnt) {
 }
 
 inline BasicSet BasicSet::boxFromPoints(const Point &pnt1, const Point &pnt2) {
-  Ctx _ctx = pnt2.Context();
+  const Ctx &_ctx = pnt2.Context();
   _ctx.lock();
   Point _cast_pnt1 = pnt1.asPoint();
   Point _cast_pnt2 = pnt2.asPoint();
@@ -77,7 +76,7 @@ inline BasicSet BasicSet::boxFromPoints(const Point &pnt1, const Point &pnt2) {
 }
 
 inline BasicSet BasicSet::fromConstraintMatrices(const Space &dim, const Mat &eq, const Mat &ineq, DimType c1, DimType c2, DimType c3, DimType c4) {
-  Ctx _ctx = ineq.Context();
+  const Ctx &_ctx = ineq.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   Mat _cast_eq = eq.asMat();
@@ -93,7 +92,7 @@ inline BasicSet BasicSet::fromConstraintMatrices(const Space &dim, const Mat &eq
 }
 
 inline BasicSet BasicSet::fromConstraint(const Constraint &constraint) {
-  Ctx _ctx = constraint.Context();
+  const Ctx &_ctx = constraint.Context();
   _ctx.lock();
   Constraint _cast_constraint = constraint.asConstraint();
   isl_basic_set *That = isl_basic_set_from_constraint((_cast_constraint).Get());
@@ -124,15 +123,9 @@ inline isl_basic_set *BasicSet::Give() {
 /// \returns A the wrapped isl object.
 inline isl_basic_set *BasicSet::Get() const {  return (isl_basic_set *)This;
 }
-inline std::string BasicSet::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printBasicSet(*this);
-  return p.getStr();
-}
 
 inline BasicSet BasicSet::asBasicSet() const {
-  return BasicSet(GetCopy());
+  return BasicSet(ctx, GetCopy());
 }
 
 inline Set BasicSet::asSet() const {
@@ -156,7 +149,7 @@ inline BasicSet BasicSet::addConstraint(const Constraint &constraint) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_add_constraint returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::addDims(DimType type, unsigned int n) const {
@@ -171,7 +164,7 @@ inline BasicSet BasicSet::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_add_dims returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::affineHull() const {
@@ -186,7 +179,7 @@ inline BasicSet BasicSet::affineHull() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_affine_hull returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::alignParams(const Space &model) const {
@@ -202,7 +195,7 @@ inline BasicSet BasicSet::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_align_params returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::apply(const BasicMap &bmap) const {
@@ -218,7 +211,7 @@ inline BasicSet BasicSet::apply(const BasicMap &bmap) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_apply returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::coefficients() const {
@@ -233,7 +226,7 @@ inline BasicSet BasicSet::coefficients() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_coefficients returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::detectEqualities() const {
@@ -248,7 +241,7 @@ inline BasicSet BasicSet::detectEqualities() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_detect_equalities returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline unsigned int BasicSet::dim(DimType type) const {
@@ -275,7 +268,7 @@ inline BasicSet BasicSet::dropConstraintsInvolvingDims(DimType type, unsigned in
   if (ctx.hasError()) {
     handleError("isl_basic_set_drop_constraints_involving_dims returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::dropConstraintsNotInvolvingDims(DimType type, unsigned int first, unsigned int n) const {
@@ -290,7 +283,7 @@ inline BasicSet BasicSet::dropConstraintsNotInvolvingDims(DimType type, unsigned
   if (ctx.hasError()) {
     handleError("isl_basic_set_drop_constraints_not_involving_dims returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::eliminate(DimType type, unsigned int first, unsigned int n) const {
@@ -305,7 +298,7 @@ inline BasicSet BasicSet::eliminate(DimType type, unsigned int first, unsigned i
   if (ctx.hasError()) {
     handleError("isl_basic_set_eliminate returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Mat BasicSet::equalitiesMatrix(DimType c1, DimType c2, DimType c3, DimType c4) const {
@@ -320,7 +313,7 @@ inline Mat BasicSet::equalitiesMatrix(DimType c1, DimType c2, DimType c3, DimTyp
   if (ctx.hasError()) {
     handleError("isl_basic_set_equalities_matrix returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline BasicSet BasicSet::flatProduct(const BasicSet &bset2) const {
@@ -336,7 +329,7 @@ inline BasicSet BasicSet::flatProduct(const BasicSet &bset2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_flat_product returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::flatten() const {
@@ -351,7 +344,7 @@ inline BasicSet BasicSet::flatten() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_flatten returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Stat BasicSet::foreachBoundPair(DimType type, unsigned int pos, const std::function<isl_stat(isl_constraint *, isl_constraint *, isl_basic_set *, void *)> && fn, void * user) const {
@@ -390,7 +383,7 @@ inline Id BasicSet::getDimId(DimType type, unsigned int pos) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_get_dim_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline std::string BasicSet::getDimName(DimType type, unsigned int pos) const {
@@ -422,7 +415,7 @@ inline Space BasicSet::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline std::string BasicSet::getTupleName() const {
@@ -455,7 +448,7 @@ inline BasicSet BasicSet::gist(const BasicSet &context) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_gist returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Mat BasicSet::inequalitiesMatrix(DimType c1, DimType c2, DimType c3, DimType c4) const {
@@ -470,7 +463,7 @@ inline Mat BasicSet::inequalitiesMatrix(DimType c1, DimType c2, DimType c3, DimT
   if (ctx.hasError()) {
     handleError("isl_basic_set_inequalities_matrix returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline BasicSet BasicSet::insertDims(DimType type, unsigned int pos, unsigned int n) const {
@@ -485,7 +478,7 @@ inline BasicSet BasicSet::insertDims(DimType type, unsigned int pos, unsigned in
   if (ctx.hasError()) {
     handleError("isl_basic_set_insert_dims returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::intersect(const BasicSet &bset2) const {
@@ -501,7 +494,7 @@ inline BasicSet BasicSet::intersect(const BasicSet &bset2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_intersect returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::intersectParams(const BasicSet &bset2) const {
@@ -517,7 +510,7 @@ inline BasicSet BasicSet::intersectParams(const BasicSet &bset2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_intersect_params returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Bool BasicSet::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -594,7 +587,7 @@ inline Set BasicSet::lexmax() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_lexmax returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set BasicSet::lexmin() const {
@@ -609,7 +602,7 @@ inline Set BasicSet::lexmin() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_lexmin returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet BasicSet::lift() const {
@@ -624,7 +617,7 @@ inline BasicSet BasicSet::lift() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_lift returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_type, unsigned int src_pos, unsigned int n) const {
@@ -639,7 +632,7 @@ inline BasicSet BasicSet::moveDims(DimType dst_type, unsigned int dst_pos, DimTy
   if (ctx.hasError()) {
     handleError("isl_basic_set_move_dims returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline int BasicSet::nConstraint() const {
@@ -666,7 +659,7 @@ inline BasicSet BasicSet::neg() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_neg returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::projectOut(DimType type, unsigned int first, unsigned int n) const {
@@ -681,7 +674,7 @@ inline BasicSet BasicSet::projectOut(DimType type, unsigned int first, unsigned 
   if (ctx.hasError()) {
     handleError("isl_basic_set_project_out returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Mat BasicSet::reducedBasis() const {
@@ -696,7 +689,7 @@ inline Mat BasicSet::reducedBasis() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_reduced_basis returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline BasicSet BasicSet::removeDivs() const {
@@ -711,7 +704,7 @@ inline BasicSet BasicSet::removeDivs() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_remove_divs returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::removeDivsInvolvingDims(DimType type, unsigned int first, unsigned int n) const {
@@ -726,7 +719,7 @@ inline BasicSet BasicSet::removeDivsInvolvingDims(DimType type, unsigned int fir
   if (ctx.hasError()) {
     handleError("isl_basic_set_remove_divs_involving_dims returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::removeUnknownDivs() const {
@@ -741,7 +734,7 @@ inline BasicSet BasicSet::removeUnknownDivs() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_remove_unknown_divs returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::sample() const {
@@ -756,7 +749,7 @@ inline BasicSet BasicSet::sample() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_sample returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Point BasicSet::samplePoint() const {
@@ -771,7 +764,7 @@ inline Point BasicSet::samplePoint() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_sample_point returned a NULL pointer.");
   }
-  return Point(res);
+  return Point(ctx, res);
 }
 
 inline BasicSet BasicSet::setTupleId(const Id &id) const {
@@ -787,7 +780,7 @@ inline BasicSet BasicSet::setTupleId(const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_set_tuple_id returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::solutions() const {
@@ -802,7 +795,7 @@ inline BasicSet BasicSet::solutions() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_solutions returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Set BasicSet::union_(const BasicSet &bset2) const {
@@ -818,7 +811,7 @@ inline Set BasicSet::union_(const BasicSet &bset2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_union returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicMap BasicSet::unwrap() const {
@@ -833,7 +826,7 @@ inline BasicMap BasicSet::unwrap() const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_unwrap returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 } // namespace isl

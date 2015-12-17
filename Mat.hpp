@@ -24,7 +24,7 @@ inline Mat &Mat::operator=(const Mat &Other) {
   return *this;
 }
 inline Mat Mat::alloc(const Ctx &ctx, unsigned int n_row, unsigned int n_col) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_mat *That = isl_mat_alloc((ctx.Get()), n_row, n_col);
   ctx.unlock();
@@ -38,7 +38,7 @@ inline Mat Mat::alloc(const Ctx &ctx, unsigned int n_row, unsigned int n_col) {
 }
 
 inline Mat Mat::fromRowVec(const Vec &vec) {
-  Ctx _ctx = vec.Context();
+  const Ctx &_ctx = vec.Context();
   _ctx.lock();
   Vec _cast_vec = vec.asVec();
   isl_mat *That = isl_mat_from_row_vec((_cast_vec).Give());
@@ -71,7 +71,7 @@ inline isl_mat *Mat::Get() const {  return (isl_mat *)This;
 }
 
 inline Mat Mat::asMat() const {
-  return Mat(GetCopy());
+  return Mat(ctx, GetCopy());
 }
 
 inline Mat Mat::addRows(unsigned int n) const {
@@ -86,7 +86,7 @@ inline Mat Mat::addRows(unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_mat_add_rows returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::addZeroCols(unsigned int n) const {
@@ -101,7 +101,7 @@ inline Mat Mat::addZeroCols(unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_mat_add_zero_cols returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::addZeroRows(unsigned int n) const {
@@ -116,7 +116,7 @@ inline Mat Mat::addZeroRows(unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_mat_add_zero_rows returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline int Mat::cols() const {
@@ -144,7 +144,7 @@ inline Mat Mat::concat(const Mat &bot) const {
   if (ctx.hasError()) {
     handleError("isl_mat_concat returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Val Mat::getElementVal(int row, int col) const {
@@ -159,7 +159,7 @@ inline Val Mat::getElementVal(int row, int col) const {
   if (ctx.hasError()) {
     handleError("isl_mat_get_element_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline int Mat::initialNonZeroCols() const {
@@ -186,7 +186,7 @@ inline Mat Mat::insertCols(unsigned int col, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_mat_insert_cols returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::insertRows(unsigned int row, unsigned int n) const {
@@ -201,7 +201,7 @@ inline Mat Mat::insertRows(unsigned int row, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_mat_insert_rows returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::insertZeroCols(unsigned int first, unsigned int n) const {
@@ -216,7 +216,7 @@ inline Mat Mat::insertZeroCols(unsigned int first, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_mat_insert_zero_cols returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::insertZeroRows(unsigned int row, unsigned int n) const {
@@ -231,7 +231,7 @@ inline Mat Mat::insertZeroRows(unsigned int row, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_mat_insert_zero_rows returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline int Mat::isEqual(const Mat &mat2) const {
@@ -259,7 +259,7 @@ inline Mat Mat::moveCols(unsigned int dst_col, unsigned int src_col, unsigned in
   if (ctx.hasError()) {
     handleError("isl_mat_move_cols returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::normalize() const {
@@ -274,7 +274,7 @@ inline Mat Mat::normalize() const {
   if (ctx.hasError()) {
     handleError("isl_mat_normalize returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::normalizeRow(int row) const {
@@ -289,7 +289,7 @@ inline Mat Mat::normalizeRow(int row) const {
   if (ctx.hasError()) {
     handleError("isl_mat_normalize_row returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::rightInverse() const {
@@ -304,7 +304,7 @@ inline Mat Mat::rightInverse() const {
   if (ctx.hasError()) {
     handleError("isl_mat_right_inverse returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::rightKernel() const {
@@ -319,7 +319,7 @@ inline Mat Mat::rightKernel() const {
   if (ctx.hasError()) {
     handleError("isl_mat_right_kernel returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline int Mat::rows() const {
@@ -347,7 +347,7 @@ inline Mat Mat::setElementVal(int row, int col, const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_mat_set_element_val returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline Mat Mat::vecConcat(const Vec &bot) const {
@@ -363,7 +363,7 @@ inline Mat Mat::vecConcat(const Vec &bot) const {
   if (ctx.hasError()) {
     handleError("isl_mat_vec_concat returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 } // namespace isl

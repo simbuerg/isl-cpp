@@ -23,7 +23,7 @@ inline IdList &IdList::operator=(const IdList &Other) {
   return *this;
 }
 inline IdList IdList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_id_list *That = isl_id_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_id_list *IdList::Get() const {  return (isl_id_list *)This;
 }
 
 inline IdList IdList::asIdList() const {
-  return IdList(GetCopy());
+  return IdList(ctx, GetCopy());
 }
 
 inline IdList IdList::add(const Id &el) const {
@@ -72,7 +72,7 @@ inline IdList IdList::add(const Id &el) const {
   if (ctx.hasError()) {
     handleError("isl_id_list_add returned a NULL pointer.");
   }
-  return IdList(res);
+  return IdList(ctx, res);
 }
 
 } // namespace isl

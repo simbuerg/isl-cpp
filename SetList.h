@@ -16,20 +16,13 @@ class Set;
 
 class SetList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit SetList(Ctx ctx, isl_set_list *That) : ctx(ctx), This((void *)That) {}
   explicit SetList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_set_list we want to wrap.
-  explicit SetList(isl_set_list *That) : SetList(Ctx(isl_set_list_get_ctx(That)), That) {}
   isl_set_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new SetList
   SetList add(const Set &el) const;
-  SetList(const SetList &Other) : SetList(Other.Context(), Other.GetCopy()) {}
+  SetList(const SetList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   SetList &operator=(const SetList &Other);
-  SetList (SetList && Other) : SetList(Other.Context(), Other.This) {}
+  SetList (SetList && Other) : ctx(Other.Context()), This(Other.This) {}
   SetList &operator=(SetList && Other) {
     isl_set_list *New = Other.Give();
     isl_set_list_free((isl_set_list *)This);

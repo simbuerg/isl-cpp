@@ -22,22 +22,14 @@ class Constraint;
 class Id;
 class Mat;
 class Point;
-class Printer;
 class Space;
 
 class BasicSet : public Set {
 protected:
-  explicit BasicSet(Ctx ctx, isl_basic_set *That) : Set(ctx, (void *)That) {/* empty */}
-  explicit BasicSet(Ctx ctx, void *That) : Set(ctx, (void *)That) {/* empty */}
 
 public:
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_basic_set we want to wrap.
-  explicit BasicSet(isl_basic_set *That) : BasicSet(Ctx(isl_basic_set_get_ctx(That)), That) {}
+  explicit BasicSet(Ctx ctx, isl_basic_set *That) : Set(ctx, (void *)That) {/* empty */}
+  explicit BasicSet(Ctx ctx, void *That) : Set(ctx, (void *)That) {/* empty */}
   isl_basic_set *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -79,7 +71,6 @@ public:
   /// \param constraint
   static BasicSet fromConstraint(const Constraint &constraint);
   virtual ~BasicSet();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual BasicSet asBasicSet() const;
 

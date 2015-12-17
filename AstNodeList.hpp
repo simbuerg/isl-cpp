@@ -23,7 +23,7 @@ inline AstNodeList &AstNodeList::operator=(const AstNodeList &Other) {
   return *this;
 }
 inline AstNodeList AstNodeList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_ast_node_list *That = isl_ast_node_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_ast_node_list *AstNodeList::Get() const {  return (isl_ast_node_list 
 }
 
 inline AstNodeList AstNodeList::asAstNodeList() const {
-  return AstNodeList(GetCopy());
+  return AstNodeList(ctx, GetCopy());
 }
 
 inline AstNodeList AstNodeList::add(const AstNode &el) const {
@@ -72,7 +72,7 @@ inline AstNodeList AstNodeList::add(const AstNode &el) const {
   if (ctx.hasError()) {
     handleError("isl_ast_node_list_add returned a NULL pointer.");
   }
-  return AstNodeList(res);
+  return AstNodeList(ctx, res);
 }
 
 } // namespace isl

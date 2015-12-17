@@ -19,24 +19,16 @@
 namespace isl {
 class AstExpr;
 class Id;
-class Printer;
 
 class IdToAstExpr {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit IdToAstExpr(Ctx ctx, isl_id_to_ast_expr *That) : ctx(ctx), This((void *)That) {}
   explicit IdToAstExpr(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_id_to_ast_expr we want to wrap.
-  explicit IdToAstExpr(isl_id_to_ast_expr *That) : IdToAstExpr(Ctx(isl_id_to_ast_expr_get_ctx(That)), That) {}
   isl_id_to_ast_expr *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -55,7 +47,6 @@ public:
   /// \param min_size
   static IdToAstExpr alloc(const Ctx &ctx, int min_size);
   virtual ~IdToAstExpr();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual IdToAstExpr asIdToAstExpr() const;
 
@@ -88,9 +79,9 @@ public:
   ///
   /// \returns A new IdToAstExpr
   IdToAstExpr set(const Id &key, const AstExpr &val) const;
-  IdToAstExpr(const IdToAstExpr &Other) : IdToAstExpr(Other.Context(), Other.GetCopy()) {}
+  IdToAstExpr(const IdToAstExpr &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   IdToAstExpr &operator=(const IdToAstExpr &Other);
-  IdToAstExpr (IdToAstExpr && Other) : IdToAstExpr(Other.Context(), Other.This) {}
+  IdToAstExpr (IdToAstExpr && Other) : ctx(Other.Context()), This(Other.This) {}
   IdToAstExpr &operator=(IdToAstExpr && Other) {
     isl_id_to_ast_expr *New = Other.Give();
     isl_id_to_ast_expr_free((isl_id_to_ast_expr *)This);

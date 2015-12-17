@@ -23,7 +23,7 @@ inline UnionSetList &UnionSetList::operator=(const UnionSetList &Other) {
   return *this;
 }
 inline UnionSetList UnionSetList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_set_list *That = isl_union_set_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_union_set_list *UnionSetList::Get() const {  return (isl_union_set_li
 }
 
 inline UnionSetList UnionSetList::asUnionSetList() const {
-  return UnionSetList(GetCopy());
+  return UnionSetList(ctx, GetCopy());
 }
 
 inline UnionSetList UnionSetList::add(const UnionSet &el) const {
@@ -72,7 +72,7 @@ inline UnionSetList UnionSetList::add(const UnionSet &el) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_list_add returned a NULL pointer.");
   }
-  return UnionSetList(res);
+  return UnionSetList(ctx, res);
 }
 
 } // namespace isl

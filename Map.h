@@ -23,7 +23,6 @@ class Constraint;
 class Id;
 class MultiAff;
 class MultiPwAff;
-class Printer;
 class PwAff;
 class PwMultiAff;
 class PwQpolynomialFold;
@@ -33,17 +32,10 @@ class Val;
 
 class Map : public UnionMap {
 protected:
-  explicit Map(Ctx ctx, isl_map *That) : UnionMap(ctx, (void *)That) {/* empty */}
-  explicit Map(Ctx ctx, void *That) : UnionMap(ctx, (void *)That) {/* empty */}
 
 public:
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_map we want to wrap.
-  explicit Map(isl_map *That) : Map(Ctx(isl_map_get_ctx(That)), That) {}
+  explicit Map(Ctx ctx, isl_map *That) : UnionMap(ctx, (void *)That) {/* empty */}
+  explicit Map(Ctx ctx, void *That) : UnionMap(ctx, (void *)That) {/* empty */}
   isl_map *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -139,7 +131,6 @@ public:
   /// \param umap
   static Map fromUnionMap(const UnionMap &umap);
   virtual ~Map();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Map asMap() const;
 

@@ -10,7 +10,6 @@
 #include "isl/LocalSpace.hpp"
 #include "isl/Mat.hpp"
 #include "isl/MultiAff.hpp"
-#include "isl/Printer.hpp"
 #include "isl/PwMultiAff.hpp"
 #include "isl/Qpolynomial.hpp"
 #include "isl/Space.hpp"
@@ -39,7 +38,7 @@ inline BasicMap &BasicMap::operator=(const BasicMap &Other) {
   return *this;
 }
 inline BasicMap BasicMap::lessAt(const Space &dim, unsigned int pos) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_basic_map *That = isl_basic_map_less_at((_cast_dim).Give(), pos);
@@ -53,7 +52,7 @@ inline BasicMap BasicMap::lessAt(const Space &dim, unsigned int pos) {
 }
 
 inline BasicMap BasicMap::moreAt(const Space &dim, unsigned int pos) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_basic_map *That = isl_basic_map_more_at((_cast_dim).Give(), pos);
@@ -67,7 +66,7 @@ inline BasicMap BasicMap::moreAt(const Space &dim, unsigned int pos) {
 }
 
 inline BasicMap BasicMap::empty(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_basic_map *That = isl_basic_map_empty((_cast_dim).Give());
@@ -81,7 +80,7 @@ inline BasicMap BasicMap::empty(const Space &dim) {
 }
 
 inline BasicMap BasicMap::natUniverse(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_basic_map *That = isl_basic_map_nat_universe((_cast_dim).Give());
@@ -95,7 +94,7 @@ inline BasicMap BasicMap::natUniverse(const Space &dim) {
 }
 
 inline BasicMap BasicMap::fromBasicSet(const BasicSet &bset, const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   BasicSet _cast_bset = bset.asBasicSet();
   Space _cast_dim = dim.asSpace();
@@ -110,7 +109,7 @@ inline BasicMap BasicMap::fromBasicSet(const BasicSet &bset, const Space &dim) {
 }
 
 inline BasicMap BasicMap::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_basic_map *That = isl_basic_map_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -124,7 +123,7 @@ inline BasicMap BasicMap::readFromStr(const Ctx &ctx, std::string str) {
 }
 
 inline BasicMap BasicMap::fromDomain(const BasicSet &bset) {
-  Ctx _ctx = bset.Context();
+  const Ctx &_ctx = bset.Context();
   _ctx.lock();
   BasicSet _cast_bset = bset.asBasicSet();
   isl_basic_map *That = isl_basic_map_from_domain((_cast_bset).Give());
@@ -138,7 +137,7 @@ inline BasicMap BasicMap::fromDomain(const BasicSet &bset) {
 }
 
 inline BasicMap BasicMap::fromRange(const BasicSet &bset) {
-  Ctx _ctx = bset.Context();
+  const Ctx &_ctx = bset.Context();
   _ctx.lock();
   BasicSet _cast_bset = bset.asBasicSet();
   isl_basic_map *That = isl_basic_map_from_range((_cast_bset).Give());
@@ -152,7 +151,7 @@ inline BasicMap BasicMap::fromRange(const BasicSet &bset) {
 }
 
 inline BasicMap BasicMap::fromDomainAndRange(const BasicSet &domain, const BasicSet &range) {
-  Ctx _ctx = range.Context();
+  const Ctx &_ctx = range.Context();
   _ctx.lock();
   BasicSet _cast_domain = domain.asBasicSet();
   BasicSet _cast_range = range.asBasicSet();
@@ -167,7 +166,7 @@ inline BasicMap BasicMap::fromDomainAndRange(const BasicSet &domain, const Basic
 }
 
 inline BasicMap BasicMap::fromConstraintMatrices(const Space &dim, const Mat &eq, const Mat &ineq, DimType c1, DimType c2, DimType c3, DimType c4, DimType c5) {
-  Ctx _ctx = ineq.Context();
+  const Ctx &_ctx = ineq.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   Mat _cast_eq = eq.asMat();
@@ -183,7 +182,7 @@ inline BasicMap BasicMap::fromConstraintMatrices(const Space &dim, const Mat &eq
 }
 
 inline BasicMap BasicMap::fromAff(const Aff &aff) {
-  Ctx _ctx = aff.Context();
+  const Ctx &_ctx = aff.Context();
   _ctx.lock();
   Aff _cast_aff = aff.asAff();
   isl_basic_map *That = isl_basic_map_from_aff((_cast_aff).Give());
@@ -197,7 +196,7 @@ inline BasicMap BasicMap::fromAff(const Aff &aff) {
 }
 
 inline BasicMap BasicMap::fromMultiAff(const MultiAff &maff) {
-  Ctx _ctx = maff.Context();
+  const Ctx &_ctx = maff.Context();
   _ctx.lock();
   MultiAff _cast_maff = maff.asMultiAff();
   isl_basic_map *That = isl_basic_map_from_multi_aff((_cast_maff).Give());
@@ -211,7 +210,7 @@ inline BasicMap BasicMap::fromMultiAff(const MultiAff &maff) {
 }
 
 inline BasicMap BasicMap::fromConstraint(const Constraint &constraint) {
-  Ctx _ctx = constraint.Context();
+  const Ctx &_ctx = constraint.Context();
   _ctx.lock();
   Constraint _cast_constraint = constraint.asConstraint();
   isl_basic_map *That = isl_basic_map_from_constraint((_cast_constraint).Give());
@@ -225,7 +224,7 @@ inline BasicMap BasicMap::fromConstraint(const Constraint &constraint) {
 }
 
 inline BasicMap BasicMap::fromQpolynomial(const Qpolynomial &qp) {
-  Ctx _ctx = qp.Context();
+  const Ctx &_ctx = qp.Context();
   _ctx.lock();
   Qpolynomial _cast_qp = qp.asQpolynomial();
   isl_basic_map *That = isl_basic_map_from_qpolynomial((_cast_qp).Give());
@@ -256,15 +255,9 @@ inline isl_basic_map *BasicMap::Give() {
 /// \returns A the wrapped isl object.
 inline isl_basic_map *BasicMap::Get() const {  return (isl_basic_map *)This;
 }
-inline std::string BasicMap::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printBasicMap(*this);
-  return p.getStr();
-}
 
 inline BasicMap BasicMap::asBasicMap() const {
-  return BasicMap(GetCopy());
+  return BasicMap(ctx, GetCopy());
 }
 
 inline Map BasicMap::asMap() const {
@@ -288,7 +281,7 @@ inline BasicMap BasicMap::addConstraint(const Constraint &constraint) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_add_constraint returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::addDims(DimType type, unsigned int n) const {
@@ -303,7 +296,7 @@ inline BasicMap BasicMap::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_add_dims returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::affineHull() const {
@@ -318,7 +311,7 @@ inline BasicMap BasicMap::affineHull() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_affine_hull returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::alignParams(const Space &model) const {
@@ -334,7 +327,7 @@ inline BasicMap BasicMap::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_align_params returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::applyDomain(const BasicMap &bmap2) const {
@@ -350,7 +343,7 @@ inline BasicMap BasicMap::applyDomain(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_apply_domain returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::applyRange(const BasicMap &bmap2) const {
@@ -366,7 +359,7 @@ inline BasicMap BasicMap::applyRange(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_apply_range returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline Bool BasicMap::canCurry() const {
@@ -417,7 +410,7 @@ inline Map BasicMap::computeDivs() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_compute_divs returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline BasicMap BasicMap::curry() const {
@@ -432,7 +425,7 @@ inline BasicMap BasicMap::curry() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_curry returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicSet BasicMap::deltas() const {
@@ -447,7 +440,7 @@ inline BasicSet BasicMap::deltas() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_deltas returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicMap BasicMap::deltasMap() const {
@@ -462,7 +455,7 @@ inline BasicMap BasicMap::deltasMap() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_deltas_map returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::detectEqualities() const {
@@ -477,7 +470,7 @@ inline BasicMap BasicMap::detectEqualities() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_detect_equalities returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline unsigned int BasicMap::dim(DimType type) const {
@@ -504,7 +497,7 @@ inline BasicSet BasicMap::domain() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_domain returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicMap BasicMap::domainMap() const {
@@ -519,7 +512,7 @@ inline BasicMap BasicMap::domainMap() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_domain_map returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::domainProduct(const BasicMap &bmap2) const {
@@ -535,7 +528,7 @@ inline BasicMap BasicMap::domainProduct(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_domain_product returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::dropConstraintsInvolvingDims(DimType type, unsigned int first, unsigned int n) const {
@@ -550,7 +543,7 @@ inline BasicMap BasicMap::dropConstraintsInvolvingDims(DimType type, unsigned in
   if (ctx.hasError()) {
     handleError("isl_basic_map_drop_constraints_involving_dims returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::eliminate(DimType type, unsigned int first, unsigned int n) const {
@@ -565,7 +558,7 @@ inline BasicMap BasicMap::eliminate(DimType type, unsigned int first, unsigned i
   if (ctx.hasError()) {
     handleError("isl_basic_map_eliminate returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline Mat BasicMap::equalitiesMatrix(DimType c1, DimType c2, DimType c3, DimType c4, DimType c5) const {
@@ -580,7 +573,7 @@ inline Mat BasicMap::equalitiesMatrix(DimType c1, DimType c2, DimType c3, DimTyp
   if (ctx.hasError()) {
     handleError("isl_basic_map_equalities_matrix returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline BasicMap BasicMap::equate(DimType type1, int pos1, DimType type2, int pos2) const {
@@ -595,7 +588,7 @@ inline BasicMap BasicMap::equate(DimType type1, int pos1, DimType type2, int pos
   if (ctx.hasError()) {
     handleError("isl_basic_map_equate returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::fixVal(DimType type, unsigned int pos, const Val &v) const {
@@ -611,7 +604,7 @@ inline BasicMap BasicMap::fixVal(DimType type, unsigned int pos, const Val &v) c
   if (ctx.hasError()) {
     handleError("isl_basic_map_fix_val returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::flatProduct(const BasicMap &bmap2) const {
@@ -627,7 +620,7 @@ inline BasicMap BasicMap::flatProduct(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_flat_product returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::flatRangeProduct(const BasicMap &bmap2) const {
@@ -643,7 +636,7 @@ inline BasicMap BasicMap::flatRangeProduct(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_flat_range_product returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::flatten() const {
@@ -658,7 +651,7 @@ inline BasicMap BasicMap::flatten() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_flatten returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::flattenDomain() const {
@@ -673,7 +666,7 @@ inline BasicMap BasicMap::flattenDomain() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_flatten_domain returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::flattenRange() const {
@@ -688,7 +681,7 @@ inline BasicMap BasicMap::flattenRange() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_flatten_range returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline Stat BasicMap::foreachConstraint(const std::function<isl_stat(isl_constraint *, void *)> && fn, void * user) const {
@@ -732,7 +725,7 @@ inline Aff BasicMap::getDiv(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_get_div returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline LocalSpace BasicMap::getLocalSpace() const {
@@ -747,7 +740,7 @@ inline LocalSpace BasicMap::getLocalSpace() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_get_local_space returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline Space BasicMap::getSpace() const {
@@ -762,7 +755,7 @@ inline Space BasicMap::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline std::string BasicMap::getTupleName(DimType type) const {
@@ -795,7 +788,7 @@ inline BasicMap BasicMap::gist(const BasicMap &context) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_gist returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline Bool BasicMap::hasDimId(DimType type, unsigned int pos) const {
@@ -822,7 +815,7 @@ inline Mat BasicMap::inequalitiesMatrix(DimType c1, DimType c2, DimType c3, DimT
   if (ctx.hasError()) {
     handleError("isl_basic_map_inequalities_matrix returned a NULL pointer.");
   }
-  return Mat(res);
+  return Mat(ctx, res);
 }
 
 inline BasicMap BasicMap::insertDims(DimType type, unsigned int pos, unsigned int n) const {
@@ -837,7 +830,7 @@ inline BasicMap BasicMap::insertDims(DimType type, unsigned int pos, unsigned in
   if (ctx.hasError()) {
     handleError("isl_basic_map_insert_dims returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::intersect(const BasicMap &bmap2) const {
@@ -853,7 +846,7 @@ inline BasicMap BasicMap::intersect(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_intersect returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::intersectDomain(const BasicSet &bset) const {
@@ -869,7 +862,7 @@ inline BasicMap BasicMap::intersectDomain(const BasicSet &bset) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_intersect_domain returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::intersectRange(const BasicSet &bset) const {
@@ -885,7 +878,7 @@ inline BasicMap BasicMap::intersectRange(const BasicSet &bset) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_intersect_range returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline Bool BasicMap::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -1000,7 +993,7 @@ inline Map BasicMap::lexmax() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_lexmax returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline Map BasicMap::lexmin() const {
@@ -1015,7 +1008,7 @@ inline Map BasicMap::lexmin() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_lexmin returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline PwMultiAff BasicMap::lexminPwMultiAff() const {
@@ -1030,7 +1023,7 @@ inline PwMultiAff BasicMap::lexminPwMultiAff() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_lexmin_pw_multi_aff returned a NULL pointer.");
   }
-  return PwMultiAff(res);
+  return PwMultiAff(ctx, res);
 }
 
 inline BasicMap BasicMap::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_type, unsigned int src_pos, unsigned int n) const {
@@ -1045,7 +1038,7 @@ inline BasicMap BasicMap::moveDims(DimType dst_type, unsigned int dst_pos, DimTy
   if (ctx.hasError()) {
     handleError("isl_basic_map_move_dims returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline int BasicMap::nConstraint() const {
@@ -1120,7 +1113,7 @@ inline BasicMap BasicMap::orderGe(DimType type1, int pos1, DimType type2, int po
   if (ctx.hasError()) {
     handleError("isl_basic_map_order_ge returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::orderGt(DimType type1, int pos1, DimType type2, int pos2) const {
@@ -1135,7 +1128,7 @@ inline BasicMap BasicMap::orderGt(DimType type1, int pos1, DimType type2, int po
   if (ctx.hasError()) {
     handleError("isl_basic_map_order_gt returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::product(const BasicMap &bmap2) const {
@@ -1151,7 +1144,7 @@ inline BasicMap BasicMap::product(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_product returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::projectOut(DimType type, unsigned int first, unsigned int n) const {
@@ -1166,7 +1159,7 @@ inline BasicMap BasicMap::projectOut(DimType type, unsigned int first, unsigned 
   if (ctx.hasError()) {
     handleError("isl_basic_map_project_out returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicSet BasicMap::range() const {
@@ -1181,7 +1174,7 @@ inline BasicSet BasicMap::range() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_range returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline BasicMap BasicMap::rangeMap() const {
@@ -1196,7 +1189,7 @@ inline BasicMap BasicMap::rangeMap() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_range_map returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::rangeProduct(const BasicMap &bmap2) const {
@@ -1212,7 +1205,7 @@ inline BasicMap BasicMap::rangeProduct(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_range_product returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::removeDims(DimType type, unsigned int first, unsigned int n) const {
@@ -1227,7 +1220,7 @@ inline BasicMap BasicMap::removeDims(DimType type, unsigned int first, unsigned 
   if (ctx.hasError()) {
     handleError("isl_basic_map_remove_dims returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::removeDivs() const {
@@ -1242,7 +1235,7 @@ inline BasicMap BasicMap::removeDivs() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_remove_divs returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::removeDivsInvolvingDims(DimType type, unsigned int first, unsigned int n) const {
@@ -1257,7 +1250,7 @@ inline BasicMap BasicMap::removeDivsInvolvingDims(DimType type, unsigned int fir
   if (ctx.hasError()) {
     handleError("isl_basic_map_remove_divs_involving_dims returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::reverse() const {
@@ -1272,7 +1265,7 @@ inline BasicMap BasicMap::reverse() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_reverse returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::sample() const {
@@ -1287,7 +1280,7 @@ inline BasicMap BasicMap::sample() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_sample returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::setDimName(DimType type, unsigned int pos, std::string s) const {
@@ -1302,7 +1295,7 @@ inline BasicMap BasicMap::setDimName(DimType type, unsigned int pos, std::string
   if (ctx.hasError()) {
     handleError("isl_basic_map_set_dim_name returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::setTupleId(DimType type, const Id &id) const {
@@ -1318,7 +1311,7 @@ inline BasicMap BasicMap::setTupleId(DimType type, const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_set_tuple_id returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline BasicMap BasicMap::setTupleName(DimType type, std::string s) const {
@@ -1333,7 +1326,7 @@ inline BasicMap BasicMap::setTupleName(DimType type, std::string s) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_set_tuple_name returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline unsigned int BasicMap::totalDim() const {
@@ -1360,7 +1353,7 @@ inline BasicMap BasicMap::uncurry() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_uncurry returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline Map BasicMap::union_(const BasicMap &bmap2) const {
@@ -1376,7 +1369,7 @@ inline Map BasicMap::union_(const BasicMap &bmap2) const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_union returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline BasicSet BasicMap::wrap() const {
@@ -1391,7 +1384,7 @@ inline BasicSet BasicMap::wrap() const {
   if (ctx.hasError()) {
     handleError("isl_basic_map_wrap returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 } // namespace isl

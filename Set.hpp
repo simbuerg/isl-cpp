@@ -10,7 +10,6 @@
 #include "isl/MultiAff.hpp"
 #include "isl/MultiPwAff.hpp"
 #include "isl/Point.hpp"
-#include "isl/Printer.hpp"
 #include "isl/PwAff.hpp"
 #include "isl/PwMultiAff.hpp"
 #include "isl/PwQpolynomialFold.hpp"
@@ -41,7 +40,7 @@ inline Set &Set::operator=(const Set &Other) {
   return *this;
 }
 inline Set Set::fromPwAff(const PwAff &pwaff) {
-  Ctx _ctx = pwaff.Context();
+  const Ctx &_ctx = pwaff.Context();
   _ctx.lock();
   PwAff _cast_pwaff = pwaff.asPwAff();
   isl_set *That = isl_set_from_pw_aff((_cast_pwaff).Give());
@@ -55,7 +54,7 @@ inline Set Set::fromPwAff(const PwAff &pwaff) {
 }
 
 inline Set Set::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_set *That = isl_set_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -69,7 +68,7 @@ inline Set Set::readFromStr(const Ctx &ctx, std::string str) {
 }
 
 inline Set Set::fromBasicSet(const BasicSet &bset) {
-  Ctx _ctx = bset.Context();
+  const Ctx &_ctx = bset.Context();
   _ctx.lock();
   BasicSet _cast_bset = bset.asBasicSet();
   isl_set *That = isl_set_from_basic_set((_cast_bset).Give());
@@ -83,7 +82,7 @@ inline Set Set::fromBasicSet(const BasicSet &bset) {
 }
 
 inline Set Set::fromPoint(const Point &pnt) {
-  Ctx _ctx = pnt.Context();
+  const Ctx &_ctx = pnt.Context();
   _ctx.lock();
   Point _cast_pnt = pnt.asPoint();
   isl_set *That = isl_set_from_point((_cast_pnt).Give());
@@ -97,7 +96,7 @@ inline Set Set::fromPoint(const Point &pnt) {
 }
 
 inline Set Set::boxFromPoints(const Point &pnt1, const Point &pnt2) {
-  Ctx _ctx = pnt2.Context();
+  const Ctx &_ctx = pnt2.Context();
   _ctx.lock();
   Point _cast_pnt1 = pnt1.asPoint();
   Point _cast_pnt2 = pnt2.asPoint();
@@ -112,7 +111,7 @@ inline Set Set::boxFromPoints(const Point &pnt1, const Point &pnt2) {
 }
 
 inline Set Set::fromUnionSet(const UnionSet &uset) {
-  Ctx _ctx = uset.Context();
+  const Ctx &_ctx = uset.Context();
   _ctx.lock();
   UnionSet _cast_uset = uset.asUnionSet();
   isl_set *That = isl_set_from_union_set((_cast_uset).Give());
@@ -143,15 +142,9 @@ inline isl_set *Set::Give() {
 /// \returns A the wrapped isl object.
 inline isl_set *Set::Get() const {  return (isl_set *)This;
 }
-inline std::string Set::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printSet(*this);
-  return p.getStr();
-}
 
 inline Set Set::asSet() const {
-  return Set(GetCopy());
+  return Set(ctx, GetCopy());
 }
 
 inline UnionSet Set::asUnionSet() const {
@@ -171,7 +164,7 @@ inline Set Set::addConstraint(const Constraint &constraint) const {
   if (ctx.hasError()) {
     handleError("isl_set_add_constraint returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::addDims(DimType type, unsigned int n) const {
@@ -186,7 +179,7 @@ inline Set Set::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_set_add_dims returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet Set::affineHull() const {
@@ -201,7 +194,7 @@ inline BasicSet Set::affineHull() const {
   if (ctx.hasError()) {
     handleError("isl_set_affine_hull returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Set Set::alignDivs() const {
@@ -216,7 +209,7 @@ inline Set Set::alignDivs() const {
   if (ctx.hasError()) {
     handleError("isl_set_align_divs returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::alignParams(const Space &model) const {
@@ -232,7 +225,7 @@ inline Set Set::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_set_align_params returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::apply(const Map &map) const {
@@ -248,7 +241,7 @@ inline Set Set::apply(const Map &map) const {
   if (ctx.hasError()) {
     handleError("isl_set_apply returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwQpolynomialFold Set::applyPwQpolynomialFold(const PwQpolynomialFold &pwf, int * tight) const {
@@ -264,7 +257,7 @@ inline PwQpolynomialFold Set::applyPwQpolynomialFold(const PwQpolynomialFold &pw
   if (ctx.hasError()) {
     handleError("isl_set_apply_pw_qpolynomial_fold returned a NULL pointer.");
   }
-  return PwQpolynomialFold(res);
+  return PwQpolynomialFold(ctx, res);
 }
 
 inline Set Set::coalesce() const {
@@ -279,7 +272,7 @@ inline Set Set::coalesce() const {
   if (ctx.hasError()) {
     handleError("isl_set_coalesce returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet Set::coefficients() const {
@@ -294,7 +287,7 @@ inline BasicSet Set::coefficients() const {
   if (ctx.hasError()) {
     handleError("isl_set_coefficients returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Set Set::complement() const {
@@ -309,7 +302,7 @@ inline Set Set::complement() const {
   if (ctx.hasError()) {
     handleError("isl_set_complement returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::computeDivs() const {
@@ -324,7 +317,7 @@ inline Set Set::computeDivs() const {
   if (ctx.hasError()) {
     handleError("isl_set_compute_divs returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet Set::convexHull() const {
@@ -339,7 +332,7 @@ inline BasicSet Set::convexHull() const {
   if (ctx.hasError()) {
     handleError("isl_set_convex_hull returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Val Set::countVal() const {
@@ -354,7 +347,7 @@ inline Val Set::countVal() const {
   if (ctx.hasError()) {
     handleError("isl_set_count_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Set Set::detectEqualities() const {
@@ -369,7 +362,7 @@ inline Set Set::detectEqualities() const {
   if (ctx.hasError()) {
     handleError("isl_set_detect_equalities returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline unsigned int Set::dim(DimType type) const {
@@ -456,7 +449,7 @@ inline PwAff Set::dimMax(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_set_dim_max returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline PwAff Set::dimMin(int pos) const {
@@ -471,7 +464,7 @@ inline PwAff Set::dimMin(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_set_dim_min returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set Set::dropConstraintsInvolvingDims(DimType type, unsigned int first, unsigned int n) const {
@@ -486,7 +479,7 @@ inline Set Set::dropConstraintsInvolvingDims(DimType type, unsigned int first, u
   if (ctx.hasError()) {
     handleError("isl_set_drop_constraints_involving_dims returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::flatProduct(const Set &set2) const {
@@ -502,7 +495,7 @@ inline Set Set::flatProduct(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_flat_product returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::flatten() const {
@@ -517,7 +510,7 @@ inline Set Set::flatten() const {
   if (ctx.hasError()) {
     handleError("isl_set_flatten returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Map Set::flattenMap() const {
@@ -532,7 +525,7 @@ inline Map Set::flattenMap() const {
   if (ctx.hasError()) {
     handleError("isl_set_flatten_map returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline Stat Set::foreachBasicSet(const std::function<isl_stat(isl_basic_set *, void *)> && fn, void * user) const {
@@ -571,7 +564,7 @@ inline Id Set::getDimId(DimType type, unsigned int pos) const {
   if (ctx.hasError()) {
     handleError("isl_set_get_dim_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline std::string Set::getDimName(DimType type, unsigned int pos) const {
@@ -603,7 +596,7 @@ inline Space Set::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_set_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Id Set::getTupleId() const {
@@ -618,7 +611,7 @@ inline Id Set::getTupleId() const {
   if (ctx.hasError()) {
     handleError("isl_set_get_tuple_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline std::string Set::getTupleName() const {
@@ -651,7 +644,7 @@ inline Set Set::gist(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_set_gist returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::gistBasicSet(const BasicSet &context) const {
@@ -667,7 +660,7 @@ inline Set Set::gistBasicSet(const BasicSet &context) const {
   if (ctx.hasError()) {
     handleError("isl_set_gist_basic_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::gistParams(const Set &context) const {
@@ -683,7 +676,7 @@ inline Set Set::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_set_gist_params returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Bool Set::hasDimId(DimType type, unsigned int pos) const {
@@ -759,7 +752,7 @@ inline Map Set::identity() const {
   if (ctx.hasError()) {
     handleError("isl_set_identity returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline PwAff Set::indicatorFunction() const {
@@ -774,7 +767,7 @@ inline PwAff Set::indicatorFunction() const {
   if (ctx.hasError()) {
     handleError("isl_set_indicator_function returned a NULL pointer.");
   }
-  return PwAff(res);
+  return PwAff(ctx, res);
 }
 
 inline Set Set::insertDims(DimType type, unsigned int pos, unsigned int n) const {
@@ -789,7 +782,7 @@ inline Set Set::insertDims(DimType type, unsigned int pos, unsigned int n) const
   if (ctx.hasError()) {
     handleError("isl_set_insert_dims returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::intersect(const Set &set2) const {
@@ -805,7 +798,7 @@ inline Set Set::intersect(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_intersect returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::intersectParams(const Set &params) const {
@@ -821,7 +814,7 @@ inline Set Set::intersectParams(const Set &params) const {
   if (ctx.hasError()) {
     handleError("isl_set_intersect_params returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Bool Set::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -949,7 +942,7 @@ inline Map Set::lexGeSet(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_lex_ge_set returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline Map Set::lexGtSet(const Set &set2) const {
@@ -965,7 +958,7 @@ inline Map Set::lexGtSet(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_lex_gt_set returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline Map Set::lexLeSet(const Set &set2) const {
@@ -981,7 +974,7 @@ inline Map Set::lexLeSet(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_lex_le_set returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline Map Set::lexLtSet(const Set &set2) const {
@@ -997,7 +990,7 @@ inline Map Set::lexLtSet(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_lex_lt_set returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline Set Set::lexmax() const {
@@ -1012,7 +1005,7 @@ inline Set Set::lexmax() const {
   if (ctx.hasError()) {
     handleError("isl_set_lexmax returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwMultiAff Set::lexmaxPwMultiAff() const {
@@ -1027,7 +1020,7 @@ inline PwMultiAff Set::lexmaxPwMultiAff() const {
   if (ctx.hasError()) {
     handleError("isl_set_lexmax_pw_multi_aff returned a NULL pointer.");
   }
-  return PwMultiAff(res);
+  return PwMultiAff(ctx, res);
 }
 
 inline Set Set::lexmin() const {
@@ -1042,7 +1035,7 @@ inline Set Set::lexmin() const {
   if (ctx.hasError()) {
     handleError("isl_set_lexmin returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwMultiAff Set::lexminPwMultiAff() const {
@@ -1057,7 +1050,7 @@ inline PwMultiAff Set::lexminPwMultiAff() const {
   if (ctx.hasError()) {
     handleError("isl_set_lexmin_pw_multi_aff returned a NULL pointer.");
   }
-  return PwMultiAff(res);
+  return PwMultiAff(ctx, res);
 }
 
 inline Set Set::lift() const {
@@ -1072,7 +1065,7 @@ inline Set Set::lift() const {
   if (ctx.hasError()) {
     handleError("isl_set_lift returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Map Set::lifting() const {
@@ -1087,7 +1080,7 @@ inline Map Set::lifting() const {
   if (ctx.hasError()) {
     handleError("isl_set_lifting returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 inline Set Set::makeDisjoint() const {
@@ -1102,7 +1095,7 @@ inline Set Set::makeDisjoint() const {
   if (ctx.hasError()) {
     handleError("isl_set_make_disjoint returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_type, unsigned int src_pos, unsigned int n) const {
@@ -1117,7 +1110,7 @@ inline Set Set::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_typ
   if (ctx.hasError()) {
     handleError("isl_set_move_dims returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline int Set::nBasicSet() const {
@@ -1144,7 +1137,7 @@ inline Set Set::neg() const {
   if (ctx.hasError()) {
     handleError("isl_set_neg returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet Set::polyhedralHull() const {
@@ -1159,7 +1152,7 @@ inline BasicSet Set::polyhedralHull() const {
   if (ctx.hasError()) {
     handleError("isl_set_polyhedral_hull returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Set Set::preimageMultiAff(const MultiAff &ma) const {
@@ -1175,7 +1168,7 @@ inline Set Set::preimageMultiAff(const MultiAff &ma) const {
   if (ctx.hasError()) {
     handleError("isl_set_preimage_multi_aff returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::preimageMultiPwAff(const MultiPwAff &mpa) const {
@@ -1191,7 +1184,7 @@ inline Set Set::preimageMultiPwAff(const MultiPwAff &mpa) const {
   if (ctx.hasError()) {
     handleError("isl_set_preimage_multi_pw_aff returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::preimagePwMultiAff(const PwMultiAff &pma) const {
@@ -1207,7 +1200,7 @@ inline Set Set::preimagePwMultiAff(const PwMultiAff &pma) const {
   if (ctx.hasError()) {
     handleError("isl_set_preimage_pw_multi_aff returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::product(const Set &set2) const {
@@ -1223,7 +1216,7 @@ inline Set Set::product(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_product returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::projectOut(DimType type, unsigned int first, unsigned int n) const {
@@ -1238,7 +1231,7 @@ inline Set Set::projectOut(DimType type, unsigned int first, unsigned int n) con
   if (ctx.hasError()) {
     handleError("isl_set_project_out returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::recessionCone() const {
@@ -1253,7 +1246,7 @@ inline Set Set::recessionCone() const {
   if (ctx.hasError()) {
     handleError("isl_set_recession_cone returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::removeDims(DimType type, unsigned int first, unsigned int n) const {
@@ -1268,7 +1261,7 @@ inline Set Set::removeDims(DimType type, unsigned int first, unsigned int n) con
   if (ctx.hasError()) {
     handleError("isl_set_remove_dims returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::removeDivs() const {
@@ -1283,7 +1276,7 @@ inline Set Set::removeDivs() const {
   if (ctx.hasError()) {
     handleError("isl_set_remove_divs returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::removeDivsInvolvingDims(DimType type, unsigned int first, unsigned int n) const {
@@ -1298,7 +1291,7 @@ inline Set Set::removeDivsInvolvingDims(DimType type, unsigned int first, unsign
   if (ctx.hasError()) {
     handleError("isl_set_remove_divs_involving_dims returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::removeUnknownDivs() const {
@@ -1313,7 +1306,7 @@ inline Set Set::removeUnknownDivs() const {
   if (ctx.hasError()) {
     handleError("isl_set_remove_unknown_divs returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::resetTupleId() const {
@@ -1328,7 +1321,7 @@ inline Set Set::resetTupleId() const {
   if (ctx.hasError()) {
     handleError("isl_set_reset_tuple_id returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet Set::sample() const {
@@ -1343,7 +1336,7 @@ inline BasicSet Set::sample() const {
   if (ctx.hasError()) {
     handleError("isl_set_sample returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Point Set::samplePoint() const {
@@ -1358,7 +1351,7 @@ inline Point Set::samplePoint() const {
   if (ctx.hasError()) {
     handleError("isl_set_sample_point returned a NULL pointer.");
   }
-  return Point(res);
+  return Point(ctx, res);
 }
 
 inline Set Set::setDimId(DimType type, unsigned int pos, const Id &id) const {
@@ -1374,7 +1367,7 @@ inline Set Set::setDimId(DimType type, unsigned int pos, const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_set_set_dim_id returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::setTupleId(const Id &id) const {
@@ -1390,7 +1383,7 @@ inline Set Set::setTupleId(const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_set_set_tuple_id returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet Set::simpleHull() const {
@@ -1405,7 +1398,7 @@ inline BasicSet Set::simpleHull() const {
   if (ctx.hasError()) {
     handleError("isl_set_simple_hull returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline int Set::size() const {
@@ -1432,7 +1425,7 @@ inline BasicSet Set::solutions() const {
   if (ctx.hasError()) {
     handleError("isl_set_solutions returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Set Set::splitDims(DimType type, unsigned int first, unsigned int n) const {
@@ -1447,7 +1440,7 @@ inline Set Set::splitDims(DimType type, unsigned int first, unsigned int n) cons
   if (ctx.hasError()) {
     handleError("isl_set_split_dims returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::subtract(const Set &set2) const {
@@ -1463,7 +1456,7 @@ inline Set Set::subtract(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_subtract returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::sum(const Set &set2) const {
@@ -1479,7 +1472,7 @@ inline Set Set::sum(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_sum returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Set Set::union_(const Set &set2) const {
@@ -1495,7 +1488,7 @@ inline Set Set::union_(const Set &set2) const {
   if (ctx.hasError()) {
     handleError("isl_set_union returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline BasicSet Set::unshiftedSimpleHull() const {
@@ -1510,7 +1503,7 @@ inline BasicSet Set::unshiftedSimpleHull() const {
   if (ctx.hasError()) {
     handleError("isl_set_unshifted_simple_hull returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Map Set::unwrap() const {
@@ -1525,7 +1518,7 @@ inline Map Set::unwrap() const {
   if (ctx.hasError()) {
     handleError("isl_set_unwrap returned a NULL pointer.");
   }
-  return Map(res);
+  return Map(ctx, res);
 }
 
 } // namespace isl

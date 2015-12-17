@@ -13,24 +13,16 @@
 
 namespace isl {
 class MultiUnionPwAff;
-class Printer;
 
 class UnionPwMultiAff {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionPwMultiAff(Ctx ctx, isl_union_pw_multi_aff *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwMultiAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_pw_multi_aff we want to wrap.
-  explicit UnionPwMultiAff(isl_union_pw_multi_aff *That) : UnionPwMultiAff(Ctx(isl_union_pw_multi_aff_get_ctx(That)), That) {}
   isl_union_pw_multi_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -48,12 +40,11 @@ public:
   /// \param mupa
   static UnionPwMultiAff fromMultiUnionPwAff(const MultiUnionPwAff &mupa);
   virtual ~UnionPwMultiAff();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual UnionPwMultiAff asUnionPwMultiAff() const;
-  UnionPwMultiAff(const UnionPwMultiAff &Other) : UnionPwMultiAff(Other.Context(), Other.GetCopy()) {}
+  UnionPwMultiAff(const UnionPwMultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwMultiAff &operator=(const UnionPwMultiAff &Other);
-  UnionPwMultiAff (UnionPwMultiAff && Other) : UnionPwMultiAff(Other.Context(), Other.This) {}
+  UnionPwMultiAff (UnionPwMultiAff && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionPwMultiAff &operator=(UnionPwMultiAff && Other) {
     isl_union_pw_multi_aff *New = Other.Give();
     isl_union_pw_multi_aff_free((isl_union_pw_multi_aff *)This);

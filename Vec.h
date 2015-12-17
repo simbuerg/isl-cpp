@@ -14,25 +14,17 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Printer;
 class Val;
 
 class Vec {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Vec(Ctx ctx, isl_vec *That) : ctx(ctx), This((void *)That) {}
   explicit Vec(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_vec we want to wrap.
-  explicit Vec(isl_vec *That) : Vec(Ctx(isl_vec_get_ctx(That)), That) {}
   isl_vec *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -51,7 +43,6 @@ public:
   /// \param size
   static Vec alloc(const Ctx &ctx, unsigned int size);
   virtual ~Vec();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Vec asVec() const;
 
@@ -176,9 +167,9 @@ public:
   ///
   /// \returns A new Vec
   Vec zeroExtend(unsigned int size) const;
-  Vec(const Vec &Other) : Vec(Other.Context(), Other.GetCopy()) {}
+  Vec(const Vec &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Vec &operator=(const Vec &Other);
-  Vec (Vec && Other) : Vec(Other.Context(), Other.This) {}
+  Vec (Vec && Other) : ctx(Other.Context()), This(Other.This) {}
   Vec &operator=(Vec && Other) {
     isl_vec *New = Other.Give();
     isl_vec_free((isl_vec *)This);

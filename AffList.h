@@ -16,20 +16,13 @@ class Aff;
 
 class AffList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit AffList(Ctx ctx, isl_aff_list *That) : ctx(ctx), This((void *)That) {}
   explicit AffList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_aff_list we want to wrap.
-  explicit AffList(isl_aff_list *That) : AffList(Ctx(isl_aff_list_get_ctx(That)), That) {}
   isl_aff_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new AffList
   AffList add(const Aff &el) const;
-  AffList(const AffList &Other) : AffList(Other.Context(), Other.GetCopy()) {}
+  AffList(const AffList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AffList &operator=(const AffList &Other);
-  AffList (AffList && Other) : AffList(Other.Context(), Other.This) {}
+  AffList (AffList && Other) : ctx(Other.Context()), This(Other.This) {}
   AffList &operator=(AffList && Other) {
     isl_aff_list *New = Other.Give();
     isl_aff_list_free((isl_aff_list *)This);

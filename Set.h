@@ -25,7 +25,6 @@ class Map;
 class MultiAff;
 class MultiPwAff;
 class Point;
-class Printer;
 class PwAff;
 class PwMultiAff;
 class PwQpolynomialFold;
@@ -34,17 +33,10 @@ class Val;
 
 class Set : public UnionSet {
 protected:
-  explicit Set(Ctx ctx, isl_set *That) : UnionSet(ctx, (void *)That) {/* empty */}
-  explicit Set(Ctx ctx, void *That) : UnionSet(ctx, (void *)That) {/* empty */}
 
 public:
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_set we want to wrap.
-  explicit Set(isl_set *That) : Set(Ctx(isl_set_get_ctx(That)), That) {}
+  explicit Set(Ctx ctx, isl_set *That) : UnionSet(ctx, (void *)That) {/* empty */}
+  explicit Set(Ctx ctx, void *That) : UnionSet(ctx, (void *)That) {/* empty */}
   isl_set *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -84,7 +76,6 @@ public:
   /// \param uset
   static Set fromUnionSet(const UnionSet &uset);
   virtual ~Set();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Set asSet() const;
 

@@ -14,26 +14,18 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Printer;
 class Space;
 class Val;
 
 class Point {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Point(Ctx ctx, isl_point *That) : ctx(ctx), This((void *)That) {}
   explicit Point(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_point we want to wrap.
-  explicit Point(isl_point *That) : Point(Ctx(isl_point_get_ctx(That)), That) {}
   isl_point *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -55,7 +47,6 @@ public:
   /// \param dim
   static Point void_(const Space &dim);
   virtual ~Point();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Point asPoint() const;
 
@@ -87,9 +78,9 @@ public:
   ///
   /// \returns A new Point
   Point setCoordinateVal(DimType type, int pos, const Val &v) const;
-  Point(const Point &Other) : Point(Other.Context(), Other.GetCopy()) {}
+  Point(const Point &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Point &operator=(const Point &Other);
-  Point (Point && Other) : Point(Other.Context(), Other.This) {}
+  Point (Point && Other) : ctx(Other.Context()), This(Other.This) {}
   Point &operator=(Point && Other) {
     isl_point *New = Other.Give();
     isl_point_free((isl_point *)This);

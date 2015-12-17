@@ -35,7 +35,7 @@ inline isl_ctx *Ctx::Get() const {  return (isl_ctx *)This.get()->p;
 }
 
 inline Ctx Ctx::asCtx() const {
-  return *const_cast<Ctx *>(this);
+  return *this;
 }
 
 inline int Ctx::getTileScaleTileLoops() const {

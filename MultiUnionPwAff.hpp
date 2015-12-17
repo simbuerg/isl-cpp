@@ -33,7 +33,7 @@ inline MultiUnionPwAff &MultiUnionPwAff::operator=(const MultiUnionPwAff &Other)
   return *this;
 }
 inline MultiUnionPwAff MultiUnionPwAff::fromMultiAff(const MultiAff &ma) {
-  Ctx _ctx = ma.Context();
+  const Ctx &_ctx = ma.Context();
   _ctx.lock();
   MultiAff _cast_ma = ma.asMultiAff();
   isl_multi_union_pw_aff *That = isl_multi_union_pw_aff_from_multi_aff((_cast_ma).Give());
@@ -47,7 +47,7 @@ inline MultiUnionPwAff MultiUnionPwAff::fromMultiAff(const MultiAff &ma) {
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::fromUnionPwAff(const UnionPwAff &upa) {
-  Ctx _ctx = upa.Context();
+  const Ctx &_ctx = upa.Context();
   _ctx.lock();
   UnionPwAff _cast_upa = upa.asUnionPwAff();
   isl_multi_union_pw_aff *That = isl_multi_union_pw_aff_from_union_pw_aff((_cast_upa).Give());
@@ -61,7 +61,7 @@ inline MultiUnionPwAff MultiUnionPwAff::fromUnionPwAff(const UnionPwAff &upa) {
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::fromMultiPwAff(const MultiPwAff &mpa) {
-  Ctx _ctx = mpa.Context();
+  const Ctx &_ctx = mpa.Context();
   _ctx.lock();
   MultiPwAff _cast_mpa = mpa.asMultiPwAff();
   isl_multi_union_pw_aff *That = isl_multi_union_pw_aff_from_multi_pw_aff((_cast_mpa).Give());
@@ -75,7 +75,7 @@ inline MultiUnionPwAff MultiUnionPwAff::fromMultiPwAff(const MultiPwAff &mpa) {
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::multiValOnDomain(const UnionSet &domain, const MultiVal &mv) {
-  Ctx _ctx = mv.Context();
+  const Ctx &_ctx = mv.Context();
   _ctx.lock();
   UnionSet _cast_domain = domain.asUnionSet();
   MultiVal _cast_mv = mv.asMultiVal();
@@ -90,7 +90,7 @@ inline MultiUnionPwAff MultiUnionPwAff::multiValOnDomain(const UnionSet &domain,
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::multiAffOnDomain(const UnionSet &domain, const MultiAff &ma) {
-  Ctx _ctx = ma.Context();
+  const Ctx &_ctx = ma.Context();
   _ctx.lock();
   UnionSet _cast_domain = domain.asUnionSet();
   MultiAff _cast_ma = ma.asMultiAff();
@@ -105,7 +105,7 @@ inline MultiUnionPwAff MultiUnionPwAff::multiAffOnDomain(const UnionSet &domain,
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::fromUnionPwMultiAff(const UnionPwMultiAff &upma) {
-  Ctx _ctx = upma.Context();
+  const Ctx &_ctx = upma.Context();
   _ctx.lock();
   UnionPwMultiAff _cast_upma = upma.asUnionPwMultiAff();
   isl_multi_union_pw_aff *That = isl_multi_union_pw_aff_from_union_pw_multi_aff((_cast_upma).Give());
@@ -119,7 +119,7 @@ inline MultiUnionPwAff MultiUnionPwAff::fromUnionPwMultiAff(const UnionPwMultiAf
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::fromUnionMap(const UnionMap &umap) {
-  Ctx _ctx = umap.Context();
+  const Ctx &_ctx = umap.Context();
   _ctx.lock();
   UnionMap _cast_umap = umap.asUnionMap();
   isl_multi_union_pw_aff *That = isl_multi_union_pw_aff_from_union_map((_cast_umap).Give());
@@ -133,7 +133,7 @@ inline MultiUnionPwAff MultiUnionPwAff::fromUnionMap(const UnionMap &umap) {
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_multi_union_pw_aff *That = isl_multi_union_pw_aff_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -166,7 +166,7 @@ inline isl_multi_union_pw_aff *MultiUnionPwAff::Get() const {  return (isl_multi
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::asMultiUnionPwAff() const {
-  return MultiUnionPwAff(GetCopy());
+  return MultiUnionPwAff(ctx, GetCopy());
 }
 
 inline UnionPwAff MultiUnionPwAff::applyAff(const Aff &aff) const {
@@ -182,7 +182,7 @@ inline UnionPwAff MultiUnionPwAff::applyAff(const Aff &aff) const {
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_apply_aff returned a NULL pointer.");
   }
-  return UnionPwAff(res);
+  return UnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::applyMultiAff(const MultiAff &ma) const {
@@ -198,7 +198,7 @@ inline MultiUnionPwAff MultiUnionPwAff::applyMultiAff(const MultiAff &ma) const 
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_apply_multi_aff returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::applyPwMultiAff(const PwMultiAff &pma) const {
@@ -214,7 +214,7 @@ inline MultiUnionPwAff MultiUnionPwAff::applyPwMultiAff(const PwMultiAff &pma) c
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_apply_pw_multi_aff returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline UnionSet MultiUnionPwAff::domain() const {
@@ -229,7 +229,7 @@ inline UnionSet MultiUnionPwAff::domain() const {
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_domain returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::floor() const {
@@ -244,7 +244,7 @@ inline MultiUnionPwAff MultiUnionPwAff::floor() const {
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_floor returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::gist(const UnionSet &context) const {
@@ -260,7 +260,7 @@ inline MultiUnionPwAff MultiUnionPwAff::gist(const UnionSet &context) const {
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_gist returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::gistParams(const Set &context) const {
@@ -276,7 +276,7 @@ inline MultiUnionPwAff MultiUnionPwAff::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_gist_params returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::intersectDomain(const UnionSet &uset) const {
@@ -292,7 +292,7 @@ inline MultiUnionPwAff MultiUnionPwAff::intersectDomain(const UnionSet &uset) co
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_intersect_domain returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::intersectParams(const Set &params) const {
@@ -308,7 +308,7 @@ inline MultiUnionPwAff MultiUnionPwAff::intersectParams(const Set &params) const
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_intersect_params returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::intersectRange(const Set &set) const {
@@ -324,7 +324,7 @@ inline MultiUnionPwAff MultiUnionPwAff::intersectRange(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_intersect_range returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline Bool MultiUnionPwAff::plainIsEqual(const MultiUnionPwAff &multi2) const {
@@ -353,7 +353,7 @@ inline MultiUnionPwAff MultiUnionPwAff::pullbackUnionPwMultiAff(const UnionPwMul
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_pullback_union_pw_multi_aff returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline MultiUnionPwAff MultiUnionPwAff::unionAdd(const MultiUnionPwAff &mupa2) const {
@@ -369,7 +369,7 @@ inline MultiUnionPwAff MultiUnionPwAff::unionAdd(const MultiUnionPwAff &mupa2) c
   if (ctx.hasError()) {
     handleError("isl_multi_union_pw_aff_union_add returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 } // namespace isl

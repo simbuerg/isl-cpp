@@ -16,20 +16,13 @@ class BasicSet;
 
 class BasicSetList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit BasicSetList(Ctx ctx, isl_basic_set_list *That) : ctx(ctx), This((void *)That) {}
   explicit BasicSetList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_basic_set_list we want to wrap.
-  explicit BasicSetList(isl_basic_set_list *That) : BasicSetList(Ctx(isl_basic_set_list_get_ctx(That)), That) {}
   isl_basic_set_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new BasicSetList
   BasicSetList add(const BasicSet &el) const;
-  BasicSetList(const BasicSetList &Other) : BasicSetList(Other.Context(), Other.GetCopy()) {}
+  BasicSetList(const BasicSetList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicSetList &operator=(const BasicSetList &Other);
-  BasicSetList (BasicSetList && Other) : BasicSetList(Other.Context(), Other.This) {}
+  BasicSetList (BasicSetList && Other) : ctx(Other.Context()), This(Other.This) {}
   BasicSetList &operator=(BasicSetList && Other) {
     isl_basic_set_list *New = Other.Give();
     isl_basic_set_list_free((isl_basic_set_list *)This);

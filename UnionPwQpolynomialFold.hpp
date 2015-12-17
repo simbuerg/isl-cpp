@@ -4,7 +4,6 @@
 #include "isl/UnionPwQpolynomialFold.h"
 
 #include "isl/Point.hpp"
-#include "isl/Printer.hpp"
 #include "isl/PwQpolynomialFold.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
@@ -34,7 +33,7 @@ inline UnionPwQpolynomialFold &UnionPwQpolynomialFold::operator=(const UnionPwQp
   return *this;
 }
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::fromPwQpolynomialFold(const PwQpolynomialFold &pwf) {
-  Ctx _ctx = pwf.Context();
+  const Ctx &_ctx = pwf.Context();
   _ctx.lock();
   PwQpolynomialFold _cast_pwf = pwf.asPwQpolynomialFold();
   isl_union_pw_qpolynomial_fold *That = isl_union_pw_qpolynomial_fold_from_pw_qpolynomial_fold((_cast_pwf).Give());
@@ -48,7 +47,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::fromPwQpolynomialFold(cons
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::zero(const Space &dim, Fold type) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_union_pw_qpolynomial_fold *That = isl_union_pw_qpolynomial_fold_zero((_cast_dim).Give(), (enum isl_fold)type);
@@ -79,15 +78,9 @@ inline isl_union_pw_qpolynomial_fold *UnionPwQpolynomialFold::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_pw_qpolynomial_fold *UnionPwQpolynomialFold::Get() const {  return (isl_union_pw_qpolynomial_fold *)This;
 }
-inline std::string UnionPwQpolynomialFold::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printUnionPwQpolynomialFold(*this);
-  return p.getStr();
-}
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::asUnionPwQpolynomialFold() const {
-  return UnionPwQpolynomialFold(GetCopy());
+  return UnionPwQpolynomialFold(ctx, GetCopy());
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::addUnionPwQpolynomial(const UnionPwQpolynomial &upwqp) const {
@@ -103,7 +96,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::addUnionPwQpolynomial(cons
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_add_union_pw_qpolynomial returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::alignParams(const Space &model) const {
@@ -119,7 +112,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::alignParams(const Space &m
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_align_params returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::coalesce() const {
@@ -134,7 +127,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::coalesce() const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_coalesce returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionSet UnionPwQpolynomialFold::domain() const {
@@ -149,7 +142,7 @@ inline UnionSet UnionPwQpolynomialFold::domain() const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_domain returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline Val UnionPwQpolynomialFold::eval(const Point &pnt) const {
@@ -165,7 +158,7 @@ inline Val UnionPwQpolynomialFold::eval(const Point &pnt) const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_eval returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline PwQpolynomialFold UnionPwQpolynomialFold::extractPwQpolynomialFold(const Space &dim) const {
@@ -181,7 +174,7 @@ inline PwQpolynomialFold UnionPwQpolynomialFold::extractPwQpolynomialFold(const 
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_extract_pw_qpolynomial_fold returned a NULL pointer.");
   }
-  return PwQpolynomialFold(res);
+  return PwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::fold(const UnionPwQpolynomialFold &upwf2) const {
@@ -197,7 +190,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::fold(const UnionPwQpolynom
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_fold returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::foldPwQpolynomialFold(const PwQpolynomialFold &pwqp) const {
@@ -213,7 +206,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::foldPwQpolynomialFold(cons
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_fold_pw_qpolynomial_fold returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline Stat UnionPwQpolynomialFold::foreachPwQpolynomialFold(const std::function<isl_stat(isl_pw_qpolynomial_fold *, void *)> && fn, void * user) const {
@@ -240,7 +233,7 @@ inline Space UnionPwQpolynomialFold::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Fold UnionPwQpolynomialFold::getType() const {
@@ -268,7 +261,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::gist(const UnionSet &conte
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_gist returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::gistParams(const Set &context) const {
@@ -284,7 +277,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::gistParams(const Set &cont
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_gist_params returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::intersectDomain(const UnionSet &uset) const {
@@ -300,7 +293,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::intersectDomain(const Unio
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_intersect_domain returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::intersectParams(const Set &set) const {
@@ -316,7 +309,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::intersectParams(const Set 
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_intersect_params returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline Bool UnionPwQpolynomialFold::plainIsEqual(const UnionPwQpolynomialFold &upwf2) const {
@@ -345,7 +338,7 @@ inline UnionPwQpolynomialFold UnionPwQpolynomialFold::scaleVal(const Val &v) con
   if (ctx.hasError()) {
     handleError("isl_union_pw_qpolynomial_fold_scale_val returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 } // namespace isl

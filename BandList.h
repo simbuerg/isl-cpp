@@ -17,20 +17,13 @@ class Band;
 
 class BandList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit BandList(Ctx ctx, isl_band_list *That) : ctx(ctx), This((void *)That) {}
   explicit BandList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_band_list we want to wrap.
-  explicit BandList(isl_band_list *That) : BandList(Ctx(isl_band_list_get_ctx(That)), That) {}
   isl_band_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -66,9 +59,9 @@ public:
   ///
   /// \returns A new int
   int foreachBand(const std::function<int(isl_band *, void *)> && fn, void * user) const;
-  BandList(const BandList &Other) : BandList(Other.Context(), Other.GetCopy()) {}
+  BandList(const BandList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BandList &operator=(const BandList &Other);
-  BandList (BandList && Other) : BandList(Other.Context(), Other.This) {}
+  BandList (BandList && Other) : ctx(Other.Context()), This(Other.This) {}
   BandList &operator=(BandList && Other) {
     isl_band_list *New = Other.Give();
     isl_band_list_free((isl_band_list *)This);

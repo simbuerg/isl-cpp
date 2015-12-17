@@ -16,20 +16,13 @@ class Map;
 
 class MapList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit MapList(Ctx ctx, isl_map_list *That) : ctx(ctx), This((void *)That) {}
   explicit MapList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_map_list we want to wrap.
-  explicit MapList(isl_map_list *That) : MapList(Ctx(isl_map_list_get_ctx(That)), That) {}
   isl_map_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new MapList
   MapList add(const Map &el) const;
-  MapList(const MapList &Other) : MapList(Other.Context(), Other.GetCopy()) {}
+  MapList(const MapList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MapList &operator=(const MapList &Other);
-  MapList (MapList && Other) : MapList(Other.Context(), Other.This) {}
+  MapList (MapList && Other) : ctx(Other.Context()), This(Other.This) {}
   MapList &operator=(MapList && Other) {
     isl_map_list *New = Other.Give();
     isl_map_list_free((isl_map_list *)This);

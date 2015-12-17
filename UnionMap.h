@@ -20,7 +20,6 @@
 namespace isl {
 class BasicMap;
 class Map;
-class Printer;
 class Set;
 class Space;
 class UnionPwQpolynomialFold;
@@ -29,20 +28,13 @@ class Val;
 
 class UnionMap {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionMap(Ctx ctx, isl_union_map *That) : ctx(ctx), This((void *)That) {}
   explicit UnionMap(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_map we want to wrap.
-  explicit UnionMap(isl_union_map *That) : UnionMap(Ctx(isl_union_map_get_ctx(That)), That) {}
   isl_union_map *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -85,7 +77,6 @@ public:
   /// \param str
   static UnionMap readFromStr(const Ctx &ctx, std::string str);
   virtual ~UnionMap();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual UnionMap asUnionMap() const;
 
@@ -456,9 +447,9 @@ public:
   ///
   /// \returns A new UnionMap
   UnionMap zip() const;
-  UnionMap(const UnionMap &Other) : UnionMap(Other.Context(), Other.GetCopy()) {}
+  UnionMap(const UnionMap &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionMap &operator=(const UnionMap &Other);
-  UnionMap (UnionMap && Other) : UnionMap(Other.Context(), Other.This) {}
+  UnionMap (UnionMap && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionMap &operator=(UnionMap && Other) {
     isl_union_map *New = Other.Give();
     isl_union_map_free((isl_union_map *)This);

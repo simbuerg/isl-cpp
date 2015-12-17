@@ -19,20 +19,13 @@ class Printer;
 
 class AstNode {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit AstNode(Ctx ctx, isl_ast_node *That) : ctx(ctx), This((void *)That) {}
   explicit AstNode(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_ast_node we want to wrap.
-  explicit AstNode(isl_ast_node *That) : AstNode(Ctx(isl_ast_node_get_ctx(That)), That) {}
   isl_ast_node *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -50,7 +43,6 @@ public:
   /// \param expr
   static AstNode allocUser(const AstExpr &expr);
   virtual ~AstNode();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual AstNode asAstNode() const;
 
@@ -73,9 +65,9 @@ public:
   ///
   /// \returns A new AstExpr
   AstExpr userGetExpr() const;
-  AstNode(const AstNode &Other) : AstNode(Other.Context(), Other.GetCopy()) {}
+  AstNode(const AstNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstNode &operator=(const AstNode &Other);
-  AstNode (AstNode && Other) : AstNode(Other.Context(), Other.This) {}
+  AstNode (AstNode && Other) : ctx(Other.Context()), This(Other.This) {}
   AstNode &operator=(AstNode && Other) {
     isl_ast_node *New = Other.Give();
     isl_ast_node_free((isl_ast_node *)This);

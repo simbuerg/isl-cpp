@@ -12,26 +12,18 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Printer;
 class UnionMap;
 class Vec;
 
 class Band {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Band(Ctx ctx, isl_band *That) : ctx(ctx), This((void *)That) {}
   explicit Band(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_band we want to wrap.
-  explicit Band(isl_band *That) : Band(Ctx(isl_band_get_ctx(That)), That) {}
   isl_band *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -45,7 +37,6 @@ public:
   isl_band *Get() const;
 
   virtual ~Band() = default;
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Band asBand() const;
 
@@ -80,9 +71,9 @@ public:
   ///
   /// \returns A new int
   int tile(const Vec &sizes) const;
-  Band(const Band &Other) : Band(Other.Context(), Other.GetCopy()) {}
+  Band(const Band &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Band &operator=(const Band &Other);
-  Band (Band && Other) : Band(Other.Context(), Other.This) {}
+  Band (Band && Other) : ctx(Other.Context()), This(Other.This) {}
   Band &operator=(Band && Other) {
     isl_band *New = Other.Give();
     isl_band_free((isl_band *)This);

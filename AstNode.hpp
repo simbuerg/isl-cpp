@@ -26,7 +26,7 @@ inline AstNode &AstNode::operator=(const AstNode &Other) {
   return *this;
 }
 inline AstNode AstNode::allocUser(const AstExpr &expr) {
-  Ctx _ctx = expr.Context();
+  const Ctx &_ctx = expr.Context();
   _ctx.lock();
   AstExpr _cast_expr = expr.asAstExpr();
   isl_ast_node *That = isl_ast_node_alloc_user((_cast_expr).Give());
@@ -57,15 +57,9 @@ inline isl_ast_node *AstNode::Give() {
 /// \returns A the wrapped isl object.
 inline isl_ast_node *AstNode::Get() const {  return (isl_ast_node *)This;
 }
-inline std::string AstNode::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printAstNode(*this);
-  return p.getStr();
-}
 
 inline AstNode AstNode::asAstNode() const {
-  return AstNode(GetCopy());
+  return AstNode(ctx, GetCopy());
 }
 
 inline AstNodeType AstNode::getType() const {
@@ -94,7 +88,7 @@ inline Printer AstNode::print(const Printer &p, const AstPrintOptions &options) 
   if (ctx.hasError()) {
     handleError("isl_ast_node_print returned a NULL pointer.");
   }
-  return Printer(res);
+  return Printer(ctx, res);
 }
 
 inline AstExpr AstNode::userGetExpr() const {
@@ -109,7 +103,7 @@ inline AstExpr AstNode::userGetExpr() const {
   if (ctx.hasError()) {
     handleError("isl_ast_node_user_get_expr returned a NULL pointer.");
   }
-  return AstExpr(res);
+  return AstExpr(ctx, res);
 }
 
 } // namespace isl

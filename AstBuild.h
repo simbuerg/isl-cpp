@@ -23,20 +23,13 @@ class UnionMap;
 
 class AstBuild {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit AstBuild(Ctx ctx, isl_ast_build *That) : ctx(ctx), This((void *)That) {}
   explicit AstBuild(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_ast_build we want to wrap.
-  explicit AstBuild(isl_ast_build *That) : AstBuild(Ctx(isl_ast_build_get_ctx(That)), That) {}
   isl_ast_build *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -118,9 +111,9 @@ public:
   ///
   /// \returns A new AstBuild
   AstBuild setAtEachDomain(const std::function<isl_ast_node *(isl_ast_node *, isl_ast_build *, void *)> && fn, void * user) const;
-  AstBuild(const AstBuild &Other) : AstBuild(Other.Context(), Other.GetCopy()) {}
+  AstBuild(const AstBuild &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstBuild &operator=(const AstBuild &Other);
-  AstBuild (AstBuild && Other) : AstBuild(Other.Context(), Other.This) {}
+  AstBuild (AstBuild && Other) : ctx(Other.Context()), This(Other.This) {}
   AstBuild &operator=(AstBuild && Other) {
     isl_ast_build *New = Other.Give();
     isl_ast_build_free((isl_ast_build *)This);

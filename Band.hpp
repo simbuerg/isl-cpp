@@ -3,7 +3,6 @@
 
 #include "isl/Band.h"
 
-#include "isl/Printer.hpp"
 #include "isl/UnionMap.hpp"
 #include "isl/Vec.hpp"
 #include "isl/Format.h"
@@ -38,15 +37,9 @@ inline isl_band *Band::Give() {
 /// \returns A the wrapped isl object.
 inline isl_band *Band::Get() const {  return (isl_band *)This;
 }
-inline std::string Band::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printBand(*this);
-  return p.getStr();
-}
 
 inline Band Band::asBand() const {
-  return Band(GetCopy());
+  return Band(ctx, GetCopy());
 }
 
 inline UnionMap Band::getPartialSchedule() const {
@@ -61,7 +54,7 @@ inline UnionMap Band::getPartialSchedule() const {
   if (ctx.hasError()) {
     handleError("isl_band_get_partial_schedule returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap Band::getPrefixSchedule() const {
@@ -76,7 +69,7 @@ inline UnionMap Band::getPrefixSchedule() const {
   if (ctx.hasError()) {
     handleError("isl_band_get_prefix_schedule returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap Band::getSuffixSchedule() const {
@@ -91,7 +84,7 @@ inline UnionMap Band::getSuffixSchedule() const {
   if (ctx.hasError()) {
     handleError("isl_band_get_suffix_schedule returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline int Band::split(int pos) const {

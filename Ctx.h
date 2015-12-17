@@ -28,10 +28,10 @@ protected:
     ptr(ptr && other) = delete;
     ptr &operator=(ptr && other) = delete;
   };
-  std::shared_ptr<ptr> This;
-  explicit Ctx(std::shared_ptr<ptr> That) : This(That) {}
 
 public:
+  std::shared_ptr<ptr> This;
+  explicit Ctx(std::shared_ptr<ptr> That) : This(That) {}
   const Ctx &Context() const { return *this; }
   /// \brief Wrap an existing isl object.
   ///

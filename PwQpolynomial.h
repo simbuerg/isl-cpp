@@ -20,7 +20,6 @@
 
 namespace isl {
 class Point;
-class Printer;
 class PwAff;
 class PwQpolynomialFold;
 class Qpolynomial;
@@ -30,20 +29,13 @@ class Val;
 
 class PwQpolynomial {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit PwQpolynomial(Ctx ctx, isl_pw_qpolynomial *That) : ctx(ctx), This((void *)That) {}
   explicit PwQpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_pw_qpolynomial we want to wrap.
-  explicit PwQpolynomial(isl_pw_qpolynomial *That) : PwQpolynomial(Ctx(isl_pw_qpolynomial_get_ctx(That)), That) {}
   isl_pw_qpolynomial *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -79,7 +71,6 @@ public:
   /// \param str
   static PwQpolynomial readFromStr(const Ctx &ctx, std::string str);
   virtual ~PwQpolynomial();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual PwQpolynomial asPwQpolynomial() const;
 
@@ -352,9 +343,9 @@ public:
   ///
   /// \returns A new PwQpolynomial
   PwQpolynomial toPolynomial(int sign) const;
-  PwQpolynomial(const PwQpolynomial &Other) : PwQpolynomial(Other.Context(), Other.GetCopy()) {}
+  PwQpolynomial(const PwQpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwQpolynomial &operator=(const PwQpolynomial &Other);
-  PwQpolynomial (PwQpolynomial && Other) : PwQpolynomial(Other.Context(), Other.This) {}
+  PwQpolynomial (PwQpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}
   PwQpolynomial &operator=(PwQpolynomial && Other) {
     isl_pw_qpolynomial *New = Other.Give();
     isl_pw_qpolynomial_free((isl_pw_qpolynomial *)This);

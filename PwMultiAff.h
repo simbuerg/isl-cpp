@@ -19,7 +19,6 @@
 namespace isl {
 class Id;
 class MultiAff;
-class Printer;
 class PwAff;
 class Set;
 class Space;
@@ -27,20 +26,13 @@ class Val;
 
 class PwMultiAff {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit PwMultiAff(Ctx ctx, isl_pw_multi_aff *That) : ctx(ctx), This((void *)That) {}
   explicit PwMultiAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_pw_multi_aff we want to wrap.
-  explicit PwMultiAff(isl_pw_multi_aff *That) : PwMultiAff(Ctx(isl_pw_multi_aff_get_ctx(That)), That) {}
   isl_pw_multi_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -67,7 +59,6 @@ public:
   /// \param maff
   static PwMultiAff alloc(const Set &set, const MultiAff &maff);
   virtual ~PwMultiAff();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual PwMultiAff asPwMultiAff() const;
 
@@ -319,9 +310,9 @@ public:
   ///
   /// \returns A new PwMultiAff
   PwMultiAff unionLexmin(const PwMultiAff &pma2) const;
-  PwMultiAff(const PwMultiAff &Other) : PwMultiAff(Other.Context(), Other.GetCopy()) {}
+  PwMultiAff(const PwMultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwMultiAff &operator=(const PwMultiAff &Other);
-  PwMultiAff (PwMultiAff && Other) : PwMultiAff(Other.Context(), Other.This) {}
+  PwMultiAff (PwMultiAff && Other) : ctx(Other.Context()), This(Other.This) {}
   PwMultiAff &operator=(PwMultiAff && Other) {
     isl_pw_multi_aff *New = Other.Give();
     isl_pw_multi_aff_free((isl_pw_multi_aff *)This);

@@ -24,7 +24,6 @@ class Id;
 class LocalSpace;
 class Mat;
 class MultiAff;
-class Printer;
 class PwMultiAff;
 class Qpolynomial;
 class Space;
@@ -32,17 +31,10 @@ class Val;
 
 class BasicMap : public Map {
 protected:
-  explicit BasicMap(Ctx ctx, isl_basic_map *That) : Map(ctx, (void *)That) {/* empty */}
-  explicit BasicMap(Ctx ctx, void *That) : Map(ctx, (void *)That) {/* empty */}
 
 public:
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_basic_map we want to wrap.
-  explicit BasicMap(isl_basic_map *That) : BasicMap(Ctx(isl_basic_map_get_ctx(That)), That) {}
+  explicit BasicMap(Ctx ctx, isl_basic_map *That) : Map(ctx, (void *)That) {/* empty */}
+  explicit BasicMap(Ctx ctx, void *That) : Map(ctx, (void *)That) {/* empty */}
   isl_basic_map *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -124,7 +116,6 @@ public:
   /// \param qp
   static BasicMap fromQpolynomial(const Qpolynomial &qp);
   virtual ~BasicMap();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual BasicMap asBasicMap() const;
 

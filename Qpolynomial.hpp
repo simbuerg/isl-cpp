@@ -7,7 +7,6 @@
 #include "isl/BasicSet.hpp"
 #include "isl/Constraint.hpp"
 #include "isl/Point.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
 #include "isl/Term.hpp"
@@ -36,7 +35,7 @@ inline Qpolynomial &Qpolynomial::operator=(const Qpolynomial &Other) {
   return *this;
 }
 inline Qpolynomial Qpolynomial::zeroOnDomain(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_qpolynomial *That = isl_qpolynomial_zero_on_domain((_cast_dim).Give());
@@ -50,7 +49,7 @@ inline Qpolynomial Qpolynomial::zeroOnDomain(const Space &dim) {
 }
 
 inline Qpolynomial Qpolynomial::oneOnDomain(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_qpolynomial *That = isl_qpolynomial_one_on_domain((_cast_dim).Give());
@@ -64,7 +63,7 @@ inline Qpolynomial Qpolynomial::oneOnDomain(const Space &dim) {
 }
 
 inline Qpolynomial Qpolynomial::inftyOnDomain(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_qpolynomial *That = isl_qpolynomial_infty_on_domain((_cast_dim).Give());
@@ -78,7 +77,7 @@ inline Qpolynomial Qpolynomial::inftyOnDomain(const Space &dim) {
 }
 
 inline Qpolynomial Qpolynomial::neginftyOnDomain(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_qpolynomial *That = isl_qpolynomial_neginfty_on_domain((_cast_dim).Give());
@@ -92,7 +91,7 @@ inline Qpolynomial Qpolynomial::neginftyOnDomain(const Space &dim) {
 }
 
 inline Qpolynomial Qpolynomial::nanOnDomain(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_qpolynomial *That = isl_qpolynomial_nan_on_domain((_cast_dim).Give());
@@ -106,7 +105,7 @@ inline Qpolynomial Qpolynomial::nanOnDomain(const Space &dim) {
 }
 
 inline Qpolynomial Qpolynomial::valOnDomain(const Space &space, const Val &val) {
-  Ctx _ctx = val.Context();
+  const Ctx &_ctx = val.Context();
   _ctx.lock();
   Space _cast_space = space.asSpace();
   Val _cast_val = val.asVal();
@@ -121,7 +120,7 @@ inline Qpolynomial Qpolynomial::valOnDomain(const Space &space, const Val &val) 
 }
 
 inline Qpolynomial Qpolynomial::varOnDomain(const Space &dim, DimType type, unsigned int pos) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_qpolynomial *That = isl_qpolynomial_var_on_domain((_cast_dim).Give(), (enum isl_dim_type)type, pos);
@@ -135,7 +134,7 @@ inline Qpolynomial Qpolynomial::varOnDomain(const Space &dim, DimType type, unsi
 }
 
 inline Qpolynomial Qpolynomial::fromConstraint(const Constraint &c, DimType type, unsigned int pos) {
-  Ctx _ctx = c.Context();
+  const Ctx &_ctx = c.Context();
   _ctx.lock();
   Constraint _cast_c = c.asConstraint();
   isl_qpolynomial *That = isl_qpolynomial_from_constraint((_cast_c).Give(), (enum isl_dim_type)type, pos);
@@ -149,7 +148,7 @@ inline Qpolynomial Qpolynomial::fromConstraint(const Constraint &c, DimType type
 }
 
 inline Qpolynomial Qpolynomial::fromTerm(const Term &term) {
-  Ctx _ctx = term.Context();
+  const Ctx &_ctx = term.Context();
   _ctx.lock();
   Term _cast_term = term.asTerm();
   isl_qpolynomial *That = isl_qpolynomial_from_term((_cast_term).Give());
@@ -163,7 +162,7 @@ inline Qpolynomial Qpolynomial::fromTerm(const Term &term) {
 }
 
 inline Qpolynomial Qpolynomial::fromAff(const Aff &aff) {
-  Ctx _ctx = aff.Context();
+  const Ctx &_ctx = aff.Context();
   _ctx.lock();
   Aff _cast_aff = aff.asAff();
   isl_qpolynomial *That = isl_qpolynomial_from_aff((_cast_aff).Give());
@@ -194,15 +193,9 @@ inline isl_qpolynomial *Qpolynomial::Give() {
 /// \returns A the wrapped isl object.
 inline isl_qpolynomial *Qpolynomial::Get() const {  return (isl_qpolynomial *)This;
 }
-inline std::string Qpolynomial::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printQpolynomial(*this);
-  return p.getStr();
-}
 
 inline Qpolynomial Qpolynomial::asQpolynomial() const {
-  return Qpolynomial(GetCopy());
+  return Qpolynomial(ctx, GetCopy());
 }
 
 inline Qpolynomial Qpolynomial::add(const Qpolynomial &qp2) const {
@@ -218,7 +211,7 @@ inline Qpolynomial Qpolynomial::add(const Qpolynomial &qp2) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_add returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::addDims(DimType type, unsigned int n) const {
@@ -233,7 +226,7 @@ inline Qpolynomial Qpolynomial::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_add_dims returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::alignParams(const Space &model) const {
@@ -249,7 +242,7 @@ inline Qpolynomial Qpolynomial::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_align_params returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline int Qpolynomial::asPolynomialOnDomain(const BasicSet &bset, const std::function<int(isl_basic_set *, isl_qpolynomial *, void *)> && fn, void * user) const {
@@ -289,7 +282,7 @@ inline Qpolynomial Qpolynomial::dropDims(DimType type, unsigned int first, unsig
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_drop_dims returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Val Qpolynomial::eval(const Point &pnt) const {
@@ -305,7 +298,7 @@ inline Val Qpolynomial::eval(const Point &pnt) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_eval returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Stat Qpolynomial::foreachTerm(const std::function<isl_stat(isl_term *, void *)> && fn, void * user) const {
@@ -332,7 +325,7 @@ inline Val Qpolynomial::getConstantVal() const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_get_constant_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Space Qpolynomial::getDomainSpace() const {
@@ -347,7 +340,7 @@ inline Space Qpolynomial::getDomainSpace() const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_get_domain_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Qpolynomial::getSpace() const {
@@ -362,7 +355,7 @@ inline Space Qpolynomial::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::gist(const Set &context) const {
@@ -378,7 +371,7 @@ inline Qpolynomial Qpolynomial::gist(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_gist returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::gistParams(const Set &context) const {
@@ -394,7 +387,7 @@ inline Qpolynomial Qpolynomial::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_gist_params returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::homogenize() const {
@@ -409,7 +402,7 @@ inline Qpolynomial Qpolynomial::homogenize() const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_homogenize returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::insertDims(DimType type, unsigned int first, unsigned int n) const {
@@ -424,7 +417,7 @@ inline Qpolynomial Qpolynomial::insertDims(DimType type, unsigned int first, uns
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_insert_dims returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Bool Qpolynomial::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -499,7 +492,7 @@ inline Qpolynomial Qpolynomial::moveDims(DimType dst_type, unsigned int dst_pos,
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_move_dims returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::mul(const Qpolynomial &qp2) const {
@@ -515,7 +508,7 @@ inline Qpolynomial Qpolynomial::mul(const Qpolynomial &qp2) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_mul returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::neg() const {
@@ -530,7 +523,7 @@ inline Qpolynomial Qpolynomial::neg() const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_neg returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Bool Qpolynomial::plainIsEqual(const Qpolynomial &qp2) const {
@@ -558,7 +551,7 @@ inline Qpolynomial Qpolynomial::pow(unsigned int power) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_pow returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::projectDomainOnParams() const {
@@ -573,7 +566,7 @@ inline Qpolynomial Qpolynomial::projectDomainOnParams() const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_project_domain_on_params returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::scaleVal(const Val &v) const {
@@ -589,7 +582,7 @@ inline Qpolynomial Qpolynomial::scaleVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_scale_val returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::setDimName(DimType type, unsigned int pos, std::string s) const {
@@ -604,7 +597,7 @@ inline Qpolynomial Qpolynomial::setDimName(DimType type, unsigned int pos, std::
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_set_dim_name returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline int Qpolynomial::sgn() const {
@@ -632,7 +625,7 @@ inline Qpolynomial Qpolynomial::sub(const Qpolynomial &qp2) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_sub returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 inline Qpolynomial Qpolynomial::substitute(DimType type, unsigned int first, unsigned int n, std::unique_ptr<Qpolynomial> * subs) const {
@@ -647,7 +640,7 @@ inline Qpolynomial Qpolynomial::substitute(DimType type, unsigned int first, uns
   if (ctx.hasError()) {
     handleError("subs became a NULL pointer.");
   }
-    Qpolynomial _tmp_subs = Qpolynomial (_subs);
+    Qpolynomial _tmp_subs = Qpolynomial(ctx, _subs);
     subs->reset(new Qpolynomial(_tmp_subs));
   }
   ctx.unlock();
@@ -655,7 +648,7 @@ inline Qpolynomial Qpolynomial::substitute(DimType type, unsigned int first, uns
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_substitute returned a NULL pointer.");
   }
-  return Qpolynomial(res);
+  return Qpolynomial(ctx, res);
 }
 
 } // namespace isl

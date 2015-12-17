@@ -6,7 +6,6 @@
 #include "isl/Aff.hpp"
 #include "isl/BasicMap.hpp"
 #include "isl/Id.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Space.hpp"
 #include "isl/Bool.h"
 #include "isl/DimType.h"
@@ -29,7 +28,7 @@ inline LocalSpace &LocalSpace::operator=(const LocalSpace &Other) {
   return *this;
 }
 inline LocalSpace LocalSpace::fromSpace(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_local_space *That = isl_local_space_from_space((_cast_dim).Give());
@@ -60,15 +59,9 @@ inline isl_local_space *LocalSpace::Give() {
 /// \returns A the wrapped isl object.
 inline isl_local_space *LocalSpace::Get() const {  return (isl_local_space *)This;
 }
-inline std::string LocalSpace::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printLocalSpace(*this);
-  return p.getStr();
-}
 
 inline LocalSpace LocalSpace::asLocalSpace() const {
-  return LocalSpace(GetCopy());
+  return LocalSpace(ctx, GetCopy());
 }
 
 inline LocalSpace LocalSpace::addDims(DimType type, unsigned int n) const {
@@ -83,7 +76,7 @@ inline LocalSpace LocalSpace::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_local_space_add_dims returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline int LocalSpace::dim(DimType type) const {
@@ -110,7 +103,7 @@ inline LocalSpace LocalSpace::domain() const {
   if (ctx.hasError()) {
     handleError("isl_local_space_domain returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline LocalSpace LocalSpace::dropDims(DimType type, unsigned int first, unsigned int n) const {
@@ -125,7 +118,7 @@ inline LocalSpace LocalSpace::dropDims(DimType type, unsigned int first, unsigne
   if (ctx.hasError()) {
     handleError("isl_local_space_drop_dims returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline LocalSpace LocalSpace::fromDomain() const {
@@ -140,7 +133,7 @@ inline LocalSpace LocalSpace::fromDomain() const {
   if (ctx.hasError()) {
     handleError("isl_local_space_from_domain returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline Id LocalSpace::getDimId(DimType type, unsigned int pos) const {
@@ -155,7 +148,7 @@ inline Id LocalSpace::getDimId(DimType type, unsigned int pos) const {
   if (ctx.hasError()) {
     handleError("isl_local_space_get_dim_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline std::string LocalSpace::getDimName(DimType type, unsigned int pos) const {
@@ -187,7 +180,7 @@ inline Aff LocalSpace::getDiv(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_local_space_get_div returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Space LocalSpace::getSpace() const {
@@ -202,7 +195,7 @@ inline Space LocalSpace::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_local_space_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Bool LocalSpace::hasDimId(DimType type, unsigned int pos) const {
@@ -241,7 +234,7 @@ inline LocalSpace LocalSpace::insertDims(DimType type, unsigned int first, unsig
   if (ctx.hasError()) {
     handleError("isl_local_space_insert_dims returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline LocalSpace LocalSpace::intersect(const LocalSpace &ls2) const {
@@ -257,7 +250,7 @@ inline LocalSpace LocalSpace::intersect(const LocalSpace &ls2) const {
   if (ctx.hasError()) {
     handleError("isl_local_space_intersect returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline Bool LocalSpace::isEqual(const LocalSpace &ls2) const {
@@ -297,7 +290,7 @@ inline BasicMap LocalSpace::lifting() const {
   if (ctx.hasError()) {
     handleError("isl_local_space_lifting returned a NULL pointer.");
   }
-  return BasicMap(res);
+  return BasicMap(ctx, res);
 }
 
 inline LocalSpace LocalSpace::range() const {
@@ -312,7 +305,7 @@ inline LocalSpace LocalSpace::range() const {
   if (ctx.hasError()) {
     handleError("isl_local_space_range returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline LocalSpace LocalSpace::setDimId(DimType type, unsigned int pos, const Id &id) const {
@@ -328,7 +321,7 @@ inline LocalSpace LocalSpace::setDimId(DimType type, unsigned int pos, const Id 
   if (ctx.hasError()) {
     handleError("isl_local_space_set_dim_id returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline LocalSpace LocalSpace::setDimName(DimType type, unsigned int pos, std::string s) const {
@@ -343,7 +336,7 @@ inline LocalSpace LocalSpace::setDimName(DimType type, unsigned int pos, std::st
   if (ctx.hasError()) {
     handleError("isl_local_space_set_dim_name returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline LocalSpace LocalSpace::setTupleId(DimType type, const Id &id) const {
@@ -359,7 +352,7 @@ inline LocalSpace LocalSpace::setTupleId(DimType type, const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_local_space_set_tuple_id returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 } // namespace isl

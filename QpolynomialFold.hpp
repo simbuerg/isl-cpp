@@ -4,7 +4,6 @@
 #include "isl/QpolynomialFold.h"
 
 #include "isl/Point.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Qpolynomial.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
@@ -32,7 +31,7 @@ inline QpolynomialFold &QpolynomialFold::operator=(const QpolynomialFold &Other)
   return *this;
 }
 inline QpolynomialFold QpolynomialFold::empty(Fold type, const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_qpolynomial_fold *That = isl_qpolynomial_fold_empty((enum isl_fold)type, (_cast_dim).Give());
@@ -46,7 +45,7 @@ inline QpolynomialFold QpolynomialFold::empty(Fold type, const Space &dim) {
 }
 
 inline QpolynomialFold QpolynomialFold::alloc(Fold type, const Qpolynomial &qp) {
-  Ctx _ctx = qp.Context();
+  const Ctx &_ctx = qp.Context();
   _ctx.lock();
   Qpolynomial _cast_qp = qp.asQpolynomial();
   isl_qpolynomial_fold *That = isl_qpolynomial_fold_alloc((enum isl_fold)type, (_cast_qp).Give());
@@ -77,15 +76,9 @@ inline isl_qpolynomial_fold *QpolynomialFold::Give() {
 /// \returns A the wrapped isl object.
 inline isl_qpolynomial_fold *QpolynomialFold::Get() const {  return (isl_qpolynomial_fold *)This;
 }
-inline std::string QpolynomialFold::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printQpolynomialFold(*this);
-  return p.getStr();
-}
 
 inline QpolynomialFold QpolynomialFold::asQpolynomialFold() const {
-  return QpolynomialFold(GetCopy());
+  return QpolynomialFold(ctx, GetCopy());
 }
 
 inline Val QpolynomialFold::eval(const Point &pnt) const {
@@ -101,7 +94,7 @@ inline Val QpolynomialFold::eval(const Point &pnt) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_eval returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline QpolynomialFold QpolynomialFold::fold(const QpolynomialFold &fold2) const {
@@ -117,7 +110,7 @@ inline QpolynomialFold QpolynomialFold::fold(const QpolynomialFold &fold2) const
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_fold returned a NULL pointer.");
   }
-  return QpolynomialFold(res);
+  return QpolynomialFold(ctx, res);
 }
 
 inline Stat QpolynomialFold::foreachQpolynomial(const std::function<isl_stat(isl_qpolynomial *, void *)> && fn, void * user) const {
@@ -144,7 +137,7 @@ inline Space QpolynomialFold::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Fold QpolynomialFold::getType() const {
@@ -172,7 +165,7 @@ inline QpolynomialFold QpolynomialFold::gist(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_gist returned a NULL pointer.");
   }
-  return QpolynomialFold(res);
+  return QpolynomialFold(ctx, res);
 }
 
 inline QpolynomialFold QpolynomialFold::gistParams(const Set &context) const {
@@ -188,7 +181,7 @@ inline QpolynomialFold QpolynomialFold::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_gist_params returned a NULL pointer.");
   }
-  return QpolynomialFold(res);
+  return QpolynomialFold(ctx, res);
 }
 
 inline int QpolynomialFold::isEmpty() const {
@@ -215,7 +208,7 @@ inline QpolynomialFold QpolynomialFold::moveDims(DimType dst_type, unsigned int 
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_move_dims returned a NULL pointer.");
   }
-  return QpolynomialFold(res);
+  return QpolynomialFold(ctx, res);
 }
 
 inline int QpolynomialFold::plainIsEqual(const QpolynomialFold &fold2) const {
@@ -244,7 +237,7 @@ inline QpolynomialFold QpolynomialFold::scaleVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_scale_val returned a NULL pointer.");
   }
-  return QpolynomialFold(res);
+  return QpolynomialFold(ctx, res);
 }
 
 inline QpolynomialFold QpolynomialFold::substitute(DimType type, unsigned int first, unsigned int n, std::unique_ptr<Qpolynomial> * subs) const {
@@ -259,7 +252,7 @@ inline QpolynomialFold QpolynomialFold::substitute(DimType type, unsigned int fi
   if (ctx.hasError()) {
     handleError("subs became a NULL pointer.");
   }
-    Qpolynomial _tmp_subs = Qpolynomial (_subs);
+    Qpolynomial _tmp_subs = Qpolynomial(ctx, _subs);
     subs->reset(new Qpolynomial(_tmp_subs));
   }
   ctx.unlock();
@@ -267,7 +260,7 @@ inline QpolynomialFold QpolynomialFold::substitute(DimType type, unsigned int fi
   if (ctx.hasError()) {
     handleError("isl_qpolynomial_fold_substitute returned a NULL pointer.");
   }
-  return QpolynomialFold(res);
+  return QpolynomialFold(ctx, res);
 }
 
 } // namespace isl

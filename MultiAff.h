@@ -16,26 +16,18 @@
 namespace isl {
 class Aff;
 class LocalSpace;
-class Printer;
 class Set;
 class Space;
 
 class MultiAff {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit MultiAff(Ctx ctx, isl_multi_aff *That) : ctx(ctx), This((void *)That) {}
   explicit MultiAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_multi_aff we want to wrap.
-  explicit MultiAff(isl_multi_aff *That) : MultiAff(Ctx(isl_multi_aff_get_ctx(That)), That) {}
   isl_multi_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -72,7 +64,6 @@ public:
   /// \param n
   static MultiAff projectOutMap(const Space &space, DimType type, unsigned int first, unsigned int n);
   virtual ~MultiAff();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual MultiAff asMultiAff() const;
 
@@ -136,9 +127,9 @@ public:
   ///
   /// \returns A new MultiAff
   MultiAff pullbackMultiAff(const MultiAff &ma2) const;
-  MultiAff(const MultiAff &Other) : MultiAff(Other.Context(), Other.GetCopy()) {}
+  MultiAff(const MultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiAff &operator=(const MultiAff &Other);
-  MultiAff (MultiAff && Other) : MultiAff(Other.Context(), Other.This) {}
+  MultiAff (MultiAff && Other) : ctx(Other.Context()), This(Other.This) {}
   MultiAff &operator=(MultiAff && Other) {
     isl_multi_aff *New = Other.Give();
     isl_multi_aff_free((isl_multi_aff *)This);

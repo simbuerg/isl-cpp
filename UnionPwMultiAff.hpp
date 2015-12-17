@@ -4,7 +4,6 @@
 #include "isl/UnionPwMultiAff.h"
 
 #include "isl/MultiUnionPwAff.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
@@ -24,7 +23,7 @@ inline UnionPwMultiAff &UnionPwMultiAff::operator=(const UnionPwMultiAff &Other)
   return *this;
 }
 inline UnionPwMultiAff UnionPwMultiAff::fromMultiUnionPwAff(const MultiUnionPwAff &mupa) {
-  Ctx _ctx = mupa.Context();
+  const Ctx &_ctx = mupa.Context();
   _ctx.lock();
   MultiUnionPwAff _cast_mupa = mupa.asMultiUnionPwAff();
   isl_union_pw_multi_aff *That = isl_union_pw_multi_aff_from_multi_union_pw_aff((_cast_mupa).Give());
@@ -55,15 +54,9 @@ inline isl_union_pw_multi_aff *UnionPwMultiAff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_pw_multi_aff *UnionPwMultiAff::Get() const {  return (isl_union_pw_multi_aff *)This;
 }
-inline std::string UnionPwMultiAff::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printUnionPwMultiAff(*this);
-  return p.getStr();
-}
 
 inline UnionPwMultiAff UnionPwMultiAff::asUnionPwMultiAff() const {
-  return UnionPwMultiAff(GetCopy());
+  return UnionPwMultiAff(ctx, GetCopy());
 }
 
 } // namespace isl

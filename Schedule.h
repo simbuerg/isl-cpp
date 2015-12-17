@@ -13,7 +13,6 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Printer;
 class UnionMap;
 
 class Schedule {
@@ -29,19 +28,12 @@ protected:
     ptr(ptr && other) = delete;
     ptr &operator=(ptr && other) = delete;
   };
-  Ctx ctx;
-  std::shared_ptr<ptr> This;
-  explicit Schedule(Ctx ctx, std::shared_ptr<ptr> That) : ctx(ctx), This(That) {}
 
 public:
+  Ctx ctx;
+  std::shared_ptr<ptr> This;
+  explicit Schedule(Ctx ctx, isl_schedule *That) : ctx(ctx), This(std::make_shared<ptr>(That)) {}
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_schedule we want to wrap.
-  explicit Schedule(isl_schedule *That) : Schedule(Ctx(isl_schedule_get_ctx(That)), std::make_shared<isl::Schedule::ptr>(That)) {}
   std::shared_ptr<isl::Schedule::ptr> GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -55,7 +47,6 @@ public:
   isl_schedule *Get() const;
 
   virtual ~Schedule() = default;
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Schedule asSchedule() const;
 
@@ -72,9 +63,9 @@ public:
   ///
   /// \returns A new UnionMap
   UnionMap getMap() const;
-  Schedule(const Schedule &Other) : Schedule(Other.Context(), Other.GetCopy()) {}
+  Schedule(const Schedule &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Schedule &operator=(const Schedule &Other) = delete;
-  Schedule (Schedule && Other) : Schedule(Other.Context(), Other.This) {}
+  Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.This) {}
   Schedule &operator=(Schedule && Other) {
     std::swap(This, Other.This);
     return *this;

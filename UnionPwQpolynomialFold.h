@@ -17,7 +17,6 @@
 
 namespace isl {
 class Point;
-class Printer;
 class PwQpolynomialFold;
 class Set;
 class Space;
@@ -27,20 +26,13 @@ class Val;
 
 class UnionPwQpolynomialFold {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionPwQpolynomialFold(Ctx ctx, isl_union_pw_qpolynomial_fold *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwQpolynomialFold(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_pw_qpolynomial_fold we want to wrap.
-  explicit UnionPwQpolynomialFold(isl_union_pw_qpolynomial_fold *That) : UnionPwQpolynomialFold(Ctx(isl_union_pw_qpolynomial_fold_get_ctx(That)), That) {}
   isl_union_pw_qpolynomial_fold *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -63,7 +55,6 @@ public:
   /// \param type
   static UnionPwQpolynomialFold zero(const Space &dim, Fold type);
   virtual ~UnionPwQpolynomialFold();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual UnionPwQpolynomialFold asUnionPwQpolynomialFold() const;
 
@@ -182,9 +173,9 @@ public:
   ///
   /// \returns A new UnionPwQpolynomialFold
   UnionPwQpolynomialFold scaleVal(const Val &v) const;
-  UnionPwQpolynomialFold(const UnionPwQpolynomialFold &Other) : UnionPwQpolynomialFold(Other.Context(), Other.GetCopy()) {}
+  UnionPwQpolynomialFold(const UnionPwQpolynomialFold &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwQpolynomialFold &operator=(const UnionPwQpolynomialFold &Other);
-  UnionPwQpolynomialFold (UnionPwQpolynomialFold && Other) : UnionPwQpolynomialFold(Other.Context(), Other.This) {}
+  UnionPwQpolynomialFold (UnionPwQpolynomialFold && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionPwQpolynomialFold &operator=(UnionPwQpolynomialFold && Other) {
     isl_union_pw_qpolynomial_fold *New = Other.Give();
     isl_union_pw_qpolynomial_fold_free((isl_union_pw_qpolynomial_fold *)This);

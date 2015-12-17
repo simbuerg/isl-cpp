@@ -4,7 +4,6 @@
 #include "isl/UnionSet.h"
 
 #include "isl/BasicSet.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Schedule.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
@@ -34,7 +33,7 @@ inline UnionSet &UnionSet::operator=(const UnionSet &Other) {
   return *this;
 }
 inline UnionSet UnionSet::fromBasicSet(const BasicSet &bset) {
-  Ctx _ctx = bset.Context();
+  const Ctx &_ctx = bset.Context();
   _ctx.lock();
   BasicSet _cast_bset = bset.asBasicSet();
   isl_union_set *That = isl_union_set_from_basic_set((_cast_bset).Give());
@@ -48,7 +47,7 @@ inline UnionSet UnionSet::fromBasicSet(const BasicSet &bset) {
 }
 
 inline UnionSet UnionSet::fromSet(const Set &set) {
-  Ctx _ctx = set.Context();
+  const Ctx &_ctx = set.Context();
   _ctx.lock();
   Set _cast_set = set.asSet();
   isl_union_set *That = isl_union_set_from_set((_cast_set).Give());
@@ -62,7 +61,7 @@ inline UnionSet UnionSet::fromSet(const Set &set) {
 }
 
 inline UnionSet UnionSet::empty(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_union_set *That = isl_union_set_empty((_cast_dim).Give());
@@ -76,7 +75,7 @@ inline UnionSet UnionSet::empty(const Space &dim) {
 }
 
 inline UnionSet UnionSet::universe(const UnionSet &uset) {
-  Ctx _ctx = uset.Context();
+  const Ctx &_ctx = uset.Context();
   _ctx.lock();
   UnionSet _cast_uset = uset.asUnionSet();
   isl_union_set *That = isl_union_set_universe((_cast_uset).Give());
@@ -90,7 +89,7 @@ inline UnionSet UnionSet::universe(const UnionSet &uset) {
 }
 
 inline UnionSet UnionSet::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_set *That = isl_union_set_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -121,15 +120,9 @@ inline isl_union_set *UnionSet::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_set *UnionSet::Get() const {  return (isl_union_set *)This;
 }
-inline std::string UnionSet::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printUnionSet(*this);
-  return p.getStr();
-}
 
 inline UnionSet UnionSet::asUnionSet() const {
-  return UnionSet(GetCopy());
+  return UnionSet(ctx, GetCopy());
 }
 
 inline UnionSet UnionSet::addSet(const Set &set) const {
@@ -145,7 +138,7 @@ inline UnionSet UnionSet::addSet(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_add_set returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::affineHull() const {
@@ -160,7 +153,7 @@ inline UnionSet UnionSet::affineHull() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_affine_hull returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::alignParams(const Space &model) const {
@@ -176,7 +169,7 @@ inline UnionSet UnionSet::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_align_params returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::apply(const UnionMap &umap) const {
@@ -192,7 +185,7 @@ inline UnionSet UnionSet::apply(const UnionMap &umap) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_apply returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionPwQpolynomialFold UnionSet::applyUnionPwQpolynomialFold(const UnionPwQpolynomialFold &upwf, int * tight) const {
@@ -208,7 +201,7 @@ inline UnionPwQpolynomialFold UnionSet::applyUnionPwQpolynomialFold(const UnionP
   if (ctx.hasError()) {
     handleError("isl_union_set_apply_union_pw_qpolynomial_fold returned a NULL pointer.");
   }
-  return UnionPwQpolynomialFold(res);
+  return UnionPwQpolynomialFold(ctx, res);
 }
 
 inline UnionSet UnionSet::coalesce() const {
@@ -223,7 +216,7 @@ inline UnionSet UnionSet::coalesce() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_coalesce returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::coefficients() const {
@@ -238,7 +231,7 @@ inline UnionSet UnionSet::coefficients() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_coefficients returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline Schedule UnionSet::computeSchedule(const UnionMap &validity, const UnionMap &proximity) const {
@@ -255,7 +248,7 @@ inline Schedule UnionSet::computeSchedule(const UnionMap &validity, const UnionM
   if (ctx.hasError()) {
     handleError("isl_union_set_compute_schedule returned a NULL pointer.");
   }
-  return Schedule(res);
+  return Schedule(ctx, res);
 }
 
 inline int UnionSet::contains(const Space &dim) const {
@@ -283,7 +276,7 @@ inline UnionSet UnionSet::detectEqualities() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_detect_equalities returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline Set UnionSet::extractSet(const Space &dim) const {
@@ -299,7 +292,7 @@ inline Set UnionSet::extractSet(const Space &dim) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_extract_set returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Stat UnionSet::foreachPoint(const std::function<isl_stat(isl_point *, void *)> && fn, void * user) const {
@@ -338,7 +331,7 @@ inline Space UnionSet::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline UnionSet UnionSet::gist(const UnionSet &context) const {
@@ -354,7 +347,7 @@ inline UnionSet UnionSet::gist(const UnionSet &context) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_gist returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::gistParams(const Set &set) const {
@@ -370,7 +363,7 @@ inline UnionSet UnionSet::gistParams(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_gist_params returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionMap UnionSet::identity() const {
@@ -385,7 +378,7 @@ inline UnionMap UnionSet::identity() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_identity returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionSet UnionSet::intersect(const UnionSet &uset2) const {
@@ -401,7 +394,7 @@ inline UnionSet UnionSet::intersect(const UnionSet &uset2) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_intersect returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::intersectParams(const Set &set) const {
@@ -417,7 +410,7 @@ inline UnionSet UnionSet::intersectParams(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_intersect_params returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline Bool UnionSet::isEmpty() const {
@@ -496,7 +489,7 @@ inline UnionMap UnionSet::lexGeUnionSet(const UnionSet &uset2) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_lex_ge_union_set returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionSet::lexGtUnionSet(const UnionSet &uset2) const {
@@ -512,7 +505,7 @@ inline UnionMap UnionSet::lexGtUnionSet(const UnionSet &uset2) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_lex_gt_union_set returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionSet::lexLeUnionSet(const UnionSet &uset2) const {
@@ -528,7 +521,7 @@ inline UnionMap UnionSet::lexLeUnionSet(const UnionSet &uset2) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_lex_le_union_set returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap UnionSet::lexLtUnionSet(const UnionSet &uset2) const {
@@ -544,7 +537,7 @@ inline UnionMap UnionSet::lexLtUnionSet(const UnionSet &uset2) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_lex_lt_union_set returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionSet UnionSet::lexmax() const {
@@ -559,7 +552,7 @@ inline UnionSet UnionSet::lexmax() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_lexmax returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::lexmin() const {
@@ -574,7 +567,7 @@ inline UnionSet UnionSet::lexmin() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_lexmin returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::lift() const {
@@ -589,7 +582,7 @@ inline UnionSet UnionSet::lift() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_lift returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline int UnionSet::nSet() const {
@@ -616,7 +609,7 @@ inline Set UnionSet::params() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_params returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline UnionSet UnionSet::polyhedralHull() const {
@@ -631,7 +624,7 @@ inline UnionSet UnionSet::polyhedralHull() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_polyhedral_hull returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline BasicSet UnionSet::sample() const {
@@ -646,7 +639,7 @@ inline BasicSet UnionSet::sample() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_sample returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline UnionSet UnionSet::solutions() const {
@@ -661,7 +654,7 @@ inline UnionSet UnionSet::solutions() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_solutions returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::subtract(const UnionSet &uset2) const {
@@ -677,7 +670,7 @@ inline UnionSet UnionSet::subtract(const UnionSet &uset2) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_subtract returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionSet UnionSet::union_(const UnionSet &uset2) const {
@@ -693,7 +686,7 @@ inline UnionSet UnionSet::union_(const UnionSet &uset2) const {
   if (ctx.hasError()) {
     handleError("isl_union_set_union returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline UnionMap UnionSet::unwrap() const {
@@ -708,7 +701,7 @@ inline UnionMap UnionSet::unwrap() const {
   if (ctx.hasError()) {
     handleError("isl_union_set_unwrap returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 } // namespace isl

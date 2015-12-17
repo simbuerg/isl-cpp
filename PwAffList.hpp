@@ -23,7 +23,7 @@ inline PwAffList &PwAffList::operator=(const PwAffList &Other) {
   return *this;
 }
 inline PwAffList PwAffList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_pw_aff_list *That = isl_pw_aff_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_pw_aff_list *PwAffList::Get() const {  return (isl_pw_aff_list *)This
 }
 
 inline PwAffList PwAffList::asPwAffList() const {
-  return PwAffList(GetCopy());
+  return PwAffList(ctx, GetCopy());
 }
 
 inline PwAffList PwAffList::add(const PwAff &el) const {
@@ -72,7 +72,7 @@ inline PwAffList PwAffList::add(const PwAff &el) const {
   if (ctx.hasError()) {
     handleError("isl_pw_aff_list_add returned a NULL pointer.");
   }
-  return PwAffList(res);
+  return PwAffList(ctx, res);
 }
 
 } // namespace isl

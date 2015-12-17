@@ -6,7 +6,6 @@
 #include "isl/Id.hpp"
 #include "isl/MultiUnionPwAff.hpp"
 #include "isl/MultiVal.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Schedule.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
@@ -36,7 +35,7 @@ inline ScheduleNode &ScheduleNode::operator=(const ScheduleNode &Other) {
   return *this;
 }
 inline ScheduleNode ScheduleNode::fromDomain(const UnionSet &domain) {
-  Ctx _ctx = domain.Context();
+  const Ctx &_ctx = domain.Context();
   _ctx.lock();
   UnionSet _cast_domain = domain.asUnionSet();
   isl_schedule_node *That = isl_schedule_node_from_domain((_cast_domain).Give());
@@ -50,7 +49,7 @@ inline ScheduleNode ScheduleNode::fromDomain(const UnionSet &domain) {
 }
 
 inline ScheduleNode ScheduleNode::fromExtension(const UnionMap &extension) {
-  Ctx _ctx = extension.Context();
+  const Ctx &_ctx = extension.Context();
   _ctx.lock();
   UnionMap _cast_extension = extension.asUnionMap();
   isl_schedule_node *That = isl_schedule_node_from_extension((_cast_extension).Give());
@@ -81,15 +80,9 @@ inline isl_schedule_node *ScheduleNode::Give() {
 /// \returns A the wrapped isl object.
 inline isl_schedule_node *ScheduleNode::Get() const {  return (isl_schedule_node *)This;
 }
-inline std::string ScheduleNode::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printScheduleNode(*this);
-  return p.getStr();
-}
 
 inline ScheduleNode ScheduleNode::asScheduleNode() const {
-  return ScheduleNode(GetCopy());
+  return ScheduleNode(ctx, GetCopy());
 }
 
 inline ScheduleNode ScheduleNode::alignParams(const Space &space) const {
@@ -105,7 +98,7 @@ inline ScheduleNode ScheduleNode::alignParams(const Space &space) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_align_params returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::ancestor(int generation) const {
@@ -120,7 +113,7 @@ inline ScheduleNode ScheduleNode::ancestor(int generation) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_ancestor returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline UnionSet ScheduleNode::bandGetAstBuildOptions() const {
@@ -135,7 +128,7 @@ inline UnionSet ScheduleNode::bandGetAstBuildOptions() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_get_ast_build_options returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline MultiUnionPwAff ScheduleNode::bandGetPartialSchedule() const {
@@ -150,7 +143,7 @@ inline MultiUnionPwAff ScheduleNode::bandGetPartialSchedule() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_get_partial_schedule returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline UnionMap ScheduleNode::bandGetPartialScheduleUnionMap() const {
@@ -165,7 +158,7 @@ inline UnionMap ScheduleNode::bandGetPartialScheduleUnionMap() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_get_partial_schedule_union_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline Bool ScheduleNode::bandGetPermutable() const {
@@ -192,7 +185,7 @@ inline Space ScheduleNode::bandGetSpace() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline enum isl_ast_loop_type ScheduleNode::bandMemberGetAstLoopType(int pos) const {
@@ -243,7 +236,7 @@ inline ScheduleNode ScheduleNode::bandMemberSetAstLoopType(int pos, enum isl_ast
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_member_set_ast_loop_type returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandMemberSetCoincident(int pos, int coincident) const {
@@ -258,7 +251,7 @@ inline ScheduleNode ScheduleNode::bandMemberSetCoincident(int pos, int coinciden
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_member_set_coincident returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandMemberSetIsolateAstLoopType(int pos, enum isl_ast_loop_type type) const {
@@ -273,7 +266,7 @@ inline ScheduleNode ScheduleNode::bandMemberSetIsolateAstLoopType(int pos, enum 
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_member_set_isolate_ast_loop_type returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandMod(const MultiVal &mv) const {
@@ -289,7 +282,7 @@ inline ScheduleNode ScheduleNode::bandMod(const MultiVal &mv) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_mod returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline unsigned int ScheduleNode::bandNMember() const {
@@ -317,7 +310,7 @@ inline ScheduleNode ScheduleNode::bandScale(const MultiVal &mv) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_scale returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandScaleDown(const MultiVal &mv) const {
@@ -333,7 +326,7 @@ inline ScheduleNode ScheduleNode::bandScaleDown(const MultiVal &mv) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_scale_down returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandSetAstBuildOptions(const UnionSet &options) const {
@@ -349,7 +342,7 @@ inline ScheduleNode ScheduleNode::bandSetAstBuildOptions(const UnionSet &options
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_set_ast_build_options returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandSetPermutable(int permutable) const {
@@ -364,7 +357,7 @@ inline ScheduleNode ScheduleNode::bandSetPermutable(int permutable) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_set_permutable returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandShift(const MultiUnionPwAff &shift) const {
@@ -380,7 +373,7 @@ inline ScheduleNode ScheduleNode::bandShift(const MultiUnionPwAff &shift) const 
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_shift returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandSink() const {
@@ -395,7 +388,7 @@ inline ScheduleNode ScheduleNode::bandSink() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_sink returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandSplit(int pos) const {
@@ -410,7 +403,7 @@ inline ScheduleNode ScheduleNode::bandSplit(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_split returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::bandTile(const MultiVal &sizes) const {
@@ -426,7 +419,7 @@ inline ScheduleNode ScheduleNode::bandTile(const MultiVal &sizes) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_band_tile returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::child(int pos) const {
@@ -441,7 +434,7 @@ inline ScheduleNode ScheduleNode::child(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_child returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline Set ScheduleNode::contextGetContext() const {
@@ -456,7 +449,7 @@ inline Set ScheduleNode::contextGetContext() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_context_get_context returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::copy() const {
@@ -471,7 +464,7 @@ inline ScheduleNode ScheduleNode::copy() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_copy returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::cut() const {
@@ -486,7 +479,7 @@ inline ScheduleNode ScheduleNode::cut() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_cut returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::delete_() const {
@@ -501,7 +494,7 @@ inline ScheduleNode ScheduleNode::delete_() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_delete returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline UnionSet ScheduleNode::domainGetDomain() const {
@@ -516,7 +509,7 @@ inline UnionSet ScheduleNode::domainGetDomain() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_domain_get_domain returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline void ScheduleNode::dump() const {
@@ -542,7 +535,7 @@ inline UnionPwMultiAff ScheduleNode::expansionGetContraction() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_expansion_get_contraction returned a NULL pointer.");
   }
-  return UnionPwMultiAff(res);
+  return UnionPwMultiAff(ctx, res);
 }
 
 inline UnionMap ScheduleNode::expansionGetExpansion() const {
@@ -557,7 +550,7 @@ inline UnionMap ScheduleNode::expansionGetExpansion() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_expansion_get_expansion returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap ScheduleNode::extensionGetExtension() const {
@@ -572,7 +565,7 @@ inline UnionMap ScheduleNode::extensionGetExtension() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_extension_get_extension returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionSet ScheduleNode::filterGetFilter() const {
@@ -587,7 +580,7 @@ inline UnionSet ScheduleNode::filterGetFilter() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_filter_get_filter returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::firstChild() const {
@@ -602,7 +595,7 @@ inline ScheduleNode ScheduleNode::firstChild() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_first_child returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline Stat ScheduleNode::foreachAncestorTopDown(const std::function<isl_stat(isl_schedule_node *, void *)> && fn, void * user) const {
@@ -654,7 +647,7 @@ inline ScheduleNode ScheduleNode::getChild(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_child returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline int ScheduleNode::getChildPosition() const {
@@ -693,7 +686,7 @@ inline MultiUnionPwAff ScheduleNode::getPrefixScheduleMultiUnionPwAff() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_prefix_schedule_multi_union_pw_aff returned a NULL pointer.");
   }
-  return MultiUnionPwAff(res);
+  return MultiUnionPwAff(ctx, res);
 }
 
 inline UnionMap ScheduleNode::getPrefixScheduleRelation() const {
@@ -708,7 +701,7 @@ inline UnionMap ScheduleNode::getPrefixScheduleRelation() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_prefix_schedule_relation returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap ScheduleNode::getPrefixScheduleUnionMap() const {
@@ -723,7 +716,7 @@ inline UnionMap ScheduleNode::getPrefixScheduleUnionMap() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_prefix_schedule_union_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionPwMultiAff ScheduleNode::getPrefixScheduleUnionPwMultiAff() const {
@@ -738,7 +731,7 @@ inline UnionPwMultiAff ScheduleNode::getPrefixScheduleUnionPwMultiAff() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_prefix_schedule_union_pw_multi_aff returned a NULL pointer.");
   }
-  return UnionPwMultiAff(res);
+  return UnionPwMultiAff(ctx, res);
 }
 
 inline Schedule ScheduleNode::getSchedule() const {
@@ -753,7 +746,7 @@ inline Schedule ScheduleNode::getSchedule() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_schedule returned a NULL pointer.");
   }
-  return Schedule(res);
+  return Schedule(ctx, res);
 }
 
 inline int ScheduleNode::getScheduleDepth() const {
@@ -781,7 +774,7 @@ inline ScheduleNode ScheduleNode::getSharedAncestor(const ScheduleNode &node2) c
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_shared_ancestor returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline UnionPwMultiAff ScheduleNode::getSubtreeContraction() const {
@@ -796,7 +789,7 @@ inline UnionPwMultiAff ScheduleNode::getSubtreeContraction() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_subtree_contraction returned a NULL pointer.");
   }
-  return UnionPwMultiAff(res);
+  return UnionPwMultiAff(ctx, res);
 }
 
 inline UnionMap ScheduleNode::getSubtreeExpansion() const {
@@ -811,7 +804,7 @@ inline UnionMap ScheduleNode::getSubtreeExpansion() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_subtree_expansion returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline UnionMap ScheduleNode::getSubtreeScheduleUnionMap() const {
@@ -826,7 +819,7 @@ inline UnionMap ScheduleNode::getSubtreeScheduleUnionMap() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_subtree_schedule_union_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 inline int ScheduleNode::getTreeDepth() const {
@@ -865,7 +858,7 @@ inline UnionSet ScheduleNode::getUniverseDomain() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_get_universe_domain returned a NULL pointer.");
   }
-  return UnionSet(res);
+  return UnionSet(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::graftAfter(const ScheduleNode &graft) const {
@@ -881,7 +874,7 @@ inline ScheduleNode ScheduleNode::graftAfter(const ScheduleNode &graft) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_graft_after returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::graftBefore(const ScheduleNode &graft) const {
@@ -897,7 +890,7 @@ inline ScheduleNode ScheduleNode::graftBefore(const ScheduleNode &graft) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_graft_before returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::group(const Id &group_id) const {
@@ -913,7 +906,7 @@ inline ScheduleNode ScheduleNode::group(const Id &group_id) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_group returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline Set ScheduleNode::guardGetGuard() const {
@@ -928,7 +921,7 @@ inline Set ScheduleNode::guardGetGuard() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_guard_get_guard returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline Bool ScheduleNode::hasChildren() const {
@@ -992,7 +985,7 @@ inline ScheduleNode ScheduleNode::insertContext(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_insert_context returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::insertFilter(const UnionSet &filter) const {
@@ -1008,7 +1001,7 @@ inline ScheduleNode ScheduleNode::insertFilter(const UnionSet &filter) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_insert_filter returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::insertGuard(const Set &context) const {
@@ -1024,7 +1017,7 @@ inline ScheduleNode ScheduleNode::insertGuard(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_insert_guard returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::insertMark(const Id &mark) const {
@@ -1040,7 +1033,7 @@ inline ScheduleNode ScheduleNode::insertMark(const Id &mark) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_insert_mark returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::insertPartialSchedule(const MultiUnionPwAff &schedule) const {
@@ -1056,7 +1049,7 @@ inline ScheduleNode ScheduleNode::insertPartialSchedule(const MultiUnionPwAff &s
   if (ctx.hasError()) {
     handleError("isl_schedule_node_insert_partial_schedule returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::insertSequence(const UnionSetList &filters) const {
@@ -1072,7 +1065,7 @@ inline ScheduleNode ScheduleNode::insertSequence(const UnionSetList &filters) co
   if (ctx.hasError()) {
     handleError("isl_schedule_node_insert_sequence returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::insertSet(const UnionSetList &filters) const {
@@ -1088,7 +1081,7 @@ inline ScheduleNode ScheduleNode::insertSet(const UnionSetList &filters) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_insert_set returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline Bool ScheduleNode::isEqual(const ScheduleNode &node2) const {
@@ -1128,7 +1121,7 @@ inline ScheduleNode ScheduleNode::mapDescendantBottomUp(const std::function<isl_
   if (ctx.hasError()) {
     handleError("isl_schedule_node_map_descendant_bottom_up returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline Id ScheduleNode::markGetId() const {
@@ -1143,7 +1136,7 @@ inline Id ScheduleNode::markGetId() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_mark_get_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline int ScheduleNode::nChildren() const {
@@ -1170,7 +1163,7 @@ inline ScheduleNode ScheduleNode::nextSibling() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_next_sibling returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::orderAfter(const UnionSet &filter) const {
@@ -1186,7 +1179,7 @@ inline ScheduleNode ScheduleNode::orderAfter(const UnionSet &filter) const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_order_after returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::parent() const {
@@ -1201,7 +1194,7 @@ inline ScheduleNode ScheduleNode::parent() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_parent returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::previousSibling() const {
@@ -1216,7 +1209,7 @@ inline ScheduleNode ScheduleNode::previousSibling() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_previous_sibling returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::resetUser() const {
@@ -1231,7 +1224,7 @@ inline ScheduleNode ScheduleNode::resetUser() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_reset_user returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 inline ScheduleNode ScheduleNode::root() const {
@@ -1246,7 +1239,7 @@ inline ScheduleNode ScheduleNode::root() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_node_root returned a NULL pointer.");
   }
-  return ScheduleNode(res);
+  return ScheduleNode(ctx, res);
 }
 
 } // namespace isl

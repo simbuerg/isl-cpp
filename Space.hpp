@@ -4,7 +4,6 @@
 #include "isl/Space.h"
 
 #include "isl/Id.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
 #include "isl/DimType.h"
@@ -27,7 +26,7 @@ inline Space &Space::operator=(const Space &Other) {
   return *this;
 }
 inline Space Space::alloc(const Ctx &ctx, unsigned int nparam, unsigned int n_in, unsigned int n_out) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_space *That = isl_space_alloc((ctx.Get()), nparam, n_in, n_out);
   ctx.unlock();
@@ -41,7 +40,7 @@ inline Space Space::alloc(const Ctx &ctx, unsigned int nparam, unsigned int n_in
 }
 
 inline Space Space::setAlloc(const Ctx &ctx, unsigned int nparam, unsigned int dim) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_space *That = isl_space_set_alloc((ctx.Get()), nparam, dim);
   ctx.unlock();
@@ -55,7 +54,7 @@ inline Space Space::setAlloc(const Ctx &ctx, unsigned int nparam, unsigned int d
 }
 
 inline Space Space::paramsAlloc(const Ctx &ctx, unsigned int nparam) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_space *That = isl_space_params_alloc((ctx.Get()), nparam);
   ctx.unlock();
@@ -69,7 +68,7 @@ inline Space Space::paramsAlloc(const Ctx &ctx, unsigned int nparam) {
 }
 
 inline Space Space::mapFromSet(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_space *That = isl_space_map_from_set((_cast_dim).Give());
@@ -83,7 +82,7 @@ inline Space Space::mapFromSet(const Space &dim) {
 }
 
 inline Space Space::mapFromDomainAndRange(const Space &domain, const Space &range) {
-  Ctx _ctx = range.Context();
+  const Ctx &_ctx = range.Context();
   _ctx.lock();
   Space _cast_domain = domain.asSpace();
   Space _cast_range = range.asSpace();
@@ -115,15 +114,9 @@ inline isl_space *Space::Give() {
 /// \returns A the wrapped isl object.
 inline isl_space *Space::Get() const {  return (isl_space *)This;
 }
-inline std::string Space::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printSpace(*this);
-  return p.getStr();
-}
 
 inline Space Space::asSpace() const {
-  return Space(GetCopy());
+  return Space(ctx, GetCopy());
 }
 
 inline Space Space::addDims(DimType type, unsigned int n) const {
@@ -138,7 +131,7 @@ inline Space Space::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_space_add_dims returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::alignParams(const Space &dim2) const {
@@ -154,7 +147,7 @@ inline Space Space::alignParams(const Space &dim2) const {
   if (ctx.hasError()) {
     handleError("isl_space_align_params returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Bool Space::canCurry() const {
@@ -218,7 +211,7 @@ inline Space Space::curry() const {
   if (ctx.hasError()) {
     handleError("isl_space_curry returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline unsigned int Space::dim(DimType type) const {
@@ -245,7 +238,7 @@ inline Space Space::domain() const {
   if (ctx.hasError()) {
     handleError("isl_space_domain returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::domainMap() const {
@@ -260,7 +253,7 @@ inline Space Space::domainMap() const {
   if (ctx.hasError()) {
     handleError("isl_space_domain_map returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::domainProduct(const Space &right) const {
@@ -276,7 +269,7 @@ inline Space Space::domainProduct(const Space &right) const {
   if (ctx.hasError()) {
     handleError("isl_space_domain_product returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::dropDims(DimType type, unsigned int first, unsigned int num) const {
@@ -291,7 +284,7 @@ inline Space Space::dropDims(DimType type, unsigned int first, unsigned int num)
   if (ctx.hasError()) {
     handleError("isl_space_drop_dims returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::dropInputs(unsigned int first, unsigned int n) const {
@@ -306,7 +299,7 @@ inline Space Space::dropInputs(unsigned int first, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_space_drop_inputs returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::dropOutputs(unsigned int first, unsigned int n) const {
@@ -321,7 +314,7 @@ inline Space Space::dropOutputs(unsigned int first, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_space_drop_outputs returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::extend(unsigned int nparam, unsigned int n_in, unsigned int n_out) const {
@@ -336,7 +329,7 @@ inline Space Space::extend(unsigned int nparam, unsigned int n_in, unsigned int 
   if (ctx.hasError()) {
     handleError("isl_space_extend returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline int Space::findDimById(DimType type, const Id &id) const {
@@ -376,7 +369,7 @@ inline Space Space::fromDomain() const {
   if (ctx.hasError()) {
     handleError("isl_space_from_domain returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::fromRange() const {
@@ -391,7 +384,7 @@ inline Space Space::fromRange() const {
   if (ctx.hasError()) {
     handleError("isl_space_from_range returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Id Space::getDimId(DimType type, unsigned int pos) const {
@@ -406,7 +399,7 @@ inline Id Space::getDimId(DimType type, unsigned int pos) const {
   if (ctx.hasError()) {
     handleError("isl_space_get_dim_id returned a NULL pointer.");
   }
-  return Id(res);
+  return Id(ctx, res);
 }
 
 inline std::string Space::getDimName(DimType type, unsigned int pos) const {
@@ -491,7 +484,7 @@ inline Space Space::insertDims(DimType type, unsigned int pos, unsigned int n) c
   if (ctx.hasError()) {
     handleError("isl_space_insert_dims returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Bool Space::isDomain(const Space &space2) const {
@@ -594,7 +587,7 @@ inline Space Space::join(const Space &right) const {
   if (ctx.hasError()) {
     handleError("isl_space_join returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline int Space::match(DimType dim1_type, const Space &dim2, DimType dim2_type) const {
@@ -622,7 +615,7 @@ inline Space Space::moveDims(DimType dst_type, unsigned int dst_pos, DimType src
   if (ctx.hasError()) {
     handleError("isl_space_move_dims returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::params() const {
@@ -637,7 +630,7 @@ inline Space Space::params() const {
   if (ctx.hasError()) {
     handleError("isl_space_params returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::product(const Space &right) const {
@@ -653,7 +646,7 @@ inline Space Space::product(const Space &right) const {
   if (ctx.hasError()) {
     handleError("isl_space_product returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::range() const {
@@ -668,7 +661,7 @@ inline Space Space::range() const {
   if (ctx.hasError()) {
     handleError("isl_space_range returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::rangeMap() const {
@@ -683,7 +676,7 @@ inline Space Space::rangeMap() const {
   if (ctx.hasError()) {
     handleError("isl_space_range_map returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::rangeProduct(const Space &right) const {
@@ -699,7 +692,7 @@ inline Space Space::rangeProduct(const Space &right) const {
   if (ctx.hasError()) {
     handleError("isl_space_range_product returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::resetTupleId(DimType type) const {
@@ -714,7 +707,7 @@ inline Space Space::resetTupleId(DimType type) const {
   if (ctx.hasError()) {
     handleError("isl_space_reset_tuple_id returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::reverse() const {
@@ -729,7 +722,7 @@ inline Space Space::reverse() const {
   if (ctx.hasError()) {
     handleError("isl_space_reverse returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::setDimId(DimType type, unsigned int pos, const Id &id) const {
@@ -745,7 +738,7 @@ inline Space Space::setDimId(DimType type, unsigned int pos, const Id &id) const
   if (ctx.hasError()) {
     handleError("isl_space_set_dim_id returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::setDimName(DimType type, unsigned int pos, std::string name) const {
@@ -760,7 +753,7 @@ inline Space Space::setDimName(DimType type, unsigned int pos, std::string name)
   if (ctx.hasError()) {
     handleError("isl_space_set_dim_name returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::setFromParams() const {
@@ -775,7 +768,7 @@ inline Space Space::setFromParams() const {
   if (ctx.hasError()) {
     handleError("isl_space_set_from_params returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::setTupleId(DimType type, const Id &id) const {
@@ -791,7 +784,7 @@ inline Space Space::setTupleId(DimType type, const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_space_set_tuple_id returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::setTupleName(DimType type, std::string s) const {
@@ -806,7 +799,7 @@ inline Space Space::setTupleName(DimType type, std::string s) const {
   if (ctx.hasError()) {
     handleError("isl_space_set_tuple_name returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Bool Space::tupleIsEqual(DimType type1, const Space &space2, DimType type2) const {
@@ -847,7 +840,7 @@ inline Space Space::uncurry() const {
   if (ctx.hasError()) {
     handleError("isl_space_uncurry returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::unwrap() const {
@@ -862,7 +855,7 @@ inline Space Space::unwrap() const {
   if (ctx.hasError()) {
     handleError("isl_space_unwrap returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::wrap() const {
@@ -877,7 +870,7 @@ inline Space Space::wrap() const {
   if (ctx.hasError()) {
     handleError("isl_space_wrap returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space Space::zip() const {
@@ -892,7 +885,7 @@ inline Space Space::zip() const {
   if (ctx.hasError()) {
     handleError("isl_space_zip returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 } // namespace isl

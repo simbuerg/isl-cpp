@@ -23,7 +23,7 @@ inline BasicSetList &BasicSetList::operator=(const BasicSetList &Other) {
   return *this;
 }
 inline BasicSetList BasicSetList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_basic_set_list *That = isl_basic_set_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_basic_set_list *BasicSetList::Get() const {  return (isl_basic_set_li
 }
 
 inline BasicSetList BasicSetList::asBasicSetList() const {
-  return BasicSetList(GetCopy());
+  return BasicSetList(ctx, GetCopy());
 }
 
 inline BasicSetList BasicSetList::add(const BasicSet &el) const {
@@ -72,7 +72,7 @@ inline BasicSetList BasicSetList::add(const BasicSet &el) const {
   if (ctx.hasError()) {
     handleError("isl_basic_set_list_add returned a NULL pointer.");
   }
-  return BasicSetList(res);
+  return BasicSetList(ctx, res);
 }
 
 } // namespace isl

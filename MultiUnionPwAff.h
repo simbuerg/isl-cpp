@@ -26,20 +26,13 @@ class UnionSet;
 
 class MultiUnionPwAff {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit MultiUnionPwAff(Ctx ctx, isl_multi_union_pw_aff *That) : ctx(ctx), This((void *)That) {}
   explicit MultiUnionPwAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_multi_union_pw_aff we want to wrap.
-  explicit MultiUnionPwAff(isl_multi_union_pw_aff *That) : MultiUnionPwAff(Ctx(isl_multi_union_pw_aff_get_ctx(That)), That) {}
   isl_multi_union_pw_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -179,9 +172,9 @@ public:
   ///
   /// \returns A new MultiUnionPwAff
   MultiUnionPwAff unionAdd(const MultiUnionPwAff &mupa2) const;
-  MultiUnionPwAff(const MultiUnionPwAff &Other) : MultiUnionPwAff(Other.Context(), Other.GetCopy()) {}
+  MultiUnionPwAff(const MultiUnionPwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiUnionPwAff &operator=(const MultiUnionPwAff &Other);
-  MultiUnionPwAff (MultiUnionPwAff && Other) : MultiUnionPwAff(Other.Context(), Other.This) {}
+  MultiUnionPwAff (MultiUnionPwAff && Other) : ctx(Other.Context()), This(Other.This) {}
   MultiUnionPwAff &operator=(MultiUnionPwAff && Other) {
     isl_multi_union_pw_aff *New = Other.Give();
     isl_multi_union_pw_aff_free((isl_multi_union_pw_aff *)This);

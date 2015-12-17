@@ -23,7 +23,7 @@ inline UnionPwMultiAffList &UnionPwMultiAffList::operator=(const UnionPwMultiAff
   return *this;
 }
 inline UnionPwMultiAffList UnionPwMultiAffList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_pw_multi_aff_list *That = isl_union_pw_multi_aff_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_union_pw_multi_aff_list *UnionPwMultiAffList::Get() const {  return (
 }
 
 inline UnionPwMultiAffList UnionPwMultiAffList::asUnionPwMultiAffList() const {
-  return UnionPwMultiAffList(GetCopy());
+  return UnionPwMultiAffList(ctx, GetCopy());
 }
 
 inline UnionPwMultiAffList UnionPwMultiAffList::add(const UnionPwMultiAff &el) const {
@@ -72,7 +72,7 @@ inline UnionPwMultiAffList UnionPwMultiAffList::add(const UnionPwMultiAff &el) c
   if (ctx.hasError()) {
     handleError("isl_union_pw_multi_aff_list_add returned a NULL pointer.");
   }
-  return UnionPwMultiAffList(res);
+  return UnionPwMultiAffList(ctx, res);
 }
 
 } // namespace isl

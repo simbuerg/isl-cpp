@@ -16,24 +16,16 @@
 
 namespace isl {
 class Id;
-class Printer;
 
 class Space {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Space(Ctx ctx, isl_space *That) : ctx(ctx), This((void *)That) {}
   explicit Space(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_space we want to wrap.
-  explicit Space(isl_space *That) : Space(Ctx(isl_space_get_ctx(That)), That) {}
   isl_space *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -74,7 +66,6 @@ public:
   /// \param range
   static Space mapFromDomainAndRange(const Space &domain, const Space &range);
   virtual ~Space();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Space asSpace() const;
 
@@ -465,9 +456,9 @@ public:
   ///
   /// \returns A new Space
   Space zip() const;
-  Space(const Space &Other) : Space(Other.Context(), Other.GetCopy()) {}
+  Space(const Space &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Space &operator=(const Space &Other);
-  Space (Space && Other) : Space(Other.Context(), Other.This) {}
+  Space (Space && Other) : ctx(Other.Context()), This(Other.This) {}
   Space &operator=(Space && Other) {
     isl_space *New = Other.Give();
     isl_space_free((isl_space *)This);

@@ -17,25 +17,17 @@ namespace isl {
 class Aff;
 class BasicMap;
 class Id;
-class Printer;
 class Space;
 
 class LocalSpace {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit LocalSpace(Ctx ctx, isl_local_space *That) : ctx(ctx), This((void *)That) {}
   explicit LocalSpace(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_local_space we want to wrap.
-  explicit LocalSpace(isl_local_space *That) : LocalSpace(Ctx(isl_local_space_get_ctx(That)), That) {}
   isl_local_space *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -53,7 +45,6 @@ public:
   /// \param dim
   static LocalSpace fromSpace(const Space &dim);
   virtual ~LocalSpace();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual LocalSpace asLocalSpace() const;
 
@@ -204,9 +195,9 @@ public:
   ///
   /// \returns A new LocalSpace
   LocalSpace setTupleId(DimType type, const Id &id) const;
-  LocalSpace(const LocalSpace &Other) : LocalSpace(Other.Context(), Other.GetCopy()) {}
+  LocalSpace(const LocalSpace &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   LocalSpace &operator=(const LocalSpace &Other);
-  LocalSpace (LocalSpace && Other) : LocalSpace(Other.Context(), Other.This) {}
+  LocalSpace (LocalSpace && Other) : ctx(Other.Context()), This(Other.This) {}
   LocalSpace &operator=(LocalSpace && Other) {
     isl_local_space *New = Other.Give();
     isl_local_space_free((isl_local_space *)This);

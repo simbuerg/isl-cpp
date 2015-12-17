@@ -16,26 +16,18 @@
 namespace isl {
 class Aff;
 class LocalSpace;
-class Printer;
 class Space;
 class Val;
 
 class Constraint {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Constraint(Ctx ctx, isl_constraint *That) : ctx(ctx), This((void *)That) {}
   explicit Constraint(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_constraint we want to wrap.
-  explicit Constraint(isl_constraint *That) : Constraint(Ctx(isl_constraint_get_ctx(That)), That) {}
   isl_constraint *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,7 +49,6 @@ public:
   /// \param ls
   static Constraint allocInequality(const LocalSpace &ls);
   virtual ~Constraint();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Constraint asConstraint() const;
 
@@ -190,9 +181,9 @@ public:
   ///
   /// \returns A new Constraint
   Constraint setConstantVal(const Val &v) const;
-  Constraint(const Constraint &Other) : Constraint(Other.Context(), Other.GetCopy()) {}
+  Constraint(const Constraint &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Constraint &operator=(const Constraint &Other);
-  Constraint (Constraint && Other) : Constraint(Other.Context(), Other.This) {}
+  Constraint (Constraint && Other) : ctx(Other.Context()), This(Other.This) {}
   Constraint &operator=(Constraint && Other) {
     isl_constraint *New = Other.Give();
     isl_constraint_free((isl_constraint *)This);

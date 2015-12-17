@@ -16,20 +16,13 @@ class Val;
 
 class ValList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit ValList(Ctx ctx, isl_val_list *That) : ctx(ctx), This((void *)That) {}
   explicit ValList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_val_list we want to wrap.
-  explicit ValList(isl_val_list *That) : ValList(Ctx(isl_val_list_get_ctx(That)), That) {}
   isl_val_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new ValList
   ValList add(const Val &el) const;
-  ValList(const ValList &Other) : ValList(Other.Context(), Other.GetCopy()) {}
+  ValList(const ValList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ValList &operator=(const ValList &Other);
-  ValList (ValList && Other) : ValList(Other.Context(), Other.This) {}
+  ValList (ValList && Other) : ctx(Other.Context()), This(Other.This) {}
   ValList &operator=(ValList && Other) {
     isl_val_list *New = Other.Give();
     isl_val_list_free((isl_val_list *)This);

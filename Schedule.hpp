@@ -3,7 +3,6 @@
 
 #include "isl/Schedule.h"
 
-#include "isl/Printer.hpp"
 #include "isl/UnionMap.hpp"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
@@ -34,15 +33,9 @@ inline isl_schedule *Schedule::Give() {
 /// \returns A the wrapped isl object.
 inline isl_schedule *Schedule::Get() const {  return (isl_schedule *)This.get()->p;
 }
-inline std::string Schedule::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printSchedule(*this);
-  return p.getStr();
-}
 
 inline Schedule Schedule::asSchedule() const {
-  return *const_cast<Schedule *>(this);
+  return *this;
 }
 
 inline int Schedule::foreachBand(const std::function<int(isl_band *, void *)> && fn, void * user) const {
@@ -69,7 +62,7 @@ inline UnionMap Schedule::getMap() const {
   if (ctx.hasError()) {
     handleError("isl_schedule_get_map returned a NULL pointer.");
   }
-  return UnionMap(res);
+  return UnionMap(ctx, res);
 }
 
 } // namespace isl

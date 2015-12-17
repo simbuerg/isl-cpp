@@ -16,20 +16,13 @@ class AstNode;
 
 class AstNodeList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit AstNodeList(Ctx ctx, isl_ast_node_list *That) : ctx(ctx), This((void *)That) {}
   explicit AstNodeList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_ast_node_list we want to wrap.
-  explicit AstNodeList(isl_ast_node_list *That) : AstNodeList(Ctx(isl_ast_node_list_get_ctx(That)), That) {}
   isl_ast_node_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new AstNodeList
   AstNodeList add(const AstNode &el) const;
-  AstNodeList(const AstNodeList &Other) : AstNodeList(Other.Context(), Other.GetCopy()) {}
+  AstNodeList(const AstNodeList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstNodeList &operator=(const AstNodeList &Other);
-  AstNodeList (AstNodeList && Other) : AstNodeList(Other.Context(), Other.This) {}
+  AstNodeList (AstNodeList && Other) : ctx(Other.Context()), This(Other.This) {}
   AstNodeList &operator=(AstNodeList && Other) {
     isl_ast_node_list *New = Other.Give();
     isl_ast_node_list_free((isl_ast_node_list *)This);

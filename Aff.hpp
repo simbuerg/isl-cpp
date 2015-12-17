@@ -7,7 +7,6 @@
 #include "isl/Id.hpp"
 #include "isl/LocalSpace.hpp"
 #include "isl/MultiAff.hpp"
-#include "isl/Printer.hpp"
 #include "isl/Set.hpp"
 #include "isl/Space.hpp"
 #include "isl/Val.hpp"
@@ -32,7 +31,7 @@ inline Aff &Aff::operator=(const Aff &Other) {
   return *this;
 }
 inline Aff Aff::zeroOnDomain(const LocalSpace &ls) {
-  Ctx _ctx = ls.Context();
+  const Ctx &_ctx = ls.Context();
   _ctx.lock();
   LocalSpace _cast_ls = ls.asLocalSpace();
   isl_aff *That = isl_aff_zero_on_domain((_cast_ls).Give());
@@ -46,7 +45,7 @@ inline Aff Aff::zeroOnDomain(const LocalSpace &ls) {
 }
 
 inline Aff Aff::valOnDomain(const LocalSpace &ls, const Val &val) {
-  Ctx _ctx = val.Context();
+  const Ctx &_ctx = val.Context();
   _ctx.lock();
   LocalSpace _cast_ls = ls.asLocalSpace();
   Val _cast_val = val.asVal();
@@ -61,7 +60,7 @@ inline Aff Aff::valOnDomain(const LocalSpace &ls, const Val &val) {
 }
 
 inline Aff Aff::varOnDomain(const LocalSpace &ls, DimType type, unsigned int pos) {
-  Ctx _ctx = ls.Context();
+  const Ctx &_ctx = ls.Context();
   _ctx.lock();
   LocalSpace _cast_ls = ls.asLocalSpace();
   isl_aff *That = isl_aff_var_on_domain((_cast_ls).Give(), (enum isl_dim_type)type, pos);
@@ -92,15 +91,9 @@ inline isl_aff *Aff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_aff *Aff::Get() const {  return (isl_aff *)This;
 }
-inline std::string Aff::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printAff(*this);
-  return p.getStr();
-}
 
 inline Aff Aff::asAff() const {
-  return Aff(GetCopy());
+  return Aff(ctx, GetCopy());
 }
 
 inline Aff Aff::add(const Aff &aff2) const {
@@ -116,7 +109,7 @@ inline Aff Aff::add(const Aff &aff2) const {
   if (ctx.hasError()) {
     handleError("isl_aff_add returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::addCoefficientSi(DimType type, int pos, int v) const {
@@ -131,7 +124,7 @@ inline Aff Aff::addCoefficientSi(DimType type, int pos, int v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_add_coefficient_si returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::addCoefficientVal(DimType type, int pos, const Val &v) const {
@@ -147,7 +140,7 @@ inline Aff Aff::addCoefficientVal(DimType type, int pos, const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_add_coefficient_val returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::addConstantNumSi(int v) const {
@@ -162,7 +155,7 @@ inline Aff Aff::addConstantNumSi(int v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_add_constant_num_si returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::addConstantSi(int v) const {
@@ -177,7 +170,7 @@ inline Aff Aff::addConstantSi(int v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_add_constant_si returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::addConstantVal(const Val &v) const {
@@ -193,7 +186,7 @@ inline Aff Aff::addConstantVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_add_constant_val returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::addDims(DimType type, unsigned int n) const {
@@ -208,7 +201,7 @@ inline Aff Aff::addDims(DimType type, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_aff_add_dims returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::alignParams(const Space &model) const {
@@ -224,7 +217,7 @@ inline Aff Aff::alignParams(const Space &model) const {
   if (ctx.hasError()) {
     handleError("isl_aff_align_params returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::ceil() const {
@@ -239,7 +232,7 @@ inline Aff Aff::ceil() const {
   if (ctx.hasError()) {
     handleError("isl_aff_ceil returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline int Aff::dim(DimType type) const {
@@ -267,7 +260,7 @@ inline Aff Aff::div(const Aff &aff2) const {
   if (ctx.hasError()) {
     handleError("isl_aff_div returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::dropDims(DimType type, unsigned int first, unsigned int n) const {
@@ -282,7 +275,7 @@ inline Aff Aff::dropDims(DimType type, unsigned int first, unsigned int n) const
   if (ctx.hasError()) {
     handleError("isl_aff_drop_dims returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::floor() const {
@@ -297,7 +290,7 @@ inline Aff Aff::floor() const {
   if (ctx.hasError()) {
     handleError("isl_aff_floor returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline BasicSet Aff::geBasicSet(const Aff &aff2) const {
@@ -313,7 +306,7 @@ inline BasicSet Aff::geBasicSet(const Aff &aff2) const {
   if (ctx.hasError()) {
     handleError("isl_aff_ge_basic_set returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Val Aff::getCoefficientVal(DimType type, int pos) const {
@@ -328,7 +321,7 @@ inline Val Aff::getCoefficientVal(DimType type, int pos) const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_coefficient_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Aff::getConstantVal() const {
@@ -343,7 +336,7 @@ inline Val Aff::getConstantVal() const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_constant_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val Aff::getDenominatorVal() const {
@@ -358,7 +351,7 @@ inline Val Aff::getDenominatorVal() const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_denominator_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline std::string Aff::getDimName(DimType type, unsigned int pos) const {
@@ -390,7 +383,7 @@ inline Aff Aff::getDiv(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_div returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline LocalSpace Aff::getDomainLocalSpace() const {
@@ -405,7 +398,7 @@ inline LocalSpace Aff::getDomainLocalSpace() const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_domain_local_space returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline Space Aff::getDomainSpace() const {
@@ -420,7 +413,7 @@ inline Space Aff::getDomainSpace() const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_domain_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline LocalSpace Aff::getLocalSpace() const {
@@ -435,7 +428,7 @@ inline LocalSpace Aff::getLocalSpace() const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_local_space returned a NULL pointer.");
   }
-  return LocalSpace(res);
+  return LocalSpace(ctx, res);
 }
 
 inline Space Aff::getSpace() const {
@@ -450,7 +443,7 @@ inline Space Aff::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_aff_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Aff Aff::gist(const Set &context) const {
@@ -466,7 +459,7 @@ inline Aff Aff::gist(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_aff_gist returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::gistParams(const Set &context) const {
@@ -482,7 +475,7 @@ inline Aff Aff::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_aff_gist_params returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::insertDims(DimType type, unsigned int first, unsigned int n) const {
@@ -497,7 +490,7 @@ inline Aff Aff::insertDims(DimType type, unsigned int first, unsigned int n) con
   if (ctx.hasError()) {
     handleError("isl_aff_insert_dims returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Bool Aff::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -537,7 +530,7 @@ inline BasicSet Aff::leBasicSet(const Aff &aff2) const {
   if (ctx.hasError()) {
     handleError("isl_aff_le_basic_set returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Aff Aff::modVal(const Val &mod) const {
@@ -553,7 +546,7 @@ inline Aff Aff::modVal(const Val &mod) const {
   if (ctx.hasError()) {
     handleError("isl_aff_mod_val returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_type, unsigned int src_pos, unsigned int n) const {
@@ -568,7 +561,7 @@ inline Aff Aff::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_typ
   if (ctx.hasError()) {
     handleError("isl_aff_move_dims returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::mul(const Aff &aff2) const {
@@ -584,7 +577,7 @@ inline Aff Aff::mul(const Aff &aff2) const {
   if (ctx.hasError()) {
     handleError("isl_aff_mul returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::neg() const {
@@ -599,7 +592,7 @@ inline Aff Aff::neg() const {
   if (ctx.hasError()) {
     handleError("isl_aff_neg returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline BasicSet Aff::negBasicSet() const {
@@ -614,7 +607,7 @@ inline BasicSet Aff::negBasicSet() const {
   if (ctx.hasError()) {
     handleError("isl_aff_neg_basic_set returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 inline Bool Aff::plainIsEqual(const Aff &aff2) const {
@@ -654,7 +647,7 @@ inline Aff Aff::projectDomainOnParams() const {
   if (ctx.hasError()) {
     handleError("isl_aff_project_domain_on_params returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::pullbackAff(const Aff &aff2) const {
@@ -670,7 +663,7 @@ inline Aff Aff::pullbackAff(const Aff &aff2) const {
   if (ctx.hasError()) {
     handleError("isl_aff_pullback_aff returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::pullbackMultiAff(const MultiAff &ma) const {
@@ -686,7 +679,7 @@ inline Aff Aff::pullbackMultiAff(const MultiAff &ma) const {
   if (ctx.hasError()) {
     handleError("isl_aff_pullback_multi_aff returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::scaleDownUi(unsigned int f) const {
@@ -701,7 +694,7 @@ inline Aff Aff::scaleDownUi(unsigned int f) const {
   if (ctx.hasError()) {
     handleError("isl_aff_scale_down_ui returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::scaleDownVal(const Val &v) const {
@@ -717,7 +710,7 @@ inline Aff Aff::scaleDownVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_scale_down_val returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::scaleVal(const Val &v) const {
@@ -733,7 +726,7 @@ inline Aff Aff::scaleVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_scale_val returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::setCoefficientSi(DimType type, int pos, int v) const {
@@ -748,7 +741,7 @@ inline Aff Aff::setCoefficientSi(DimType type, int pos, int v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_set_coefficient_si returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::setCoefficientVal(DimType type, int pos, const Val &v) const {
@@ -764,7 +757,7 @@ inline Aff Aff::setCoefficientVal(DimType type, int pos, const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_set_coefficient_val returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::setConstantSi(int v) const {
@@ -779,7 +772,7 @@ inline Aff Aff::setConstantSi(int v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_set_constant_si returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::setConstantVal(const Val &v) const {
@@ -795,7 +788,7 @@ inline Aff Aff::setConstantVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_aff_set_constant_val returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::setDimId(DimType type, unsigned int pos, const Id &id) const {
@@ -811,7 +804,7 @@ inline Aff Aff::setDimId(DimType type, unsigned int pos, const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_aff_set_dim_id returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::setDimName(DimType type, unsigned int pos, std::string s) const {
@@ -826,7 +819,7 @@ inline Aff Aff::setDimName(DimType type, unsigned int pos, std::string s) const 
   if (ctx.hasError()) {
     handleError("isl_aff_set_dim_name returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::setTupleId(DimType type, const Id &id) const {
@@ -842,7 +835,7 @@ inline Aff Aff::setTupleId(DimType type, const Id &id) const {
   if (ctx.hasError()) {
     handleError("isl_aff_set_tuple_id returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline Aff Aff::sub(const Aff &aff2) const {
@@ -858,7 +851,7 @@ inline Aff Aff::sub(const Aff &aff2) const {
   if (ctx.hasError()) {
     handleError("isl_aff_sub returned a NULL pointer.");
   }
-  return Aff(res);
+  return Aff(ctx, res);
 }
 
 inline BasicSet Aff::zeroBasicSet() const {
@@ -873,7 +866,7 @@ inline BasicSet Aff::zeroBasicSet() const {
   if (ctx.hasError()) {
     handleError("isl_aff_zero_basic_set returned a NULL pointer.");
   }
-  return BasicSet(res);
+  return BasicSet(ctx, res);
 }
 
 } // namespace isl

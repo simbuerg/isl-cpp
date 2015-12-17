@@ -23,7 +23,7 @@ inline SetList &SetList::operator=(const SetList &Other) {
   return *this;
 }
 inline SetList SetList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_set_list *That = isl_set_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_set_list *SetList::Get() const {  return (isl_set_list *)This;
 }
 
 inline SetList SetList::asSetList() const {
-  return SetList(GetCopy());
+  return SetList(ctx, GetCopy());
 }
 
 inline SetList SetList::add(const Set &el) const {
@@ -72,7 +72,7 @@ inline SetList SetList::add(const Set &el) const {
   if (ctx.hasError()) {
     handleError("isl_set_list_add returned a NULL pointer.");
   }
-  return SetList(res);
+  return SetList(ctx, res);
 }
 
 } // namespace isl

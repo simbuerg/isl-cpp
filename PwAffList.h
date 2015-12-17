@@ -16,20 +16,13 @@ class PwAff;
 
 class PwAffList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit PwAffList(Ctx ctx, isl_pw_aff_list *That) : ctx(ctx), This((void *)That) {}
   explicit PwAffList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_pw_aff_list we want to wrap.
-  explicit PwAffList(isl_pw_aff_list *That) : PwAffList(Ctx(isl_pw_aff_list_get_ctx(That)), That) {}
   isl_pw_aff_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new PwAffList
   PwAffList add(const PwAff &el) const;
-  PwAffList(const PwAffList &Other) : PwAffList(Other.Context(), Other.GetCopy()) {}
+  PwAffList(const PwAffList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwAffList &operator=(const PwAffList &Other);
-  PwAffList (PwAffList && Other) : PwAffList(Other.Context(), Other.This) {}
+  PwAffList (PwAffList && Other) : ctx(Other.Context()), This(Other.This) {}
   PwAffList &operator=(PwAffList && Other) {
     isl_pw_aff_list *New = Other.Give();
     isl_pw_aff_list_free((isl_pw_aff_list *)This);

@@ -4,7 +4,6 @@
 #include "isl/PwQpolynomial.h"
 
 #include "isl/Point.hpp"
-#include "isl/Printer.hpp"
 #include "isl/PwAff.hpp"
 #include "isl/PwQpolynomialFold.hpp"
 #include "isl/Qpolynomial.hpp"
@@ -37,7 +36,7 @@ inline PwQpolynomial &PwQpolynomial::operator=(const PwQpolynomial &Other) {
   return *this;
 }
 inline PwQpolynomial PwQpolynomial::zero(const Space &dim) {
-  Ctx _ctx = dim.Context();
+  const Ctx &_ctx = dim.Context();
   _ctx.lock();
   Space _cast_dim = dim.asSpace();
   isl_pw_qpolynomial *That = isl_pw_qpolynomial_zero((_cast_dim).Give());
@@ -51,7 +50,7 @@ inline PwQpolynomial PwQpolynomial::zero(const Space &dim) {
 }
 
 inline PwQpolynomial PwQpolynomial::alloc(const Set &set, const Qpolynomial &qp) {
-  Ctx _ctx = qp.Context();
+  const Ctx &_ctx = qp.Context();
   _ctx.lock();
   Set _cast_set = set.asSet();
   Qpolynomial _cast_qp = qp.asQpolynomial();
@@ -66,7 +65,7 @@ inline PwQpolynomial PwQpolynomial::alloc(const Set &set, const Qpolynomial &qp)
 }
 
 inline PwQpolynomial PwQpolynomial::fromQpolynomial(const Qpolynomial &qp) {
-  Ctx _ctx = qp.Context();
+  const Ctx &_ctx = qp.Context();
   _ctx.lock();
   Qpolynomial _cast_qp = qp.asQpolynomial();
   isl_pw_qpolynomial *That = isl_pw_qpolynomial_from_qpolynomial((_cast_qp).Give());
@@ -80,7 +79,7 @@ inline PwQpolynomial PwQpolynomial::fromQpolynomial(const Qpolynomial &qp) {
 }
 
 inline PwQpolynomial PwQpolynomial::fromPwAff(const PwAff &pwaff) {
-  Ctx _ctx = pwaff.Context();
+  const Ctx &_ctx = pwaff.Context();
   _ctx.lock();
   PwAff _cast_pwaff = pwaff.asPwAff();
   isl_pw_qpolynomial *That = isl_pw_qpolynomial_from_pw_aff((_cast_pwaff).Give());
@@ -94,7 +93,7 @@ inline PwQpolynomial PwQpolynomial::fromPwAff(const PwAff &pwaff) {
 }
 
 inline PwQpolynomial PwQpolynomial::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_pw_qpolynomial *That = isl_pw_qpolynomial_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -125,15 +124,9 @@ inline isl_pw_qpolynomial *PwQpolynomial::Give() {
 /// \returns A the wrapped isl object.
 inline isl_pw_qpolynomial *PwQpolynomial::Get() const {  return (isl_pw_qpolynomial *)This;
 }
-inline std::string PwQpolynomial::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printPwQpolynomial(*this);
-  return p.getStr();
-}
 
 inline PwQpolynomial PwQpolynomial::asPwQpolynomial() const {
-  return PwQpolynomial(GetCopy());
+  return PwQpolynomial(ctx, GetCopy());
 }
 
 inline PwQpolynomial PwQpolynomial::add(const PwQpolynomial &pwqp2) const {
@@ -149,7 +142,7 @@ inline PwQpolynomial PwQpolynomial::add(const PwQpolynomial &pwqp2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_add returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::addDims(DimType type, unsigned int n) const {
@@ -164,7 +157,7 @@ inline PwQpolynomial PwQpolynomial::addDims(DimType type, unsigned int n) const 
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_add_dims returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::addDisjoint(const PwQpolynomial &pwqp2) const {
@@ -180,7 +173,7 @@ inline PwQpolynomial PwQpolynomial::addDisjoint(const PwQpolynomial &pwqp2) cons
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_add_disjoint returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomialFold PwQpolynomial::bound(Fold type, int * tight) const {
@@ -195,7 +188,7 @@ inline PwQpolynomialFold PwQpolynomial::bound(Fold type, int * tight) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_bound returned a NULL pointer.");
   }
-  return PwQpolynomialFold(res);
+  return PwQpolynomialFold(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::coalesce() const {
@@ -210,7 +203,7 @@ inline PwQpolynomial PwQpolynomial::coalesce() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_coalesce returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline unsigned int PwQpolynomial::dim(DimType type) const {
@@ -237,7 +230,7 @@ inline Set PwQpolynomial::domain() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_domain returned a NULL pointer.");
   }
-  return Set(res);
+  return Set(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::dropDims(DimType type, unsigned int first, unsigned int n) const {
@@ -252,7 +245,7 @@ inline PwQpolynomial PwQpolynomial::dropDims(DimType type, unsigned int first, u
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_drop_dims returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline Val PwQpolynomial::eval(const Point &pnt) const {
@@ -268,7 +261,7 @@ inline Val PwQpolynomial::eval(const Point &pnt) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_eval returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::fixVal(DimType type, unsigned int n, const Val &v) const {
@@ -284,7 +277,7 @@ inline PwQpolynomial PwQpolynomial::fixVal(DimType type, unsigned int n, const V
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fix_val returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline Stat PwQpolynomial::foreachLiftedPiece(const std::function<isl_stat(isl_set *, isl_qpolynomial *, void *)> && fn, void * user) const {
@@ -323,7 +316,7 @@ inline Space PwQpolynomial::getDomainSpace() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_get_domain_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline Space PwQpolynomial::getSpace() const {
@@ -338,7 +331,7 @@ inline Space PwQpolynomial::getSpace() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_get_space returned a NULL pointer.");
   }
-  return Space(res);
+  return Space(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::gist(const Set &context) const {
@@ -354,7 +347,7 @@ inline PwQpolynomial PwQpolynomial::gist(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_gist returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::gistParams(const Set &context) const {
@@ -370,7 +363,7 @@ inline PwQpolynomial PwQpolynomial::gistParams(const Set &context) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_gist_params returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline int PwQpolynomial::hasEqualSpace(const PwQpolynomial &pwqp2) const {
@@ -398,7 +391,7 @@ inline PwQpolynomial PwQpolynomial::insertDims(DimType type, unsigned int first,
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_insert_dims returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::intersectDomain(const Set &set) const {
@@ -414,7 +407,7 @@ inline PwQpolynomial PwQpolynomial::intersectDomain(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_intersect_domain returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::intersectParams(const Set &set) const {
@@ -430,7 +423,7 @@ inline PwQpolynomial PwQpolynomial::intersectParams(const Set &set) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_intersect_params returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline Bool PwQpolynomial::involvesDims(DimType type, unsigned int first, unsigned int n) const {
@@ -469,7 +462,7 @@ inline Val PwQpolynomial::max() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_max returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Val PwQpolynomial::min() const {
@@ -484,7 +477,7 @@ inline Val PwQpolynomial::min() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_min returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_type, unsigned int src_pos, unsigned int n) const {
@@ -499,7 +492,7 @@ inline PwQpolynomial PwQpolynomial::moveDims(DimType dst_type, unsigned int dst_
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_move_dims returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::mul(const PwQpolynomial &pwqp2) const {
@@ -515,7 +508,7 @@ inline PwQpolynomial PwQpolynomial::mul(const PwQpolynomial &pwqp2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_mul returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::neg() const {
@@ -530,7 +523,7 @@ inline PwQpolynomial PwQpolynomial::neg() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_neg returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline Bool PwQpolynomial::plainIsEqual(const PwQpolynomial &pwqp2) const {
@@ -558,7 +551,7 @@ inline PwQpolynomial PwQpolynomial::pow(unsigned int exponent) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_pow returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::projectDomainOnParams() const {
@@ -573,7 +566,7 @@ inline PwQpolynomial PwQpolynomial::projectDomainOnParams() const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_project_domain_on_params returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::resetDomainSpace(const Space &dim) const {
@@ -589,7 +582,7 @@ inline PwQpolynomial PwQpolynomial::resetDomainSpace(const Space &dim) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_reset_domain_space returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::scaleVal(const Val &v) const {
@@ -605,7 +598,7 @@ inline PwQpolynomial PwQpolynomial::scaleVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_scale_val returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::setDimName(DimType type, unsigned int pos, std::string s) const {
@@ -620,7 +613,7 @@ inline PwQpolynomial PwQpolynomial::setDimName(DimType type, unsigned int pos, s
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_set_dim_name returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::splitDims(DimType type, unsigned int first, unsigned int n) const {
@@ -635,7 +628,7 @@ inline PwQpolynomial PwQpolynomial::splitDims(DimType type, unsigned int first, 
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_split_dims returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::splitPeriods(int max_periods) const {
@@ -650,7 +643,7 @@ inline PwQpolynomial PwQpolynomial::splitPeriods(int max_periods) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_split_periods returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::sub(const PwQpolynomial &pwqp2) const {
@@ -666,7 +659,7 @@ inline PwQpolynomial PwQpolynomial::sub(const PwQpolynomial &pwqp2) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_sub returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 inline PwQpolynomial PwQpolynomial::toPolynomial(int sign) const {
@@ -681,7 +674,7 @@ inline PwQpolynomial PwQpolynomial::toPolynomial(int sign) const {
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_to_polynomial returned a NULL pointer.");
   }
-  return PwQpolynomial(res);
+  return PwQpolynomial(ctx, res);
 }
 
 } // namespace isl

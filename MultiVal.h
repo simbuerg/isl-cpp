@@ -17,20 +17,13 @@ class Val;
 
 class MultiVal {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit MultiVal(Ctx ctx, isl_multi_val *That) : ctx(ctx), This((void *)That) {}
   explicit MultiVal(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_multi_val we want to wrap.
-  explicit MultiVal(isl_multi_val *That) : MultiVal(Ctx(isl_multi_val_get_ctx(That)), That) {}
   isl_multi_val *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -72,9 +65,9 @@ public:
   ///
   /// \returns A new Bool
   Bool plainIsEqual(const MultiVal &multi2) const;
-  MultiVal(const MultiVal &Other) : MultiVal(Other.Context(), Other.GetCopy()) {}
+  MultiVal(const MultiVal &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiVal &operator=(const MultiVal &Other);
-  MultiVal (MultiVal && Other) : MultiVal(Other.Context(), Other.This) {}
+  MultiVal (MultiVal && Other) : ctx(Other.Context()), This(Other.This) {}
   MultiVal &operator=(MultiVal && Other) {
     isl_multi_val *New = Other.Give();
     isl_multi_val_free((isl_multi_val *)This);

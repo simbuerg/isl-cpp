@@ -24,7 +24,7 @@ inline MultiVal &MultiVal::operator=(const MultiVal &Other) {
   return *this;
 }
 inline MultiVal MultiVal::readFromStr(const Ctx &ctx, std::string str) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_multi_val *That = isl_multi_val_read_from_str((ctx.Get()), str.c_str());
   ctx.unlock();
@@ -57,7 +57,7 @@ inline isl_multi_val *MultiVal::Get() const {  return (isl_multi_val *)This;
 }
 
 inline MultiVal MultiVal::asMultiVal() const {
-  return MultiVal(GetCopy());
+  return MultiVal(ctx, GetCopy());
 }
 
 inline MultiVal MultiVal::addVal(const Val &v) const {
@@ -73,7 +73,7 @@ inline MultiVal MultiVal::addVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_multi_val_add_val returned a NULL pointer.");
   }
-  return MultiVal(res);
+  return MultiVal(ctx, res);
 }
 
 inline MultiVal MultiVal::modVal(const Val &v) const {
@@ -89,7 +89,7 @@ inline MultiVal MultiVal::modVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_multi_val_mod_val returned a NULL pointer.");
   }
-  return MultiVal(res);
+  return MultiVal(ctx, res);
 }
 
 inline Bool MultiVal::plainIsEqual(const MultiVal &multi2) const {

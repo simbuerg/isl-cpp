@@ -3,7 +3,6 @@
 
 #include "isl/Vec.h"
 
-#include "isl/Printer.hpp"
 #include "isl/Val.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
@@ -26,7 +25,7 @@ inline Vec &Vec::operator=(const Vec &Other) {
   return *this;
 }
 inline Vec Vec::alloc(const Ctx &ctx, unsigned int size) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_vec *That = isl_vec_alloc((ctx.Get()), size);
   ctx.unlock();
@@ -57,15 +56,9 @@ inline isl_vec *Vec::Give() {
 /// \returns A the wrapped isl object.
 inline isl_vec *Vec::Get() const {  return (isl_vec *)This;
 }
-inline std::string Vec::toStr(isl::Format F) const {
-  Printer p = Printer::toStr(ctx);
-  p = p.setOutputFormat(F);
-  p = p.printVec(*this);
-  return p.getStr();
-}
 
 inline Vec Vec::asVec() const {
-  return Vec(GetCopy());
+  return Vec(ctx, GetCopy());
 }
 
 inline Vec Vec::add(const Vec &vec2) const {
@@ -81,7 +74,7 @@ inline Vec Vec::add(const Vec &vec2) const {
   if (ctx.hasError()) {
     handleError("isl_vec_add returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::clr() const {
@@ -96,7 +89,7 @@ inline Vec Vec::clr() const {
   if (ctx.hasError()) {
     handleError("isl_vec_clr returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline int Vec::cmpElement(const Vec &vec2, int pos) const {
@@ -125,7 +118,7 @@ inline Vec Vec::concat(const Vec &vec2) const {
   if (ctx.hasError()) {
     handleError("isl_vec_concat returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::dropEls(unsigned int pos, unsigned int n) const {
@@ -140,7 +133,7 @@ inline Vec Vec::dropEls(unsigned int pos, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_vec_drop_els returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::extend(unsigned int size) const {
@@ -155,7 +148,7 @@ inline Vec Vec::extend(unsigned int size) const {
   if (ctx.hasError()) {
     handleError("isl_vec_extend returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Val Vec::getElementVal(int pos) const {
@@ -170,7 +163,7 @@ inline Val Vec::getElementVal(int pos) const {
   if (ctx.hasError()) {
     handleError("isl_vec_get_element_val returned a NULL pointer.");
   }
-  return Val(res);
+  return Val(ctx, res);
 }
 
 inline Vec Vec::insertEls(unsigned int pos, unsigned int n) const {
@@ -185,7 +178,7 @@ inline Vec Vec::insertEls(unsigned int pos, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_vec_insert_els returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::insertZeroEls(unsigned int pos, unsigned int n) const {
@@ -200,7 +193,7 @@ inline Vec Vec::insertZeroEls(unsigned int pos, unsigned int n) const {
   if (ctx.hasError()) {
     handleError("isl_vec_insert_zero_els returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Bool Vec::isEqual(const Vec &vec2) const {
@@ -228,7 +221,7 @@ inline Vec Vec::moveEls(unsigned int dst_col, unsigned int src_col, unsigned int
   if (ctx.hasError()) {
     handleError("isl_vec_move_els returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::neg() const {
@@ -243,7 +236,7 @@ inline Vec Vec::neg() const {
   if (ctx.hasError()) {
     handleError("isl_vec_neg returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::setElementVal(int pos, const Val &v) const {
@@ -259,7 +252,7 @@ inline Vec Vec::setElementVal(int pos, const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_vec_set_element_val returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::setVal(const Val &v) const {
@@ -275,7 +268,7 @@ inline Vec Vec::setVal(const Val &v) const {
   if (ctx.hasError()) {
     handleError("isl_vec_set_val returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline int Vec::size() const {
@@ -302,7 +295,7 @@ inline Vec Vec::sort() const {
   if (ctx.hasError()) {
     handleError("isl_vec_sort returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 inline Vec Vec::zeroExtend(unsigned int size) const {
@@ -317,7 +310,7 @@ inline Vec Vec::zeroExtend(unsigned int size) const {
   if (ctx.hasError()) {
     handleError("isl_vec_zero_extend returned a NULL pointer.");
   }
-  return Vec(res);
+  return Vec(ctx, res);
 }
 
 } // namespace isl

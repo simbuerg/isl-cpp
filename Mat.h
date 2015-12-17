@@ -17,20 +17,13 @@ class Vec;
 
 class Mat {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Mat(Ctx ctx, isl_mat *That) : ctx(ctx), This((void *)That) {}
   explicit Mat(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_mat we want to wrap.
-  explicit Mat(isl_mat *That) : Mat(Ctx(isl_mat_get_ctx(That)), That) {}
   isl_mat *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -199,9 +192,9 @@ public:
   ///
   /// \returns A new Mat
   Mat vecConcat(const Vec &bot) const;
-  Mat(const Mat &Other) : Mat(Other.Context(), Other.GetCopy()) {}
+  Mat(const Mat &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Mat &operator=(const Mat &Other);
-  Mat (Mat && Other) : Mat(Other.Context(), Other.This) {}
+  Mat (Mat && Other) : ctx(Other.Context()), This(Other.This) {}
   Mat &operator=(Mat && Other) {
     isl_mat *New = Other.Give();
     isl_mat_free((isl_mat *)This);

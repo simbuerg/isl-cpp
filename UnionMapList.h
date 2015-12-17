@@ -16,20 +16,13 @@ class UnionMap;
 
 class UnionMapList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit UnionMapList(Ctx ctx, isl_union_map_list *That) : ctx(ctx), This((void *)That) {}
   explicit UnionMapList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_union_map_list we want to wrap.
-  explicit UnionMapList(isl_union_map_list *That) : UnionMapList(Ctx(isl_union_map_list_get_ctx(That)), That) {}
   isl_union_map_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new UnionMapList
   UnionMapList add(const UnionMap &el) const;
-  UnionMapList(const UnionMapList &Other) : UnionMapList(Other.Context(), Other.GetCopy()) {}
+  UnionMapList(const UnionMapList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionMapList &operator=(const UnionMapList &Other);
-  UnionMapList (UnionMapList && Other) : UnionMapList(Other.Context(), Other.This) {}
+  UnionMapList (UnionMapList && Other) : ctx(Other.Context()), This(Other.This) {}
   UnionMapList &operator=(UnionMapList && Other) {
     isl_union_map_list *New = Other.Give();
     isl_union_map_list_free((isl_union_map_list *)This);

@@ -14,21 +14,13 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Printer;
 
 class Val : public MultiVal {
 protected:
-  explicit Val(Ctx ctx, isl_val *That) : MultiVal(ctx, (void *)That) {/* empty */}
-  explicit Val(Ctx ctx, void *That) : MultiVal(ctx, (void *)That) {/* empty */}
 
 public:
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_val we want to wrap.
-  explicit Val(isl_val *That) : Val(Ctx(isl_val_get_ctx(That)), That) {}
+  explicit Val(Ctx ctx, isl_val *That) : MultiVal(ctx, (void *)That) {/* empty */}
+  explicit Val(Ctx ctx, void *That) : MultiVal(ctx, (void *)That) {/* empty */}
   isl_val *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -71,7 +63,6 @@ public:
   /// \param str
   static Val readFromStr(const Ctx &ctx, std::string str);
   virtual ~Val();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Val asVal() const;
 

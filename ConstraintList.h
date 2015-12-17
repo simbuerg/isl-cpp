@@ -16,20 +16,13 @@ class Constraint;
 
 class ConstraintList {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit ConstraintList(Ctx ctx, isl_constraint_list *That) : ctx(ctx), This((void *)That) {}
   explicit ConstraintList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_constraint_list we want to wrap.
-  explicit ConstraintList(isl_constraint_list *That) : ConstraintList(Ctx(isl_constraint_list_get_ctx(That)), That) {}
   isl_constraint_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -57,9 +50,9 @@ public:
   ///
   /// \returns A new ConstraintList
   ConstraintList add(const Constraint &el) const;
-  ConstraintList(const ConstraintList &Other) : ConstraintList(Other.Context(), Other.GetCopy()) {}
+  ConstraintList(const ConstraintList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ConstraintList &operator=(const ConstraintList &Other);
-  ConstraintList (ConstraintList && Other) : ConstraintList(Other.Context(), Other.This) {}
+  ConstraintList (ConstraintList && Other) : ctx(Other.Context()), This(Other.This) {}
   ConstraintList &operator=(ConstraintList && Other) {
     isl_constraint_list *New = Other.Give();
     isl_constraint_list_free((isl_constraint_list *)This);

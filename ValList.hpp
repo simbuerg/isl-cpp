@@ -23,7 +23,7 @@ inline ValList &ValList::operator=(const ValList &Other) {
   return *this;
 }
 inline ValList ValList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_val_list *That = isl_val_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_val_list *ValList::Get() const {  return (isl_val_list *)This;
 }
 
 inline ValList ValList::asValList() const {
-  return ValList(GetCopy());
+  return ValList(ctx, GetCopy());
 }
 
 inline ValList ValList::add(const Val &el) const {
@@ -72,7 +72,7 @@ inline ValList ValList::add(const Val &el) const {
   if (ctx.hasError()) {
     handleError("isl_val_list_add returned a NULL pointer.");
   }
-  return ValList(res);
+  return ValList(ctx, res);
 }
 
 } // namespace isl

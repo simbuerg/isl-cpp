@@ -21,7 +21,6 @@ class Aff;
 class BasicSet;
 class Constraint;
 class Point;
-class Printer;
 class Set;
 class Space;
 class Term;
@@ -29,20 +28,13 @@ class Val;
 
 class Qpolynomial {
 protected:
+
+public:
   Ctx ctx;
   void * This;
   explicit Qpolynomial(Ctx ctx, isl_qpolynomial *That) : ctx(ctx), This((void *)That) {}
   explicit Qpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
-
-public:
   const Ctx &Context() const { return ctx; }
-  ///rief Wrap an existing isl object.
-  ///
-  /// This serves as an entry point into the C++ API.
-  /// We take ownership of the isl object.
-  ///
-  /// \param That the isl_qpolynomial we want to wrap.
-  explicit Qpolynomial(isl_qpolynomial *That) : Qpolynomial(Ctx(isl_qpolynomial_get_ctx(That)), That) {}
   isl_qpolynomial *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -101,7 +93,6 @@ public:
   /// \param aff
   static Qpolynomial fromAff(const Aff &aff);
   virtual ~Qpolynomial();
-  std::string toStr(isl::Format F = isl::Format::FIsl) const;
 
   virtual Qpolynomial asQpolynomial() const;
 
@@ -329,9 +320,9 @@ public:
   ///
   /// \returns A new Qpolynomial
   Qpolynomial substitute(DimType type, unsigned int first, unsigned int n, std::unique_ptr<Qpolynomial> * subs) const;
-  Qpolynomial(const Qpolynomial &Other) : Qpolynomial(Other.Context(), Other.GetCopy()) {}
+  Qpolynomial(const Qpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Qpolynomial &operator=(const Qpolynomial &Other);
-  Qpolynomial (Qpolynomial && Other) : Qpolynomial(Other.Context(), Other.This) {}
+  Qpolynomial (Qpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}
   Qpolynomial &operator=(Qpolynomial && Other) {
     isl_qpolynomial *New = Other.Give();
     isl_qpolynomial_free((isl_qpolynomial *)This);

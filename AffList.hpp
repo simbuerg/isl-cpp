@@ -23,7 +23,7 @@ inline AffList &AffList::operator=(const AffList &Other) {
   return *this;
 }
 inline AffList AffList::alloc(const Ctx &ctx, int n) {
-  Ctx _ctx = ctx.Context();
+  const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_aff_list *That = isl_aff_list_alloc((ctx.Get()), n);
   ctx.unlock();
@@ -56,7 +56,7 @@ inline isl_aff_list *AffList::Get() const {  return (isl_aff_list *)This;
 }
 
 inline AffList AffList::asAffList() const {
-  return AffList(GetCopy());
+  return AffList(ctx, GetCopy());
 }
 
 inline AffList AffList::add(const Aff &el) const {
@@ -72,7 +72,7 @@ inline AffList AffList::add(const Aff &el) const {
   if (ctx.hasError()) {
     handleError("isl_aff_list_add returned a NULL pointer.");
   }
-  return AffList(res);
+  return AffList(ctx, res);
 }
 
 } // namespace isl
