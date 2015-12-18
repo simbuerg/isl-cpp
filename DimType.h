@@ -2,14 +2,14 @@
 #define ISL_CXX_DimType_H
 
 namespace isl {
-enum DimType {
-  DTAll = 5,
-  DTCst = 0,
-  DTDiv = 4,
-  DTIn = 2,
-  DTOut = 3,
-  DTParam = 1,
-  DTSet = 3,
+enum class DimType {
+  All = 5,
+  Cst = 0,
+  Div = 4,
+  In = 2,
+  Out = 3,
+  Param = 1,
+  Set = 3,
 };
 } // namespace isl
 #endif //ISL_CXX_DimType_H

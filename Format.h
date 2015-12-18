@@ -2,14 +2,14 @@
 #define ISL_CXX_Format_H
 
 namespace isl {
-enum Format {
-  FC = 4,
-  FExtPolylib = 6,
-  FIsl = 0,
-  FLatex = 5,
-  FOmega = 3,
-  FPolylib = 1,
-  FPolylibConstraints = 2,
+enum class Format {
+  C = 4,
+  ExtPolylib = 6,
+  Isl = 0,
+  Latex = 5,
+  Omega = 3,
+  Polylib = 1,
+  PolylibConstraints = 2,
 };
 } // namespace isl
 #endif //ISL_CXX_Format_H
