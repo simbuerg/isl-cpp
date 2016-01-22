@@ -20,18 +20,19 @@
 namespace isl {
 class BasicMap;
 class Map;
+class MultiUnionPwAff;
 class Set;
 class Space;
+class UnionPwMultiAff;
 class UnionPwQpolynomialFold;
 class UnionSet;
 class Val;
 
 class UnionMap {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionMap(Ctx ctx, isl_union_map *That) : ctx(ctx), This((void *)That) {}
   explicit UnionMap(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -47,38 +48,73 @@ public:
   /// \return a the wrapped isl object.
   isl_union_map *Get() const;
 
+
+  /// \brief Constructor for isl_union_map_from_union_pw_multi_aff
+  ///
+  /// \param upma
+  static UnionMap fromUnionPwMultiAff(const UnionPwMultiAff &upma);
+
+
+  /// \brief Constructor for isl_union_map_from_multi_union_pw_aff
+  ///
+  /// \param mupa
+  static UnionMap fromMultiUnionPwAff(const MultiUnionPwAff &mupa);
+
+
   /// \brief Constructor for isl_union_map_from_basic_map
   ///
   /// \param bmap
   static UnionMap fromBasicMap(const BasicMap &bmap);
+
+
   /// \brief Constructor for isl_union_map_from_map
   ///
   /// \param map
   static UnionMap fromMap(const Map &map);
+
+
   /// \brief Constructor for isl_union_map_empty
   ///
   /// \param dim
   static UnionMap empty(const Space &dim);
+
+
   /// \brief Constructor for isl_union_map_universe
   ///
   /// \param umap
   static UnionMap universe(const UnionMap &umap);
+
+
   /// \brief Constructor for isl_union_map_from_domain
   ///
   /// \param uset
   static UnionMap fromDomain(const UnionSet &uset);
+
+
   /// \brief Constructor for isl_union_map_from_range
   ///
   /// \param uset
   static UnionMap fromRange(const UnionSet &uset);
+
+
+  /// \brief Constructor for isl_union_map_from_domain_and_range
+  ///
+  /// \param domain
+  /// \param range
+  static UnionMap fromDomainAndRange(const UnionSet &domain, const UnionSet &range);
+
+
   /// \brief Constructor for isl_union_map_read_from_str
   ///
   /// \param ctx
   /// \param str
   static UnionMap readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~UnionMap();
 
-  virtual UnionMap asUnionMap() const;
+
+
+  UnionMap asUnionMap() const;
 
   /// \brief Generated from  ::<isl_union_map_affine_hull>
   ///
@@ -171,11 +207,36 @@ public:
   /// \returns A new UnionSet
   UnionSet domain() const;
 
+  /// \brief Generated from  ::<isl_union_map_domain_factor_domain>
+  ///
+  ///
+  /// \returns A new UnionMap
+  UnionMap domainFactorDomain() const;
+
+  /// \brief Generated from  ::<isl_union_map_domain_factor_range>
+  ///
+  ///
+  /// \returns A new UnionMap
+  UnionMap domainFactorRange() const;
+
   /// \brief Generated from  ::<isl_union_map_domain_map>
   ///
   ///
   /// \returns A new UnionMap
   UnionMap domainMap() const;
+
+  /// \brief Generated from  ::<isl_union_map_domain_map_union_pw_multi_aff>
+  ///
+  ///
+  /// \returns A new UnionPwMultiAff
+  UnionPwMultiAff domainMapUnionPwMultiAff() const;
+
+  /// \brief Generated from  ::<isl_union_map_domain_product>
+  ///
+  /// \param [in] umap2
+  ///
+  /// \returns A new UnionMap
+  UnionMap domainProduct(const UnionMap &umap2) const;
 
   /// \brief Generated from  ::<isl_union_map_extract_map>
   ///
@@ -183,6 +244,18 @@ public:
   ///
   /// \returns A new Map
   Map extractMap(const Space &dim) const;
+
+  /// \brief Generated from  ::<isl_union_map_factor_domain>
+  ///
+  ///
+  /// \returns A new UnionMap
+  UnionMap factorDomain() const;
+
+  /// \brief Generated from  ::<isl_union_map_factor_range>
+  ///
+  ///
+  /// \returns A new UnionMap
+  UnionMap factorRange() const;
 
   /// \brief Generated from  ::<isl_union_map_fixed_power_val>
   ///
@@ -371,17 +444,43 @@ public:
   /// \returns A new UnionMap
   UnionMap power(int * exact) const;
 
+  /// \brief Generated from  ::<isl_union_map_product>
+  ///
+  /// \param [in] umap2
+  ///
+  /// \returns A new UnionMap
+  UnionMap product(const UnionMap &umap2) const;
+
   /// \brief Generated from  ::<isl_union_map_range>
   ///
   ///
   /// \returns A new UnionSet
   UnionSet range() const;
 
+  /// \brief Generated from  ::<isl_union_map_range_factor_domain>
+  ///
+  ///
+  /// \returns A new UnionMap
+  UnionMap rangeFactorDomain() const;
+
+  /// \brief Generated from  ::<isl_union_map_range_factor_range>
+  ///
+  ///
+  /// \returns A new UnionMap
+  UnionMap rangeFactorRange() const;
+
   /// \brief Generated from  ::<isl_union_map_range_map>
   ///
   ///
   /// \returns A new UnionMap
   UnionMap rangeMap() const;
+
+  /// \brief Generated from  ::<isl_union_map_range_product>
+  ///
+  /// \param [in] umap2
+  ///
+  /// \returns A new UnionMap
+  UnionMap rangeProduct(const UnionMap &umap2) const;
 
   /// \brief Generated from  ::<isl_union_map_reverse>
   ///

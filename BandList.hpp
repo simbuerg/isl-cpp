@@ -27,7 +27,6 @@ inline BandList BandList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_band_list *That = isl_band_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -56,20 +55,11 @@ inline isl_band_list *BandList::Give() {
 inline isl_band_list *BandList::Get() const {  return (isl_band_list *)This;
 }
 
-inline BandList BandList::asBandList() const {
-  return BandList(ctx, GetCopy());
-}
 
 inline BandList BandList::add(const Band &el) const {
   ctx.lock();
-  BandList self = asBandList();
-  // Prepare arguments
-  Band _cast_el = el.asBand();
-  // Call isl_band_list_add
-  isl_band_list * res =  isl_band_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_band_list * res =  isl_band_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_band_list_add returned a NULL pointer.");
   }
@@ -78,13 +68,8 @@ inline BandList BandList::add(const Band &el) const {
 
 inline int BandList::foreachBand(const std::function<int(isl_band *, void *)> && fn, void * user) const {
   ctx.lock();
-  BandList self = asBandList();
-  // Prepare arguments
-  // Call isl_band_list_foreach_band
-  int res =  isl_band_list_foreach_band((self).Get(), get_fn_ptr<3>(fn), user);
-  // Handle result argument(s)
+  int res =  isl_band_list_foreach_band((*this).Get(), get_fn_ptr<0>(fn), user);
   ctx.unlock();
-  // Handle return
   return res;
 }
 

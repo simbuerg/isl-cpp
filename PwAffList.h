@@ -16,10 +16,9 @@ class PwAff;
 
 class PwAffList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit PwAffList(Ctx ctx, isl_pw_aff_list *That) : ctx(ctx), This((void *)That) {}
   explicit PwAffList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_pw_aff_list *Get() const;
 
+
   /// \brief Constructor for isl_pw_aff_list_alloc
   ///
   /// \param ctx
   /// \param n
   static PwAffList alloc(const Ctx &ctx, int n);
+public:
   virtual ~PwAffList();
 
-  virtual PwAffList asPwAffList() const;
+  PwAffList asPwAffList() const;
 
   /// \brief Generated from  ::<isl_pw_aff_list_add>
   ///

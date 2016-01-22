@@ -16,10 +16,9 @@ class UnionMap;
 
 class UnionMapList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionMapList(Ctx ctx, isl_union_map_list *That) : ctx(ctx), This((void *)That) {}
   explicit UnionMapList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_union_map_list *Get() const;
 
+
   /// \brief Constructor for isl_union_map_list_alloc
   ///
   /// \param ctx
   /// \param n
   static UnionMapList alloc(const Ctx &ctx, int n);
+public:
   virtual ~UnionMapList();
 
-  virtual UnionMapList asUnionMapList() const;
+  UnionMapList asUnionMapList() const;
 
   /// \brief Generated from  ::<isl_union_map_list_add>
   ///

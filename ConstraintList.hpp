@@ -26,7 +26,6 @@ inline ConstraintList ConstraintList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_constraint_list *That = isl_constraint_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_constraint_list *ConstraintList::Give() {
 inline isl_constraint_list *ConstraintList::Get() const {  return (isl_constraint_list *)This;
 }
 
-inline ConstraintList ConstraintList::asConstraintList() const {
-  return ConstraintList(ctx, GetCopy());
-}
 
 inline ConstraintList ConstraintList::add(const Constraint &el) const {
   ctx.lock();
-  ConstraintList self = asConstraintList();
-  // Prepare arguments
-  Constraint _cast_el = el.asConstraint();
-  // Call isl_constraint_list_add
-  isl_constraint_list * res =  isl_constraint_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_constraint_list * res =  isl_constraint_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_constraint_list_add returned a NULL pointer.");
   }

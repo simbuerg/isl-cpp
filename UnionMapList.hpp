@@ -26,7 +26,6 @@ inline UnionMapList UnionMapList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_map_list *That = isl_union_map_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_union_map_list *UnionMapList::Give() {
 inline isl_union_map_list *UnionMapList::Get() const {  return (isl_union_map_list *)This;
 }
 
-inline UnionMapList UnionMapList::asUnionMapList() const {
-  return UnionMapList(ctx, GetCopy());
-}
 
 inline UnionMapList UnionMapList::add(const UnionMap &el) const {
   ctx.lock();
-  UnionMapList self = asUnionMapList();
-  // Prepare arguments
-  UnionMap _cast_el = el.asUnionMap();
-  // Call isl_union_map_list_add
-  isl_union_map_list * res =  isl_union_map_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_union_map_list * res =  isl_union_map_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_union_map_list_add returned a NULL pointer.");
   }

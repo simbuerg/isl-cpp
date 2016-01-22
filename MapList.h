@@ -16,10 +16,9 @@ class Map;
 
 class MapList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit MapList(Ctx ctx, isl_map_list *That) : ctx(ctx), This((void *)That) {}
   explicit MapList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_map_list *Get() const;
 
+
   /// \brief Constructor for isl_map_list_alloc
   ///
   /// \param ctx
   /// \param n
   static MapList alloc(const Ctx &ctx, int n);
+public:
   virtual ~MapList();
 
-  virtual MapList asMapList() const;
+  MapList asMapList() const;
 
   /// \brief Generated from  ::<isl_map_list_add>
   ///

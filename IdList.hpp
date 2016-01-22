@@ -26,7 +26,6 @@ inline IdList IdList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_id_list *That = isl_id_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_id_list *IdList::Give() {
 inline isl_id_list *IdList::Get() const {  return (isl_id_list *)This;
 }
 
-inline IdList IdList::asIdList() const {
-  return IdList(ctx, GetCopy());
-}
 
 inline IdList IdList::add(const Id &el) const {
   ctx.lock();
-  IdList self = asIdList();
-  // Prepare arguments
-  Id _cast_el = el.asId();
-  // Call isl_id_list_add
-  isl_id_list * res =  isl_id_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_id_list * res =  isl_id_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_id_list_add returned a NULL pointer.");
   }

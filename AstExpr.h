@@ -3,9 +3,6 @@
 
 
 #include "isl/ast.h"
-#include "isl/AstExprType.h"
-#include "isl/AstOpType.h"
-#include "isl/Format.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
@@ -14,16 +11,12 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class Id;
-class IdToAstExpr;
-class Val;
 
 class AstExpr {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit AstExpr(Ctx ctx, isl_ast_expr *That) : ctx(ctx), This((void *)That) {}
   explicit AstExpr(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -38,118 +31,10 @@ public:
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
   isl_ast_expr *Get() const;
-
-  /// \brief Constructor for isl_ast_expr_from_val
-  ///
-  /// \param v
-  static AstExpr fromVal(const Val &v);
-  /// \brief Constructor for isl_ast_expr_from_id
-  ///
-  /// \param id
-  static AstExpr fromId(const Id &id);
+public:
   virtual ~AstExpr();
 
-  virtual AstExpr asAstExpr() const;
-
-  /// \brief Generated from  ::<isl_ast_expr_add>
-  ///
-  /// \param [in] expr2
-  ///
-  /// \returns A new AstExpr
-  AstExpr add(const AstExpr &expr2) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_and>
-  ///
-  /// \param [in] expr2
-  ///
-  /// \returns A new AstExpr
-  AstExpr and_(const AstExpr &expr2) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_div>
-  ///
-  /// \param [in] expr2
-  ///
-  /// \returns A new AstExpr
-  AstExpr div(const AstExpr &expr2) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_get_id>
-  ///
-  ///
-  /// \returns A new Id
-  Id getId() const;
-
-  /// \brief Generated from  ::<isl_ast_expr_get_op_arg>
-  ///
-  /// \param [in] pos
-  ///
-  /// \returns A new AstExpr
-  AstExpr getOpArg(int pos) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_get_op_n_arg>
-  ///
-  ///
-  /// \returns A new int
-  int getOpNArg() const;
-
-  /// \brief Generated from  ::<isl_ast_expr_get_op_type>
-  ///
-  ///
-  /// \returns A new AstOpType
-  AstOpType getOpType() const;
-
-  /// \brief Generated from  ::<isl_ast_expr_get_type>
-  ///
-  ///
-  /// \returns A new AstExprType
-  AstExprType getType() const;
-
-  /// \brief Generated from  ::<isl_ast_expr_get_val>
-  ///
-  ///
-  /// \returns A new Val
-  Val getVal() const;
-
-  /// \brief Generated from  ::<isl_ast_expr_mul>
-  ///
-  /// \param [in] expr2
-  ///
-  /// \returns A new AstExpr
-  AstExpr mul(const AstExpr &expr2) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_neg>
-  ///
-  ///
-  /// \returns A new AstExpr
-  AstExpr neg() const;
-
-  /// \brief Generated from  ::<isl_ast_expr_or>
-  ///
-  /// \param [in] expr2
-  ///
-  /// \returns A new AstExpr
-  AstExpr or_(const AstExpr &expr2) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_set_op_arg>
-  ///
-  /// \param [in] pos
-  /// \param [in] arg
-  ///
-  /// \returns A new AstExpr
-  AstExpr setOpArg(int pos, const AstExpr &arg) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_sub>
-  ///
-  /// \param [in] expr2
-  ///
-  /// \returns A new AstExpr
-  AstExpr sub(const AstExpr &expr2) const;
-
-  /// \brief Generated from  ::<isl_ast_expr_substitute_ids>
-  ///
-  /// \param [in] id2expr
-  ///
-  /// \returns A new AstExpr
-  AstExpr substituteIds(const IdToAstExpr &id2expr) const;
+  AstExpr asAstExpr() const;
   AstExpr(const AstExpr &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstExpr &operator=(const AstExpr &Other);
   AstExpr (AstExpr && Other) : ctx(Other.Context()), This(Other.This) {}

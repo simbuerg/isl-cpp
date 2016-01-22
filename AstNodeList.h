@@ -16,10 +16,9 @@ class AstNode;
 
 class AstNodeList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit AstNodeList(Ctx ctx, isl_ast_node_list *That) : ctx(ctx), This((void *)That) {}
   explicit AstNodeList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_ast_node_list *Get() const;
 
+
   /// \brief Constructor for isl_ast_node_list_alloc
   ///
   /// \param ctx
   /// \param n
   static AstNodeList alloc(const Ctx &ctx, int n);
+public:
   virtual ~AstNodeList();
 
-  virtual AstNodeList asAstNodeList() const;
+  AstNodeList asAstNodeList() const;
 
   /// \brief Generated from  ::<isl_ast_node_list_add>
   ///

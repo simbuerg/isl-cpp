@@ -16,10 +16,9 @@ namespace isl {
 
 class Id {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Id(Ctx ctx, isl_id *That) : ctx(ctx), This((void *)That) {}
   explicit Id(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,15 +34,17 @@ public:
   /// \return a the wrapped isl object.
   isl_id *Get() const;
 
+
   /// \brief Constructor for isl_id_alloc
   ///
   /// \param ctx
   /// \param name
   /// \param user
   static Id alloc(const Ctx &ctx, std::string name, void * user);
+public:
   virtual ~Id();
 
-  virtual Id asId() const;
+  Id asId() const;
 
   /// \brief Generated from  ::<isl_id_get_name>
   ///

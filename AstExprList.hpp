@@ -26,7 +26,6 @@ inline AstExprList AstExprList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_ast_expr_list *That = isl_ast_expr_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_ast_expr_list *AstExprList::Give() {
 inline isl_ast_expr_list *AstExprList::Get() const {  return (isl_ast_expr_list *)This;
 }
 
-inline AstExprList AstExprList::asAstExprList() const {
-  return AstExprList(ctx, GetCopy());
-}
 
 inline AstExprList AstExprList::add(const AstExpr &el) const {
   ctx.lock();
-  AstExprList self = asAstExprList();
-  // Prepare arguments
-  AstExpr _cast_el = el.asAstExpr();
-  // Call isl_ast_expr_list_add
-  isl_ast_expr_list * res =  isl_ast_expr_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_ast_expr_list * res =  isl_ast_expr_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_ast_expr_list_add returned a NULL pointer.");
   }

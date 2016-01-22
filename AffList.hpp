@@ -26,7 +26,6 @@ inline AffList AffList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_aff_list *That = isl_aff_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_aff_list *AffList::Give() {
 inline isl_aff_list *AffList::Get() const {  return (isl_aff_list *)This;
 }
 
-inline AffList AffList::asAffList() const {
-  return AffList(ctx, GetCopy());
-}
 
 inline AffList AffList::add(const Aff &el) const {
   ctx.lock();
-  AffList self = asAffList();
-  // Prepare arguments
-  Aff _cast_el = el.asAff();
-  // Call isl_aff_list_add
-  isl_aff_list * res =  isl_aff_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_aff_list * res =  isl_aff_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_aff_list_add returned a NULL pointer.");
   }

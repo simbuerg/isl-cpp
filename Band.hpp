@@ -38,19 +38,11 @@ inline isl_band *Band::Give() {
 inline isl_band *Band::Get() const {  return (isl_band *)This;
 }
 
-inline Band Band::asBand() const {
-  return Band(ctx, GetCopy());
-}
 
 inline UnionMap Band::getPartialSchedule() const {
   ctx.lock();
-  Band self = asBand();
-  // Prepare arguments
-  // Call isl_band_get_partial_schedule
-  isl_union_map * res =  isl_band_get_partial_schedule((self).Get());
-  // Handle result argument(s)
+  isl_union_map * res =  isl_band_get_partial_schedule((*this).Get());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_band_get_partial_schedule returned a NULL pointer.");
   }
@@ -59,13 +51,8 @@ inline UnionMap Band::getPartialSchedule() const {
 
 inline UnionMap Band::getPrefixSchedule() const {
   ctx.lock();
-  Band self = asBand();
-  // Prepare arguments
-  // Call isl_band_get_prefix_schedule
-  isl_union_map * res =  isl_band_get_prefix_schedule((self).Get());
-  // Handle result argument(s)
+  isl_union_map * res =  isl_band_get_prefix_schedule((*this).Get());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_band_get_prefix_schedule returned a NULL pointer.");
   }
@@ -74,13 +61,8 @@ inline UnionMap Band::getPrefixSchedule() const {
 
 inline UnionMap Band::getSuffixSchedule() const {
   ctx.lock();
-  Band self = asBand();
-  // Prepare arguments
-  // Call isl_band_get_suffix_schedule
-  isl_union_map * res =  isl_band_get_suffix_schedule((self).Get());
-  // Handle result argument(s)
+  isl_union_map * res =  isl_band_get_suffix_schedule((*this).Get());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_band_get_suffix_schedule returned a NULL pointer.");
   }
@@ -89,26 +71,15 @@ inline UnionMap Band::getSuffixSchedule() const {
 
 inline int Band::split(int pos) const {
   ctx.lock();
-  Band self = asBand();
-  // Prepare arguments
-  // Call isl_band_split
-  int res =  isl_band_split((self).Get(), pos);
-  // Handle result argument(s)
+  int res =  isl_band_split((*this).Get(), pos);
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline int Band::tile(const Vec &sizes) const {
   ctx.lock();
-  Band self = asBand();
-  // Prepare arguments
-  Vec _cast_sizes = sizes.asVec();
-  // Call isl_band_tile
-  int res =  isl_band_tile((self).Get(), (_cast_sizes).Give());
-  // Handle result argument(s)
+  int res =  isl_band_tile((*this).Get(), (sizes).GetCopy());
   ctx.unlock();
-  // Handle return
   return res;
 }
 

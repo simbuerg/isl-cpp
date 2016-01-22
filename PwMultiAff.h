@@ -4,10 +4,11 @@
 
 #include "isl/aff.h"
 #include "isl/Bool.h"
+#include "isl/Ctx.h"
 #include "isl/DimType.h"
 #include "isl/Format.h"
-#include "isl/IslBase.h"
 #include "isl/IslException.h"
+#include "isl/MultiPwAff.h"
 #include "isl/Stat.h"
 #include "isl/aff.h"
 #include "isl/set.h"
@@ -26,10 +27,9 @@ class Val;
 
 class PwMultiAff {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit PwMultiAff(Ctx ctx, isl_pw_multi_aff *That) : ctx(ctx), This((void *)That) {}
   explicit PwMultiAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -45,22 +45,39 @@ public:
   /// \return a the wrapped isl object.
   isl_pw_multi_aff *Get() const;
 
+
   /// \brief Constructor for isl_pw_multi_aff_from_multi_aff
   ///
   /// \param ma
   static PwMultiAff fromMultiAff(const MultiAff &ma);
+
+
   /// \brief Constructor for isl_pw_multi_aff_from_pw_aff
   ///
   /// \param pa
   static PwMultiAff fromPwAff(const PwAff &pa);
+
+
   /// \brief Constructor for isl_pw_multi_aff_alloc
   ///
   /// \param set
   /// \param maff
   static PwMultiAff alloc(const Set &set, const MultiAff &maff);
+
+
+  /// \brief Constructor for isl_pw_multi_aff_read_from_str
+  ///
+  /// \param ctx
+  /// \param str
+  static PwMultiAff readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~PwMultiAff();
 
-  virtual PwMultiAff asPwMultiAff() const;
+  PwMultiAff asPwMultiAff() const;
+
+  MultiPwAff asMultiPwAff() const;
+
+  MultiUnionPwAff asMultiUnionPwAff() const;
 
   /// \brief Generated from  ::<isl_pw_multi_aff_add>
   ///

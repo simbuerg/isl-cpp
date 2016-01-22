@@ -17,10 +17,9 @@ class Band;
 
 class BandList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit BandList(Ctx ctx, isl_band_list *That) : ctx(ctx), This((void *)That) {}
   explicit BandList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -36,14 +35,16 @@ public:
   /// \return a the wrapped isl object.
   isl_band_list *Get() const;
 
+
   /// \brief Constructor for isl_band_list_alloc
   ///
   /// \param ctx
   /// \param n
   static BandList alloc(const Ctx &ctx, int n);
+public:
   virtual ~BandList();
 
-  virtual BandList asBandList() const;
+  BandList asBandList() const;
 
   /// \brief Generated from  ::<isl_band_list_add>
   ///

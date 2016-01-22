@@ -27,7 +27,6 @@ inline Mat Mat::alloc(const Ctx &ctx, unsigned int n_row, unsigned int n_col) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_mat *That = isl_mat_alloc((ctx.Get()), n_row, n_col);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -40,8 +39,7 @@ inline Mat Mat::alloc(const Ctx &ctx, unsigned int n_row, unsigned int n_col) {
 inline Mat Mat::fromRowVec(const Vec &vec) {
   const Ctx &_ctx = vec.Context();
   _ctx.lock();
-  Vec _cast_vec = vec.asVec();
-  isl_mat *That = isl_mat_from_row_vec((_cast_vec).Give());
+  isl_mat *That = isl_mat_from_row_vec((vec).GetCopy());
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -70,19 +68,11 @@ inline isl_mat *Mat::Give() {
 inline isl_mat *Mat::Get() const {  return (isl_mat *)This;
 }
 
-inline Mat Mat::asMat() const {
-  return Mat(ctx, GetCopy());
-}
 
 inline Mat Mat::addRows(unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_add_rows
-  isl_mat * res =  isl_mat_add_rows((self).Give(), n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_add_rows((*this).GetCopy(), n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_add_rows returned a NULL pointer.");
   }
@@ -91,13 +81,8 @@ inline Mat Mat::addRows(unsigned int n) const {
 
 inline Mat Mat::addZeroCols(unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_add_zero_cols
-  isl_mat * res =  isl_mat_add_zero_cols((self).Give(), n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_add_zero_cols((*this).GetCopy(), n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_add_zero_cols returned a NULL pointer.");
   }
@@ -106,13 +91,8 @@ inline Mat Mat::addZeroCols(unsigned int n) const {
 
 inline Mat Mat::addZeroRows(unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_add_zero_rows
-  isl_mat * res =  isl_mat_add_zero_rows((self).Give(), n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_add_zero_rows((*this).GetCopy(), n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_add_zero_rows returned a NULL pointer.");
   }
@@ -121,26 +101,15 @@ inline Mat Mat::addZeroRows(unsigned int n) const {
 
 inline int Mat::cols() const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_cols
-  int res =  isl_mat_cols((self).Get());
-  // Handle result argument(s)
+  int res =  isl_mat_cols((*this).Get());
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Mat Mat::concat(const Mat &bot) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  Mat _cast_bot = bot.asMat();
-  // Call isl_mat_concat
-  isl_mat * res =  isl_mat_concat((self).Give(), (_cast_bot).Give());
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_concat((*this).GetCopy(), (bot).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_concat returned a NULL pointer.");
   }
@@ -149,13 +118,8 @@ inline Mat Mat::concat(const Mat &bot) const {
 
 inline Val Mat::getElementVal(int row, int col) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_get_element_val
-  isl_val * res =  isl_mat_get_element_val((self).Get(), row, col);
-  // Handle result argument(s)
+  isl_val * res =  isl_mat_get_element_val((*this).Get(), row, col);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_get_element_val returned a NULL pointer.");
   }
@@ -164,25 +128,15 @@ inline Val Mat::getElementVal(int row, int col) const {
 
 inline int Mat::initialNonZeroCols() const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_initial_non_zero_cols
-  int res =  isl_mat_initial_non_zero_cols((self).Get());
-  // Handle result argument(s)
+  int res =  isl_mat_initial_non_zero_cols((*this).Get());
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Mat Mat::insertCols(unsigned int col, unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_insert_cols
-  isl_mat * res =  isl_mat_insert_cols((self).Give(), col, n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_insert_cols((*this).GetCopy(), col, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_insert_cols returned a NULL pointer.");
   }
@@ -191,13 +145,8 @@ inline Mat Mat::insertCols(unsigned int col, unsigned int n) const {
 
 inline Mat Mat::insertRows(unsigned int row, unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_insert_rows
-  isl_mat * res =  isl_mat_insert_rows((self).Give(), row, n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_insert_rows((*this).GetCopy(), row, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_insert_rows returned a NULL pointer.");
   }
@@ -206,13 +155,8 @@ inline Mat Mat::insertRows(unsigned int row, unsigned int n) const {
 
 inline Mat Mat::insertZeroCols(unsigned int first, unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_insert_zero_cols
-  isl_mat * res =  isl_mat_insert_zero_cols((self).Give(), first, n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_insert_zero_cols((*this).GetCopy(), first, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_insert_zero_cols returned a NULL pointer.");
   }
@@ -221,13 +165,8 @@ inline Mat Mat::insertZeroCols(unsigned int first, unsigned int n) const {
 
 inline Mat Mat::insertZeroRows(unsigned int row, unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_insert_zero_rows
-  isl_mat * res =  isl_mat_insert_zero_rows((self).Give(), row, n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_insert_zero_rows((*this).GetCopy(), row, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_insert_zero_rows returned a NULL pointer.");
   }
@@ -236,26 +175,15 @@ inline Mat Mat::insertZeroRows(unsigned int row, unsigned int n) const {
 
 inline int Mat::isEqual(const Mat &mat2) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  Mat _cast_mat2 = mat2.asMat();
-  // Call isl_mat_is_equal
-  int res =  isl_mat_is_equal((self).Get(), (_cast_mat2).Get());
-  // Handle result argument(s)
+  int res =  isl_mat_is_equal((*this).Get(), (mat2).Get());
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Mat Mat::moveCols(unsigned int dst_col, unsigned int src_col, unsigned int n) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_move_cols
-  isl_mat * res =  isl_mat_move_cols((self).Give(), dst_col, src_col, n);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_move_cols((*this).GetCopy(), dst_col, src_col, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_move_cols returned a NULL pointer.");
   }
@@ -264,13 +192,8 @@ inline Mat Mat::moveCols(unsigned int dst_col, unsigned int src_col, unsigned in
 
 inline Mat Mat::normalize() const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_normalize
-  isl_mat * res =  isl_mat_normalize((self).Give());
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_normalize((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_normalize returned a NULL pointer.");
   }
@@ -279,13 +202,8 @@ inline Mat Mat::normalize() const {
 
 inline Mat Mat::normalizeRow(int row) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_normalize_row
-  isl_mat * res =  isl_mat_normalize_row((self).Give(), row);
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_normalize_row((*this).GetCopy(), row);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_normalize_row returned a NULL pointer.");
   }
@@ -294,13 +212,8 @@ inline Mat Mat::normalizeRow(int row) const {
 
 inline Mat Mat::rightInverse() const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_right_inverse
-  isl_mat * res =  isl_mat_right_inverse((self).Give());
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_right_inverse((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_right_inverse returned a NULL pointer.");
   }
@@ -309,13 +222,8 @@ inline Mat Mat::rightInverse() const {
 
 inline Mat Mat::rightKernel() const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_right_kernel
-  isl_mat * res =  isl_mat_right_kernel((self).Give());
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_right_kernel((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_right_kernel returned a NULL pointer.");
   }
@@ -324,26 +232,15 @@ inline Mat Mat::rightKernel() const {
 
 inline int Mat::rows() const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  // Call isl_mat_rows
-  int res =  isl_mat_rows((self).Get());
-  // Handle result argument(s)
+  int res =  isl_mat_rows((*this).Get());
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Mat Mat::setElementVal(int row, int col, const Val &v) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  Val _cast_v = v.asVal();
-  // Call isl_mat_set_element_val
-  isl_mat * res =  isl_mat_set_element_val((self).Give(), row, col, (_cast_v).Give());
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_set_element_val((*this).GetCopy(), row, col, (v).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_set_element_val returned a NULL pointer.");
   }
@@ -352,14 +249,8 @@ inline Mat Mat::setElementVal(int row, int col, const Val &v) const {
 
 inline Mat Mat::vecConcat(const Vec &bot) const {
   ctx.lock();
-  Mat self = asMat();
-  // Prepare arguments
-  Vec _cast_bot = bot.asVec();
-  // Call isl_mat_vec_concat
-  isl_mat * res =  isl_mat_vec_concat((self).Give(), (_cast_bot).Give());
-  // Handle result argument(s)
+  isl_mat * res =  isl_mat_vec_concat((*this).GetCopy(), (bot).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_mat_vec_concat returned a NULL pointer.");
   }

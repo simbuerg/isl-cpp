@@ -24,12 +24,14 @@ class Mat;
 class Point;
 class Space;
 
-class BasicSet : public Set {
+class BasicSet {
 protected:
-
+  Ctx ctx;
+  void * This;
 public:
-  explicit BasicSet(Ctx ctx, isl_basic_set *That) : Set(ctx, (void *)That) {/* empty */}
-  explicit BasicSet(Ctx ctx, void *That) : Set(ctx, (void *)That) {/* empty */}
+  explicit BasicSet(Ctx ctx, isl_basic_set *That) : ctx(ctx), This((void *)That) {}
+  explicit BasicSet(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  const Ctx &Context() const { return ctx; }
   isl_basic_set *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -42,20 +44,27 @@ public:
   /// \return a the wrapped isl object.
   isl_basic_set *Get() const;
 
+
   /// \brief Constructor for isl_basic_set_read_from_str
   ///
   /// \param ctx
   /// \param str
   static BasicSet readFromStr(const Ctx &ctx, std::string str);
+
+
   /// \brief Constructor for isl_basic_set_from_point
   ///
   /// \param pnt
   static BasicSet fromPoint(const Point &pnt);
+
+
   /// \brief Constructor for isl_basic_set_box_from_points
   ///
   /// \param pnt1
   /// \param pnt2
   static BasicSet boxFromPoints(const Point &pnt1, const Point &pnt2);
+
+
   /// \brief Constructor for isl_basic_set_from_constraint_matrices
   ///
   /// \param dim
@@ -66,17 +75,21 @@ public:
   /// \param c3
   /// \param c4
   static BasicSet fromConstraintMatrices(const Space &dim, const Mat &eq, const Mat &ineq, DimType c1, DimType c2, DimType c3, DimType c4);
+
+
   /// \brief Constructor for isl_basic_set_from_constraint
   ///
   /// \param constraint
   static BasicSet fromConstraint(const Constraint &constraint);
+public:
   virtual ~BasicSet();
 
-  virtual BasicSet asBasicSet() const;
 
-  virtual Set asSet() const override;
+  BasicSet asBasicSet() const;
 
-  virtual UnionSet asUnionSet() const override;
+  Set asSet() const;
+
+  UnionSet asUnionSet() const;
 
   /// \brief Generated from  ::<isl_basic_set_add_constraint>
   ///
@@ -118,6 +131,12 @@ public:
   ///
   /// \returns A new BasicSet
   BasicSet coefficients() const;
+
+  /// \brief Generated from  ::<isl_basic_set_compute_divs>
+  ///
+  ///
+  /// \returns A new Set
+  Set computeDivs() const;
 
   /// \brief Generated from  ::<isl_basic_set_detect_equalities>
   ///
@@ -417,9 +436,9 @@ public:
   ///
   /// \returns A new BasicMap
   BasicMap unwrap() const;
-  BasicSet(const BasicSet &Other) : Set(Other.Context(), Other.GetCopy()) {}
+  BasicSet(const BasicSet &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicSet &operator=(const BasicSet &Other);
-  BasicSet (BasicSet && Other) : Set(Other.Context(), Other.This) {}
+  BasicSet (BasicSet && Other) : ctx(Other.Context()), This(Other.This) {}
   BasicSet &operator=(BasicSet && Other) {
     isl_basic_set *New = Other.Give();
     isl_basic_set_free((isl_basic_set *)This);

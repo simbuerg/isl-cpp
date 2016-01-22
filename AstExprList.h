@@ -16,10 +16,9 @@ class AstExpr;
 
 class AstExprList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit AstExprList(Ctx ctx, isl_ast_expr_list *That) : ctx(ctx), This((void *)That) {}
   explicit AstExprList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_ast_expr_list *Get() const;
 
+
   /// \brief Constructor for isl_ast_expr_list_alloc
   ///
   /// \param ctx
   /// \param n
   static AstExprList alloc(const Ctx &ctx, int n);
+public:
   virtual ~AstExprList();
 
-  virtual AstExprList asAstExprList() const;
+  AstExprList asAstExprList() const;
 
   /// \brief Generated from  ::<isl_ast_expr_list_add>
   ///

@@ -26,7 +26,6 @@ inline UnionPwMultiAffList UnionPwMultiAffList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_pw_multi_aff_list *That = isl_union_pw_multi_aff_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_union_pw_multi_aff_list *UnionPwMultiAffList::Give() {
 inline isl_union_pw_multi_aff_list *UnionPwMultiAffList::Get() const {  return (isl_union_pw_multi_aff_list *)This;
 }
 
-inline UnionPwMultiAffList UnionPwMultiAffList::asUnionPwMultiAffList() const {
-  return UnionPwMultiAffList(ctx, GetCopy());
-}
 
 inline UnionPwMultiAffList UnionPwMultiAffList::add(const UnionPwMultiAff &el) const {
   ctx.lock();
-  UnionPwMultiAffList self = asUnionPwMultiAffList();
-  // Prepare arguments
-  UnionPwMultiAff _cast_el = el.asUnionPwMultiAff();
-  // Call isl_union_pw_multi_aff_list_add
-  isl_union_pw_multi_aff_list * res =  isl_union_pw_multi_aff_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_union_pw_multi_aff_list * res =  isl_union_pw_multi_aff_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_union_pw_multi_aff_list_add returned a NULL pointer.");
   }

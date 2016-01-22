@@ -3,6 +3,7 @@
 
 
 #include "isl/aff.h"
+#include "isl/Ctx.h"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
@@ -13,13 +14,14 @@
 
 namespace isl {
 class MultiUnionPwAff;
+class PwMultiAff;
+class UnionPwAff;
 
 class UnionPwMultiAff {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionPwMultiAff(Ctx ctx, isl_union_pw_multi_aff *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwMultiAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,13 +37,65 @@ public:
   /// \return a the wrapped isl object.
   isl_union_pw_multi_aff *Get() const;
 
+
+  /// \brief Constructor for isl_union_pw_multi_aff_from_pw_multi_aff
+  ///
+  /// \param pma
+  static UnionPwMultiAff fromPwMultiAff(const PwMultiAff &pma);
+
+
+  /// \brief Constructor for isl_union_pw_multi_aff_read_from_str
+  ///
+  /// \param ctx
+  /// \param str
+  static UnionPwMultiAff readFromStr(const Ctx &ctx, std::string str);
+
+
+  /// \brief Constructor for isl_union_pw_multi_aff_from_union_pw_aff
+  ///
+  /// \param upa
+  static UnionPwMultiAff fromUnionPwAff(const UnionPwAff &upa);
+
+
   /// \brief Constructor for isl_union_pw_multi_aff_from_multi_union_pw_aff
   ///
   /// \param mupa
   static UnionPwMultiAff fromMultiUnionPwAff(const MultiUnionPwAff &mupa);
+public:
   virtual ~UnionPwMultiAff();
 
-  virtual UnionPwMultiAff asUnionPwMultiAff() const;
+
+
+
+  UnionPwMultiAff asUnionPwMultiAff() const;
+
+  /// \brief Generated from  ::<isl_union_pw_multi_aff_add>
+  ///
+  /// \param [in] upma2
+  ///
+  /// \returns A new UnionPwMultiAff
+  UnionPwMultiAff add(const UnionPwMultiAff &upma2) const;
+
+  /// \brief Generated from  ::<isl_union_pw_multi_aff_flat_range_product>
+  ///
+  /// \param [in] upma2
+  ///
+  /// \returns A new UnionPwMultiAff
+  UnionPwMultiAff flatRangeProduct(const UnionPwMultiAff &upma2) const;
+
+  /// \brief Generated from  ::<isl_union_pw_multi_aff_pullback_union_pw_multi_aff>
+  ///
+  /// \param [in] upma2
+  ///
+  /// \returns A new UnionPwMultiAff
+  UnionPwMultiAff pullbackUnionPwMultiAff(const UnionPwMultiAff &upma2) const;
+
+  /// \brief Generated from  ::<isl_union_pw_multi_aff_union_add>
+  ///
+  /// \param [in] upma2
+  ///
+  /// \returns A new UnionPwMultiAff
+  UnionPwMultiAff unionAdd(const UnionPwMultiAff &upma2) const;
   UnionPwMultiAff(const UnionPwMultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwMultiAff &operator=(const UnionPwMultiAff &Other);
   UnionPwMultiAff (UnionPwMultiAff && Other) : ctx(Other.Context()), This(Other.This) {}

@@ -16,10 +16,9 @@ class UnionSet;
 
 class UnionSetList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionSetList(Ctx ctx, isl_union_set_list *That) : ctx(ctx), This((void *)That) {}
   explicit UnionSetList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_union_set_list *Get() const;
 
+
   /// \brief Constructor for isl_union_set_list_alloc
   ///
   /// \param ctx
   /// \param n
   static UnionSetList alloc(const Ctx &ctx, int n);
+public:
   virtual ~UnionSetList();
 
-  virtual UnionSetList asUnionSetList() const;
+  UnionSetList asUnionSetList() const;
 
   /// \brief Generated from  ::<isl_union_set_list_add>
   ///

@@ -3,11 +3,8 @@
 
 
 #include "isl/ast.h"
-#include "isl/Ctx.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
-#include "isl/ast.h"
-#include "isl/printer.h"
 #include <string>
 #include <ostream>
 
@@ -17,10 +14,9 @@ namespace isl {
 
 class AstPrintOptions {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit AstPrintOptions(Ctx ctx, isl_ast_print_options *That) : ctx(ctx), This((void *)That) {}
   explicit AstPrintOptions(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,30 +31,10 @@ public:
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
   isl_ast_print_options *Get() const;
-
-  /// \brief Constructor for isl_ast_print_options_alloc
-  ///
-  /// \param ctx
-  static AstPrintOptions alloc(const Ctx &ctx);
+public:
   virtual ~AstPrintOptions();
 
-  virtual AstPrintOptions asAstPrintOptions() const;
-
-  /// \brief Generated from  ::<isl_ast_print_options_set_print_for>
-  ///
-  /// \param [in] print_for
-  /// \param [in] user
-  ///
-  /// \returns A new AstPrintOptions
-  AstPrintOptions setPrintFor(const std::function<isl_printer *(isl_printer *, isl_ast_print_options *, isl_ast_node *, void *)> && print_for, void * user) const;
-
-  /// \brief Generated from  ::<isl_ast_print_options_set_print_user>
-  ///
-  /// \param [in] print_user
-  /// \param [in] user
-  ///
-  /// \returns A new AstPrintOptions
-  AstPrintOptions setPrintUser(const std::function<isl_printer *(isl_printer *, isl_ast_print_options *, isl_ast_node *, void *)> && print_user, void * user) const;
+  AstPrintOptions asAstPrintOptions() const;
   AstPrintOptions(const AstPrintOptions &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstPrintOptions &operator=(const AstPrintOptions &Other);
   AstPrintOptions (AstPrintOptions && Other) : ctx(Other.Context()), This(Other.This) {}

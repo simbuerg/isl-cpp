@@ -21,10 +21,9 @@ class Space;
 
 class LocalSpace {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit LocalSpace(Ctx ctx, isl_local_space *That) : ctx(ctx), This((void *)That) {}
   explicit LocalSpace(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -40,13 +39,15 @@ public:
   /// \return a the wrapped isl object.
   isl_local_space *Get() const;
 
+
   /// \brief Constructor for isl_local_space_from_space
   ///
   /// \param dim
   static LocalSpace fromSpace(const Space &dim);
+public:
   virtual ~LocalSpace();
 
-  virtual LocalSpace asLocalSpace() const;
+  LocalSpace asLocalSpace() const;
 
   /// \brief Generated from  ::<isl_local_space_add_dims>
   ///

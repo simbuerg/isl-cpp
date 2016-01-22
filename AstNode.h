@@ -3,8 +3,6 @@
 
 
 #include "isl/ast.h"
-#include "isl/AstNodeType.h"
-#include "isl/Format.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
@@ -13,16 +11,12 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
-class AstExpr;
-class AstPrintOptions;
-class Printer;
 
 class AstNode {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit AstNode(Ctx ctx, isl_ast_node *That) : ctx(ctx), This((void *)That) {}
   explicit AstNode(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -37,34 +31,10 @@ public:
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
   isl_ast_node *Get() const;
-
-  /// \brief Constructor for isl_ast_node_alloc_user
-  ///
-  /// \param expr
-  static AstNode allocUser(const AstExpr &expr);
+public:
   virtual ~AstNode();
 
-  virtual AstNode asAstNode() const;
-
-  /// \brief Generated from  ::<isl_ast_node_get_type>
-  ///
-  ///
-  /// \returns A new AstNodeType
-  AstNodeType getType() const;
-
-  /// \brief Generated from  ::<isl_ast_node_print>
-  ///
-  /// \param [in] p
-  /// \param [in] options
-  ///
-  /// \returns A new Printer
-  Printer print(const Printer &p, const AstPrintOptions &options) const;
-
-  /// \brief Generated from  ::<isl_ast_node_user_get_expr>
-  ///
-  ///
-  /// \returns A new AstExpr
-  AstExpr userGetExpr() const;
+  AstNode asAstNode() const;
   AstNode(const AstNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstNode &operator=(const AstNode &Other);
   AstNode (AstNode && Other) : ctx(Other.Context()), This(Other.This) {}

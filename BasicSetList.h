@@ -16,10 +16,9 @@ class BasicSet;
 
 class BasicSetList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit BasicSetList(Ctx ctx, isl_basic_set_list *That) : ctx(ctx), This((void *)That) {}
   explicit BasicSetList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_basic_set_list *Get() const;
 
+
   /// \brief Constructor for isl_basic_set_list_alloc
   ///
   /// \param ctx
   /// \param n
   static BasicSetList alloc(const Ctx &ctx, int n);
+public:
   virtual ~BasicSetList();
 
-  virtual BasicSetList asBasicSetList() const;
+  BasicSetList asBasicSetList() const;
 
   /// \brief Generated from  ::<isl_basic_set_list_add>
   ///

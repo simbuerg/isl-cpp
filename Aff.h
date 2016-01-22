@@ -4,10 +4,11 @@
 
 #include "isl/aff.h"
 #include "isl/Bool.h"
+#include "isl/Ctx.h"
 #include "isl/DimType.h"
 #include "isl/Format.h"
-#include "isl/IslBase.h"
 #include "isl/IslException.h"
+#include "isl/PwAff.h"
 #include <string>
 #include <ostream>
 
@@ -24,10 +25,9 @@ class Val;
 
 class Aff {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Aff(Ctx ctx, isl_aff *That) : ctx(ctx), This((void *)That) {}
   explicit Aff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -43,24 +43,43 @@ public:
   /// \return a the wrapped isl object.
   isl_aff *Get() const;
 
+
   /// \brief Constructor for isl_aff_zero_on_domain
   ///
   /// \param ls
   static Aff zeroOnDomain(const LocalSpace &ls);
+
+
   /// \brief Constructor for isl_aff_val_on_domain
   ///
   /// \param ls
   /// \param val
   static Aff valOnDomain(const LocalSpace &ls, const Val &val);
+
+
   /// \brief Constructor for isl_aff_var_on_domain
   ///
   /// \param ls
   /// \param type
   /// \param pos
   static Aff varOnDomain(const LocalSpace &ls, DimType type, unsigned int pos);
+
+
+  /// \brief Constructor for isl_aff_read_from_str
+  ///
+  /// \param ctx
+  /// \param str
+  static Aff readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~Aff();
 
-  virtual Aff asAff() const;
+  Aff asAff() const;
+
+  PwAff asPwAff() const;
+
+  UnionPwAff asUnionPwAff() const;
+
+  UnionPwMultiAff asUnionPwMultiAff() const;
 
   /// \brief Generated from  ::<isl_aff_add>
   ///
@@ -325,19 +344,19 @@ public:
   /// \returns A new Aff
   Aff projectDomainOnParams() const;
 
-  /// \brief Generated from  ::<isl_aff_pullback_aff>
-  ///
-  /// \param [in] aff2
-  ///
-  /// \returns A new Aff
-  Aff pullbackAff(const Aff &aff2) const;
-
   /// \brief Generated from  ::<isl_aff_pullback_multi_aff>
   ///
   /// \param [in] ma
   ///
   /// \returns A new Aff
   Aff pullbackMultiAff(const MultiAff &ma) const;
+
+  /// \brief Generated from  ::<isl_aff_pullback_aff>
+  ///
+  /// \param [in] aff2
+  ///
+  /// \returns A new Aff
+  Aff pullbackAff(const Aff &aff2) const;
 
   /// \brief Generated from  ::<isl_aff_scale_down_ui>
   ///

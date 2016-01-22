@@ -28,10 +28,9 @@ class UnionSetList;
 
 class ScheduleNode {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit ScheduleNode(Ctx ctx, isl_schedule_node *That) : ctx(ctx), This((void *)That) {}
   explicit ScheduleNode(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -47,17 +46,21 @@ public:
   /// \return a the wrapped isl object.
   isl_schedule_node *Get() const;
 
+
   /// \brief Constructor for isl_schedule_node_from_domain
   ///
   /// \param domain
   static ScheduleNode fromDomain(const UnionSet &domain);
+
+
   /// \brief Constructor for isl_schedule_node_from_extension
   ///
   /// \param extension
   static ScheduleNode fromExtension(const UnionMap &extension);
+public:
   virtual ~ScheduleNode();
 
-  virtual ScheduleNode asScheduleNode() const;
+  ScheduleNode asScheduleNode() const;
 
   /// \brief Generated from  ::<isl_schedule_node_align_params>
   ///

@@ -21,10 +21,9 @@ class Val;
 
 class Constraint {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Constraint(Ctx ctx, isl_constraint *That) : ctx(ctx), This((void *)That) {}
   explicit Constraint(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -40,17 +39,21 @@ public:
   /// \return a the wrapped isl object.
   isl_constraint *Get() const;
 
+
   /// \brief Constructor for isl_constraint_alloc_equality
   ///
   /// \param ls
   static Constraint allocEquality(const LocalSpace &ls);
+
+
   /// \brief Constructor for isl_constraint_alloc_inequality
   ///
   /// \param ls
   static Constraint allocInequality(const LocalSpace &ls);
+public:
   virtual ~Constraint();
 
-  virtual Constraint asConstraint() const;
+  Constraint asConstraint() const;
 
   /// \brief Generated from  ::<isl_constraint_dim>
   ///

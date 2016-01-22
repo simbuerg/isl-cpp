@@ -41,31 +41,18 @@ inline isl_term *Term::Give() {
 inline isl_term *Term::Get() const {  return (isl_term *)This;
 }
 
-inline Term Term::asTerm() const {
-  return Term(ctx, GetCopy());
-}
 
 inline unsigned int Term::dim(DimType type) const {
   ctx.lock();
-  Term self = asTerm();
-  // Prepare arguments
-  // Call isl_term_dim
-  unsigned int res =  isl_term_dim((self).Get(), (enum isl_dim_type)type);
-  // Handle result argument(s)
+  unsigned int res =  isl_term_dim((*this).Get(), (enum isl_dim_type)type);
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Aff Term::getDiv(unsigned int pos) const {
   ctx.lock();
-  Term self = asTerm();
-  // Prepare arguments
-  // Call isl_term_get_div
-  isl_aff * res =  isl_term_get_div((self).Get(), pos);
-  // Handle result argument(s)
+  isl_aff * res =  isl_term_get_div((*this).Get(), pos);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_term_get_div returned a NULL pointer.");
   }
@@ -74,13 +61,8 @@ inline Aff Term::getDiv(unsigned int pos) const {
 
 inline int Term::getExp(DimType type, unsigned int pos) const {
   ctx.lock();
-  Term self = asTerm();
-  // Prepare arguments
-  // Call isl_term_get_exp
-  int res =  isl_term_get_exp((self).Get(), (enum isl_dim_type)type, pos);
-  // Handle result argument(s)
+  int res =  isl_term_get_exp((*this).Get(), (enum isl_dim_type)type, pos);
   ctx.unlock();
-  // Handle return
   return res;
 }
 

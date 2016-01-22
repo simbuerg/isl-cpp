@@ -16,10 +16,9 @@ class Constraint;
 
 class ConstraintList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit ConstraintList(Ctx ctx, isl_constraint_list *That) : ctx(ctx), This((void *)That) {}
   explicit ConstraintList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_constraint_list *Get() const;
 
+
   /// \brief Constructor for isl_constraint_list_alloc
   ///
   /// \param ctx
   /// \param n
   static ConstraintList alloc(const Ctx &ctx, int n);
+public:
   virtual ~ConstraintList();
 
-  virtual ConstraintList asConstraintList() const;
+  ConstraintList asConstraintList() const;
 
   /// \brief Generated from  ::<isl_constraint_list_add>
   ///

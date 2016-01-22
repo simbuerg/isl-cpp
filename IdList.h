@@ -16,10 +16,9 @@ class Id;
 
 class IdList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit IdList(Ctx ctx, isl_id_list *That) : ctx(ctx), This((void *)That) {}
   explicit IdList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_id_list *Get() const;
 
+
   /// \brief Constructor for isl_id_list_alloc
   ///
   /// \param ctx
   /// \param n
   static IdList alloc(const Ctx &ctx, int n);
+public:
   virtual ~IdList();
 
-  virtual IdList asIdList() const;
+  IdList asIdList() const;
 
   /// \brief Generated from  ::<isl_id_list_add>
   ///

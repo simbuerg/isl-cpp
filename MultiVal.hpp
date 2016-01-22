@@ -3,9 +3,12 @@
 
 #include "isl/MultiVal.h"
 
+#include "isl/Space.hpp"
 #include "isl/Val.hpp"
+#include "isl/ValList.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
+#include "isl/DimType.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
@@ -23,11 +26,36 @@ inline MultiVal &MultiVal::operator=(const MultiVal &Other) {
   This = New;
   return *this;
 }
+inline MultiVal MultiVal::fromValList(const Space &space, const ValList &list) {
+  const Ctx &_ctx = list.Context();
+  _ctx.lock();
+  isl_multi_val *That = isl_multi_val_from_val_list((space).GetCopy(), (list).GetCopy());
+
+  _ctx.unlock();
+  if (_ctx.hasError()) {
+    handleError("isl_multi_val_from_val_list returned a NULL pointer.");
+  }
+
+  return MultiVal(_ctx, That);
+}
+
+inline MultiVal MultiVal::zero(const Space &space) {
+  const Ctx &_ctx = space.Context();
+  _ctx.lock();
+  isl_multi_val *That = isl_multi_val_zero((space).GetCopy());
+
+  _ctx.unlock();
+  if (_ctx.hasError()) {
+    handleError("isl_multi_val_zero returned a NULL pointer.");
+  }
+
+  return MultiVal(_ctx, That);
+}
+
 inline MultiVal MultiVal::readFromStr(const Ctx &ctx, std::string str) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_multi_val *That = isl_multi_val_read_from_str((ctx.Get()), str.c_str());
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -56,36 +84,78 @@ inline isl_multi_val *MultiVal::Give() {
 inline isl_multi_val *MultiVal::Get() const {  return (isl_multi_val *)This;
 }
 
-inline MultiVal MultiVal::asMultiVal() const {
-  return MultiVal(ctx, GetCopy());
+
+inline MultiVal MultiVal::add(const MultiVal &multi2) const {
+  ctx.lock();
+  isl_multi_val * res =  isl_multi_val_add((*this).GetCopy(), (multi2).GetCopy());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_add returned a NULL pointer.");
+  }
+  return MultiVal(ctx, res);
 }
 
 inline MultiVal MultiVal::addVal(const Val &v) const {
   ctx.lock();
-  MultiVal self = asMultiVal();
-  // Prepare arguments
-  Val _cast_v = v.asVal();
-  // Call isl_multi_val_add_val
-  isl_multi_val * res =  isl_multi_val_add_val((self).Give(), (_cast_v).Give());
-  // Handle result argument(s)
+  isl_multi_val * res =  isl_multi_val_add_val((*this).GetCopy(), (v).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_multi_val_add_val returned a NULL pointer.");
   }
   return MultiVal(ctx, res);
 }
 
+inline int MultiVal::findDimByName(DimType type, std::string name) const {
+  ctx.lock();
+  int res =  isl_multi_val_find_dim_by_name((*this).Get(), (enum isl_dim_type)type, name.c_str());
+  ctx.unlock();
+  return res;
+}
+
+inline MultiVal MultiVal::flatRangeProduct(const MultiVal &multi2) const {
+  ctx.lock();
+  isl_multi_val * res =  isl_multi_val_flat_range_product((*this).GetCopy(), (multi2).GetCopy());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_flat_range_product returned a NULL pointer.");
+  }
+  return MultiVal(ctx, res);
+}
+
+inline MultiVal MultiVal::fromRange() const {
+  ctx.lock();
+  isl_multi_val * res =  isl_multi_val_from_range((*this).GetCopy());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_from_range returned a NULL pointer.");
+  }
+  return MultiVal(ctx, res);
+}
+
+inline Space MultiVal::getDomainSpace() const {
+  ctx.lock();
+  isl_space * res =  isl_multi_val_get_domain_space((*this).Get());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_get_domain_space returned a NULL pointer.");
+  }
+  return Space(ctx, res);
+}
+
+inline Space MultiVal::getSpace() const {
+  ctx.lock();
+  isl_space * res =  isl_multi_val_get_space((*this).Get());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_get_space returned a NULL pointer.");
+  }
+  return Space(ctx, res);
+}
+
 inline MultiVal MultiVal::modVal(const Val &v) const {
   ctx.lock();
-  MultiVal self = asMultiVal();
-  // Prepare arguments
-  Val _cast_v = v.asVal();
-  // Call isl_multi_val_mod_val
-  isl_multi_val * res =  isl_multi_val_mod_val((self).Give(), (_cast_v).Give());
-  // Handle result argument(s)
+  isl_multi_val * res =  isl_multi_val_mod_val((*this).GetCopy(), (v).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_multi_val_mod_val returned a NULL pointer.");
   }
@@ -94,15 +164,29 @@ inline MultiVal MultiVal::modVal(const Val &v) const {
 
 inline Bool MultiVal::plainIsEqual(const MultiVal &multi2) const {
   ctx.lock();
-  MultiVal self = asMultiVal();
-  // Prepare arguments
-  MultiVal _cast_multi2 = multi2.asMultiVal();
-  // Call isl_multi_val_plain_is_equal
-  isl_bool res =  isl_multi_val_plain_is_equal((self).Get(), (_cast_multi2).Get());
-  // Handle result argument(s)
+  isl_bool res =  isl_multi_val_plain_is_equal((*this).Get(), (multi2).Get());
   ctx.unlock();
-  // Handle return
   return (Bool)res;
+}
+
+inline MultiVal MultiVal::product(const MultiVal &multi2) const {
+  ctx.lock();
+  isl_multi_val * res =  isl_multi_val_product((*this).GetCopy(), (multi2).GetCopy());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_product returned a NULL pointer.");
+  }
+  return MultiVal(ctx, res);
+}
+
+inline MultiVal MultiVal::rangeProduct(const MultiVal &multi2) const {
+  ctx.lock();
+  isl_multi_val * res =  isl_multi_val_range_product((*this).GetCopy(), (multi2).GetCopy());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_range_product returned a NULL pointer.");
+  }
+  return MultiVal(ctx, res);
 }
 
 } // namespace isl

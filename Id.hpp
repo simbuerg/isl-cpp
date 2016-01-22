@@ -26,7 +26,6 @@ inline Id Id::alloc(const Ctx &ctx, std::string name, void * user) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_id *That = isl_id_alloc((ctx.Get()), name.c_str(), user);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,19 +54,11 @@ inline isl_id *Id::Give() {
 inline isl_id *Id::Get() const {  return (isl_id *)This;
 }
 
-inline Id Id::asId() const {
-  return Id(ctx, GetCopy());
-}
 
 inline std::string Id::getName() const {
   ctx.lock();
-  Id self = asId();
-  // Prepare arguments
-  // Call isl_id_get_name
-  const char * res =  isl_id_get_name((self).Get());
-  // Handle result argument(s)
+  const char * res =  isl_id_get_name((*this).Get());
   ctx.unlock();
-  // Handle return
   std::string res_;
   if (ctx.hasError()) {
     handleError("isl_id_get_name returned a NULL pointer.");

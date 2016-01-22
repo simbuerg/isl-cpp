@@ -28,10 +28,9 @@ class Val;
 
 class Qpolynomial {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Qpolynomial(Ctx ctx, isl_qpolynomial *That) : ctx(ctx), This((void *)That) {}
   explicit Qpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -47,54 +46,74 @@ public:
   /// \return a the wrapped isl object.
   isl_qpolynomial *Get() const;
 
+
   /// \brief Constructor for isl_qpolynomial_zero_on_domain
   ///
   /// \param dim
   static Qpolynomial zeroOnDomain(const Space &dim);
+
+
   /// \brief Constructor for isl_qpolynomial_one_on_domain
   ///
   /// \param dim
   static Qpolynomial oneOnDomain(const Space &dim);
+
+
   /// \brief Constructor for isl_qpolynomial_infty_on_domain
   ///
   /// \param dim
   static Qpolynomial inftyOnDomain(const Space &dim);
+
+
   /// \brief Constructor for isl_qpolynomial_neginfty_on_domain
   ///
   /// \param dim
   static Qpolynomial neginftyOnDomain(const Space &dim);
+
+
   /// \brief Constructor for isl_qpolynomial_nan_on_domain
   ///
   /// \param dim
   static Qpolynomial nanOnDomain(const Space &dim);
+
+
   /// \brief Constructor for isl_qpolynomial_val_on_domain
   ///
   /// \param space
   /// \param val
   static Qpolynomial valOnDomain(const Space &space, const Val &val);
+
+
   /// \brief Constructor for isl_qpolynomial_var_on_domain
   ///
   /// \param dim
   /// \param type
   /// \param pos
   static Qpolynomial varOnDomain(const Space &dim, DimType type, unsigned int pos);
+
+
   /// \brief Constructor for isl_qpolynomial_from_constraint
   ///
   /// \param c
   /// \param type
   /// \param pos
   static Qpolynomial fromConstraint(const Constraint &c, DimType type, unsigned int pos);
+
+
   /// \brief Constructor for isl_qpolynomial_from_term
   ///
   /// \param term
   static Qpolynomial fromTerm(const Term &term);
+
+
   /// \brief Constructor for isl_qpolynomial_from_aff
   ///
   /// \param aff
   static Qpolynomial fromAff(const Aff &aff);
+public:
   virtual ~Qpolynomial();
 
-  virtual Qpolynomial asQpolynomial() const;
+  Qpolynomial asQpolynomial() const;
 
   /// \brief Generated from  ::<isl_qpolynomial_add>
   ///

@@ -17,10 +17,9 @@ class Vec;
 
 class Mat {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Mat(Ctx ctx, isl_mat *That) : ctx(ctx), This((void *)That) {}
   explicit Mat(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -36,19 +35,23 @@ public:
   /// \return a the wrapped isl object.
   isl_mat *Get() const;
 
+
   /// \brief Constructor for isl_mat_alloc
   ///
   /// \param ctx
   /// \param n_row
   /// \param n_col
   static Mat alloc(const Ctx &ctx, unsigned int n_row, unsigned int n_col);
+
+
   /// \brief Constructor for isl_mat_from_row_vec
   ///
   /// \param vec
   static Mat fromRowVec(const Vec &vec);
+public:
   virtual ~Mat();
 
-  virtual Mat asMat() const;
+  Mat asMat() const;
 
   /// \brief Generated from  ::<isl_mat_add_rows>
   ///

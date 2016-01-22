@@ -24,10 +24,9 @@ class Val;
 
 class QpolynomialFold {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit QpolynomialFold(Ctx ctx, isl_qpolynomial_fold *That) : ctx(ctx), This((void *)That) {}
   explicit QpolynomialFold(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -43,19 +42,23 @@ public:
   /// \return a the wrapped isl object.
   isl_qpolynomial_fold *Get() const;
 
+
   /// \brief Constructor for isl_qpolynomial_fold_empty
   ///
   /// \param type
   /// \param dim
   static QpolynomialFold empty(Fold type, const Space &dim);
+
+
   /// \brief Constructor for isl_qpolynomial_fold_alloc
   ///
   /// \param type
   /// \param qp
   static QpolynomialFold alloc(Fold type, const Qpolynomial &qp);
+public:
   virtual ~QpolynomialFold();
 
-  virtual QpolynomialFold asQpolynomialFold() const;
+  QpolynomialFold asQpolynomialFold() const;
 
   /// \brief Generated from  ::<isl_qpolynomial_fold_eval>
   ///

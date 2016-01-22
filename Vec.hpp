@@ -28,7 +28,6 @@ inline Vec Vec::alloc(const Ctx &ctx, unsigned int size) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_vec *That = isl_vec_alloc((ctx.Get()), size);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -57,20 +56,11 @@ inline isl_vec *Vec::Give() {
 inline isl_vec *Vec::Get() const {  return (isl_vec *)This;
 }
 
-inline Vec Vec::asVec() const {
-  return Vec(ctx, GetCopy());
-}
 
 inline Vec Vec::add(const Vec &vec2) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  Vec _cast_vec2 = vec2.asVec();
-  // Call isl_vec_add
-  isl_vec * res =  isl_vec_add((self).Give(), (_cast_vec2).Give());
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_add((*this).GetCopy(), (vec2).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_add returned a NULL pointer.");
   }
@@ -79,13 +69,8 @@ inline Vec Vec::add(const Vec &vec2) const {
 
 inline Vec Vec::clr() const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_clr
-  isl_vec * res =  isl_vec_clr((self).Give());
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_clr((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_clr returned a NULL pointer.");
   }
@@ -94,27 +79,15 @@ inline Vec Vec::clr() const {
 
 inline int Vec::cmpElement(const Vec &vec2, int pos) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  Vec _cast_vec2 = vec2.asVec();
-  // Call isl_vec_cmp_element
-  int res =  isl_vec_cmp_element((self).Get(), (_cast_vec2).Get(), pos);
-  // Handle result argument(s)
+  int res =  isl_vec_cmp_element((*this).Get(), (vec2).Get(), pos);
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Vec Vec::concat(const Vec &vec2) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  Vec _cast_vec2 = vec2.asVec();
-  // Call isl_vec_concat
-  isl_vec * res =  isl_vec_concat((self).Give(), (_cast_vec2).Give());
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_concat((*this).GetCopy(), (vec2).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_concat returned a NULL pointer.");
   }
@@ -123,13 +96,8 @@ inline Vec Vec::concat(const Vec &vec2) const {
 
 inline Vec Vec::dropEls(unsigned int pos, unsigned int n) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_drop_els
-  isl_vec * res =  isl_vec_drop_els((self).Give(), pos, n);
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_drop_els((*this).GetCopy(), pos, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_drop_els returned a NULL pointer.");
   }
@@ -138,13 +106,8 @@ inline Vec Vec::dropEls(unsigned int pos, unsigned int n) const {
 
 inline Vec Vec::extend(unsigned int size) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_extend
-  isl_vec * res =  isl_vec_extend((self).Give(), size);
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_extend((*this).GetCopy(), size);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_extend returned a NULL pointer.");
   }
@@ -153,13 +116,8 @@ inline Vec Vec::extend(unsigned int size) const {
 
 inline Val Vec::getElementVal(int pos) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_get_element_val
-  isl_val * res =  isl_vec_get_element_val((self).Get(), pos);
-  // Handle result argument(s)
+  isl_val * res =  isl_vec_get_element_val((*this).Get(), pos);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_get_element_val returned a NULL pointer.");
   }
@@ -168,13 +126,8 @@ inline Val Vec::getElementVal(int pos) const {
 
 inline Vec Vec::insertEls(unsigned int pos, unsigned int n) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_insert_els
-  isl_vec * res =  isl_vec_insert_els((self).Give(), pos, n);
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_insert_els((*this).GetCopy(), pos, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_insert_els returned a NULL pointer.");
   }
@@ -183,13 +136,8 @@ inline Vec Vec::insertEls(unsigned int pos, unsigned int n) const {
 
 inline Vec Vec::insertZeroEls(unsigned int pos, unsigned int n) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_insert_zero_els
-  isl_vec * res =  isl_vec_insert_zero_els((self).Give(), pos, n);
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_insert_zero_els((*this).GetCopy(), pos, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_insert_zero_els returned a NULL pointer.");
   }
@@ -198,26 +146,15 @@ inline Vec Vec::insertZeroEls(unsigned int pos, unsigned int n) const {
 
 inline Bool Vec::isEqual(const Vec &vec2) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  Vec _cast_vec2 = vec2.asVec();
-  // Call isl_vec_is_equal
-  isl_bool res =  isl_vec_is_equal((self).Get(), (_cast_vec2).Get());
-  // Handle result argument(s)
+  isl_bool res =  isl_vec_is_equal((*this).Get(), (vec2).Get());
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline Vec Vec::moveEls(unsigned int dst_col, unsigned int src_col, unsigned int n) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_move_els
-  isl_vec * res =  isl_vec_move_els((self).Give(), dst_col, src_col, n);
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_move_els((*this).GetCopy(), dst_col, src_col, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_move_els returned a NULL pointer.");
   }
@@ -226,13 +163,8 @@ inline Vec Vec::moveEls(unsigned int dst_col, unsigned int src_col, unsigned int
 
 inline Vec Vec::neg() const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_neg
-  isl_vec * res =  isl_vec_neg((self).Give());
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_neg((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_neg returned a NULL pointer.");
   }
@@ -241,14 +173,8 @@ inline Vec Vec::neg() const {
 
 inline Vec Vec::setElementVal(int pos, const Val &v) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  Val _cast_v = v.asVal();
-  // Call isl_vec_set_element_val
-  isl_vec * res =  isl_vec_set_element_val((self).Give(), pos, (_cast_v).Give());
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_set_element_val((*this).GetCopy(), pos, (v).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_set_element_val returned a NULL pointer.");
   }
@@ -257,14 +183,8 @@ inline Vec Vec::setElementVal(int pos, const Val &v) const {
 
 inline Vec Vec::setVal(const Val &v) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  Val _cast_v = v.asVal();
-  // Call isl_vec_set_val
-  isl_vec * res =  isl_vec_set_val((self).Give(), (_cast_v).Give());
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_set_val((*this).GetCopy(), (v).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_set_val returned a NULL pointer.");
   }
@@ -273,25 +193,15 @@ inline Vec Vec::setVal(const Val &v) const {
 
 inline int Vec::size() const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_size
-  int res =  isl_vec_size((self).Get());
-  // Handle result argument(s)
+  int res =  isl_vec_size((*this).Get());
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Vec Vec::sort() const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_sort
-  isl_vec * res =  isl_vec_sort((self).Give());
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_sort((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_sort returned a NULL pointer.");
   }
@@ -300,13 +210,8 @@ inline Vec Vec::sort() const {
 
 inline Vec Vec::zeroExtend(unsigned int size) const {
   ctx.lock();
-  Vec self = asVec();
-  // Prepare arguments
-  // Call isl_vec_zero_extend
-  isl_vec * res =  isl_vec_zero_extend((self).Give(), size);
-  // Handle result argument(s)
+  isl_vec * res =  isl_vec_zero_extend((*this).GetCopy(), size);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_vec_zero_extend returned a NULL pointer.");
   }

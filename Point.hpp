@@ -5,10 +5,10 @@
 
 #include "isl/Space.hpp"
 #include "isl/Val.hpp"
+#include "isl/BasicSet.hpp"
 #include "isl/Bool.h"
 #include "isl/DimType.h"
 #include "isl/Format.h"
-#include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
 #include <ostream>
@@ -25,29 +25,27 @@ inline Point &Point::operator=(const Point &Other) {
   This = New;
   return *this;
 }
-inline Point Point::zero(const Space &dim) {
+inline Point Point::void_(const Space &dim) {
   const Ctx &_ctx = dim.Context();
   _ctx.lock();
-  Space _cast_dim = dim.asSpace();
-  isl_point *That = isl_point_zero((_cast_dim).Give());
+  isl_point *That = isl_point_void((dim).GetCopy());
 
   _ctx.unlock();
   if (_ctx.hasError()) {
-    handleError("isl_point_zero returned a NULL pointer.");
+    handleError("isl_point_void returned a NULL pointer.");
   }
 
   return Point(_ctx, That);
 }
 
-inline Point Point::void_(const Space &dim) {
+inline Point Point::zero(const Space &dim) {
   const Ctx &_ctx = dim.Context();
   _ctx.lock();
-  Space _cast_dim = dim.asSpace();
-  isl_point *That = isl_point_void((_cast_dim).Give());
+  isl_point *That = isl_point_zero((dim).GetCopy());
 
   _ctx.unlock();
   if (_ctx.hasError()) {
-    handleError("isl_point_void returned a NULL pointer.");
+    handleError("isl_point_zero returned a NULL pointer.");
   }
 
   return Point(_ctx, That);
@@ -72,19 +70,14 @@ inline isl_point *Point::Give() {
 inline isl_point *Point::Get() const {  return (isl_point *)This;
 }
 
-inline Point Point::asPoint() const {
-  return Point(ctx, GetCopy());
-}
+
+
+
 
 inline Val Point::getCoordinateVal(DimType type, int pos) const {
   ctx.lock();
-  Point self = asPoint();
-  // Prepare arguments
-  // Call isl_point_get_coordinate_val
-  isl_val * res =  isl_point_get_coordinate_val((self).Get(), (enum isl_dim_type)type, pos);
-  // Handle result argument(s)
+  isl_val * res =  isl_point_get_coordinate_val((*this).Get(), (enum isl_dim_type)type, pos);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_point_get_coordinate_val returned a NULL pointer.");
   }
@@ -93,13 +86,8 @@ inline Val Point::getCoordinateVal(DimType type, int pos) const {
 
 inline Space Point::getSpace() const {
   ctx.lock();
-  Point self = asPoint();
-  // Prepare arguments
-  // Call isl_point_get_space
-  isl_space * res =  isl_point_get_space((self).Get());
-  // Handle result argument(s)
+  isl_space * res =  isl_point_get_space((*this).Get());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_point_get_space returned a NULL pointer.");
   }
@@ -108,26 +96,15 @@ inline Space Point::getSpace() const {
 
 inline Bool Point::isVoid() const {
   ctx.lock();
-  Point self = asPoint();
-  // Prepare arguments
-  // Call isl_point_is_void
-  isl_bool res =  isl_point_is_void((self).Get());
-  // Handle result argument(s)
+  isl_bool res =  isl_point_is_void((*this).Get());
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline Point Point::setCoordinateVal(DimType type, int pos, const Val &v) const {
   ctx.lock();
-  Point self = asPoint();
-  // Prepare arguments
-  Val _cast_v = v.asVal();
-  // Call isl_point_set_coordinate_val
-  isl_point * res =  isl_point_set_coordinate_val((self).Give(), (enum isl_dim_type)type, pos, (_cast_v).Give());
-  // Handle result argument(s)
+  isl_point * res =  isl_point_set_coordinate_val((*this).GetCopy(), (enum isl_dim_type)type, pos, (v).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_point_set_coordinate_val returned a NULL pointer.");
   }

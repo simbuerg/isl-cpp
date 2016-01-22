@@ -31,12 +31,14 @@ class PwQpolynomialFold;
 class Space;
 class Val;
 
-class Set : public UnionSet {
+class Set {
 protected:
-
+  Ctx ctx;
+  void * This;
 public:
-  explicit Set(Ctx ctx, isl_set *That) : UnionSet(ctx, (void *)That) {/* empty */}
-  explicit Set(Ctx ctx, void *That) : UnionSet(ctx, (void *)That) {/* empty */}
+  explicit Set(Ctx ctx, isl_set *That) : ctx(ctx), This((void *)That) {}
+  explicit Set(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  const Ctx &Context() const { return ctx; }
   isl_set *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -49,37 +51,51 @@ public:
   /// \return a the wrapped isl object.
   isl_set *Get() const;
 
+
   /// \brief Constructor for isl_set_from_pw_aff
   ///
   /// \param pwaff
   static Set fromPwAff(const PwAff &pwaff);
+
+
   /// \brief Constructor for isl_set_read_from_str
   ///
   /// \param ctx
   /// \param str
   static Set readFromStr(const Ctx &ctx, std::string str);
+
+
   /// \brief Constructor for isl_set_from_basic_set
   ///
   /// \param bset
   static Set fromBasicSet(const BasicSet &bset);
+
+
   /// \brief Constructor for isl_set_from_point
   ///
   /// \param pnt
   static Set fromPoint(const Point &pnt);
+
+
   /// \brief Constructor for isl_set_box_from_points
   ///
   /// \param pnt1
   /// \param pnt2
   static Set boxFromPoints(const Point &pnt1, const Point &pnt2);
+
+
   /// \brief Constructor for isl_set_from_union_set
   ///
   /// \param uset
   static Set fromUnionSet(const UnionSet &uset);
+public:
   virtual ~Set();
 
-  virtual Set asSet() const;
 
-  virtual UnionSet asUnionSet() const override;
+
+  Set asSet() const;
+
+  UnionSet asUnionSet() const;
 
   /// \brief Generated from  ::<isl_set_add_constraint>
   ///
@@ -728,9 +744,9 @@ public:
   ///
   /// \returns A new Map
   Map unwrap() const;
-  Set(const Set &Other) : UnionSet(Other.Context(), Other.GetCopy()) {}
+  Set(const Set &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Set &operator=(const Set &Other);
-  Set (Set && Other) : UnionSet(Other.Context(), Other.This) {}
+  Set (Set && Other) : ctx(Other.Context()), This(Other.This) {}
   Set &operator=(Set && Other) {
     isl_set *New = Other.Give();
     isl_set_free((isl_set *)This);

@@ -15,12 +15,14 @@
 
 namespace isl {
 
-class Val : public MultiVal {
+class Val {
 protected:
-
+  Ctx ctx;
+  void * This;
 public:
-  explicit Val(Ctx ctx, isl_val *That) : MultiVal(ctx, (void *)That) {/* empty */}
-  explicit Val(Ctx ctx, void *That) : MultiVal(ctx, (void *)That) {/* empty */}
+  explicit Val(Ctx ctx, isl_val *That) : ctx(ctx), This((void *)That) {}
+  explicit Val(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  const Ctx &Context() const { return ctx; }
   isl_val *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -33,40 +35,77 @@ public:
   /// \return a the wrapped isl object.
   isl_val *Get() const;
 
+
   /// \brief Constructor for isl_val_zero
   ///
   /// \param ctx
   static Val zero(const Ctx &ctx);
+
+
   /// \brief Constructor for isl_val_one
   ///
   /// \param ctx
   static Val one(const Ctx &ctx);
+
+
   /// \brief Constructor for isl_val_negone
   ///
   /// \param ctx
   static Val negone(const Ctx &ctx);
+
+
   /// \brief Constructor for isl_val_nan
   ///
   /// \param ctx
   static Val nan(const Ctx &ctx);
+
+
   /// \brief Constructor for isl_val_infty
   ///
   /// \param ctx
   static Val infty(const Ctx &ctx);
+
+
   /// \brief Constructor for isl_val_neginfty
   ///
   /// \param ctx
   static Val neginfty(const Ctx &ctx);
+
+
+  /// \brief Constructor for isl_val_int_from_si
+  ///
+  /// \param ctx
+  /// \param i
+  static Val intFromSi(const Ctx &ctx, long i);
+
+
+  /// \brief Constructor for isl_val_int_from_ui
+  ///
+  /// \param ctx
+  /// \param u
+  static Val intFromUi(const Ctx &ctx, unsigned long u);
+
+
+  /// \brief Constructor for isl_val_int_from_chunks
+  ///
+  /// \param ctx
+  /// \param n
+  /// \param size
+  /// \param chunks
+  static Val intFromChunks(const Ctx &ctx, size_t n, size_t size, const void * chunks);
+
+
   /// \brief Constructor for isl_val_read_from_str
   ///
   /// \param ctx
   /// \param str
   static Val readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~Val();
 
-  virtual Val asVal() const;
+  Val asVal() const;
 
-  virtual MultiVal asMultiVal() const override;
+  MultiVal asMultiVal() const;
 
   /// \brief Generated from  ::<isl_val_abs>
   ///
@@ -294,9 +333,9 @@ public:
   ///
   /// \returns A new Val
   Val trunc() const;
-  Val(const Val &Other) : MultiVal(Other.Context(), Other.GetCopy()) {}
+  Val(const Val &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Val &operator=(const Val &Other);
-  Val (Val && Other) : MultiVal(Other.Context(), Other.This) {}
+  Val (Val && Other) : ctx(Other.Context()), This(Other.This) {}
   Val &operator=(Val && Other) {
     isl_val *New = Other.Give();
     isl_val_free((isl_val *)This);

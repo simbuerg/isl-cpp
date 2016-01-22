@@ -27,10 +27,9 @@ class Val;
 
 class PwQpolynomialFold {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit PwQpolynomialFold(Ctx ctx, isl_pw_qpolynomial_fold *That) : ctx(ctx), This((void *)That) {}
   explicit PwQpolynomialFold(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -46,25 +45,31 @@ public:
   /// \return a the wrapped isl object.
   isl_pw_qpolynomial_fold *Get() const;
 
-  /// \brief Constructor for isl_pw_qpolynomial_fold_zero
-  ///
-  /// \param dim
-  /// \param type
-  static PwQpolynomialFold zero(const Space &dim, Fold type);
+
   /// \brief Constructor for isl_pw_qpolynomial_fold_from_pw_qpolynomial
   ///
   /// \param type
   /// \param pwqp
   static PwQpolynomialFold fromPwQpolynomial(Fold type, const PwQpolynomial &pwqp);
+
+
   /// \brief Constructor for isl_pw_qpolynomial_fold_alloc
   ///
   /// \param type
   /// \param set
   /// \param fold
   static PwQpolynomialFold alloc(Fold type, const Set &set, const QpolynomialFold &fold);
+
+
+  /// \brief Constructor for isl_pw_qpolynomial_fold_zero
+  ///
+  /// \param dim
+  /// \param type
+  static PwQpolynomialFold zero(const Space &dim, Fold type);
+public:
   virtual ~PwQpolynomialFold();
 
-  virtual PwQpolynomialFold asPwQpolynomialFold() const;
+  PwQpolynomialFold asPwQpolynomialFold() const;
 
   /// \brief Generated from  ::<isl_pw_qpolynomial_fold_add>
   ///

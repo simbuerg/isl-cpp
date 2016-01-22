@@ -33,25 +33,10 @@ inline PwQpolynomialFold &PwQpolynomialFold::operator=(const PwQpolynomialFold &
   This = New;
   return *this;
 }
-inline PwQpolynomialFold PwQpolynomialFold::zero(const Space &dim, Fold type) {
-  const Ctx &_ctx = dim.Context();
-  _ctx.lock();
-  Space _cast_dim = dim.asSpace();
-  isl_pw_qpolynomial_fold *That = isl_pw_qpolynomial_fold_zero((_cast_dim).Give(), (enum isl_fold)type);
-
-  _ctx.unlock();
-  if (_ctx.hasError()) {
-    handleError("isl_pw_qpolynomial_fold_zero returned a NULL pointer.");
-  }
-
-  return PwQpolynomialFold(_ctx, That);
-}
-
 inline PwQpolynomialFold PwQpolynomialFold::fromPwQpolynomial(Fold type, const PwQpolynomial &pwqp) {
   const Ctx &_ctx = pwqp.Context();
   _ctx.lock();
-  PwQpolynomial _cast_pwqp = pwqp.asPwQpolynomial();
-  isl_pw_qpolynomial_fold *That = isl_pw_qpolynomial_fold_from_pw_qpolynomial((enum isl_fold)type, (_cast_pwqp).Give());
+  isl_pw_qpolynomial_fold *That = isl_pw_qpolynomial_fold_from_pw_qpolynomial((enum isl_fold)type, (pwqp).GetCopy());
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -64,13 +49,24 @@ inline PwQpolynomialFold PwQpolynomialFold::fromPwQpolynomial(Fold type, const P
 inline PwQpolynomialFold PwQpolynomialFold::alloc(Fold type, const Set &set, const QpolynomialFold &fold) {
   const Ctx &_ctx = fold.Context();
   _ctx.lock();
-  Set _cast_set = set.asSet();
-  QpolynomialFold _cast_fold = fold.asQpolynomialFold();
-  isl_pw_qpolynomial_fold *That = isl_pw_qpolynomial_fold_alloc((enum isl_fold)type, (_cast_set).Give(), (_cast_fold).Give());
+  isl_pw_qpolynomial_fold *That = isl_pw_qpolynomial_fold_alloc((enum isl_fold)type, (set).GetCopy(), (fold).GetCopy());
 
   _ctx.unlock();
   if (_ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_alloc returned a NULL pointer.");
+  }
+
+  return PwQpolynomialFold(_ctx, That);
+}
+
+inline PwQpolynomialFold PwQpolynomialFold::zero(const Space &dim, Fold type) {
+  const Ctx &_ctx = dim.Context();
+  _ctx.lock();
+  isl_pw_qpolynomial_fold *That = isl_pw_qpolynomial_fold_zero((dim).GetCopy(), (enum isl_fold)type);
+
+  _ctx.unlock();
+  if (_ctx.hasError()) {
+    handleError("isl_pw_qpolynomial_fold_zero returned a NULL pointer.");
   }
 
   return PwQpolynomialFold(_ctx, That);
@@ -95,20 +91,11 @@ inline isl_pw_qpolynomial_fold *PwQpolynomialFold::Give() {
 inline isl_pw_qpolynomial_fold *PwQpolynomialFold::Get() const {  return (isl_pw_qpolynomial_fold *)This;
 }
 
-inline PwQpolynomialFold PwQpolynomialFold::asPwQpolynomialFold() const {
-  return PwQpolynomialFold(ctx, GetCopy());
-}
 
 inline PwQpolynomialFold PwQpolynomialFold::add(const PwQpolynomialFold &pwf2) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  PwQpolynomialFold _cast_pwf2 = pwf2.asPwQpolynomialFold();
-  // Call isl_pw_qpolynomial_fold_add
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_add((self).Give(), (_cast_pwf2).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_add((*this).GetCopy(), (pwf2).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_add returned a NULL pointer.");
   }
@@ -117,14 +104,8 @@ inline PwQpolynomialFold PwQpolynomialFold::add(const PwQpolynomialFold &pwf2) c
 
 inline PwQpolynomialFold PwQpolynomialFold::addDisjoint(const PwQpolynomialFold &pwf2) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  PwQpolynomialFold _cast_pwf2 = pwf2.asPwQpolynomialFold();
-  // Call isl_pw_qpolynomial_fold_add_disjoint
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_add_disjoint((self).Give(), (_cast_pwf2).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_add_disjoint((*this).GetCopy(), (pwf2).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_add_disjoint returned a NULL pointer.");
   }
@@ -133,13 +114,8 @@ inline PwQpolynomialFold PwQpolynomialFold::addDisjoint(const PwQpolynomialFold 
 
 inline PwQpolynomialFold PwQpolynomialFold::bound(int * tight) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_bound
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_bound((self).Give(), tight);
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_bound((*this).GetCopy(), tight);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_bound returned a NULL pointer.");
   }
@@ -148,13 +124,8 @@ inline PwQpolynomialFold PwQpolynomialFold::bound(int * tight) const {
 
 inline PwQpolynomialFold PwQpolynomialFold::coalesce() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_coalesce
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_coalesce((self).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_coalesce((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_coalesce returned a NULL pointer.");
   }
@@ -163,25 +134,15 @@ inline PwQpolynomialFold PwQpolynomialFold::coalesce() const {
 
 inline unsigned int PwQpolynomialFold::dim(DimType type) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_dim
-  unsigned int res =  isl_pw_qpolynomial_fold_dim((self).Get(), (enum isl_dim_type)type);
-  // Handle result argument(s)
+  unsigned int res =  isl_pw_qpolynomial_fold_dim((*this).Get(), (enum isl_dim_type)type);
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline Set PwQpolynomialFold::domain() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_domain
-  isl_set * res =  isl_pw_qpolynomial_fold_domain((self).Give());
-  // Handle result argument(s)
+  isl_set * res =  isl_pw_qpolynomial_fold_domain((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_domain returned a NULL pointer.");
   }
@@ -190,13 +151,8 @@ inline Set PwQpolynomialFold::domain() const {
 
 inline PwQpolynomialFold PwQpolynomialFold::dropDims(DimType type, unsigned int first, unsigned int n) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_drop_dims
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_drop_dims((self).Give(), (enum isl_dim_type)type, first, n);
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_drop_dims((*this).GetCopy(), (enum isl_dim_type)type, first, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_drop_dims returned a NULL pointer.");
   }
@@ -205,14 +161,8 @@ inline PwQpolynomialFold PwQpolynomialFold::dropDims(DimType type, unsigned int 
 
 inline Val PwQpolynomialFold::eval(const Point &pnt) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  Point _cast_pnt = pnt.asPoint();
-  // Call isl_pw_qpolynomial_fold_eval
-  isl_val * res =  isl_pw_qpolynomial_fold_eval((self).Give(), (_cast_pnt).Give());
-  // Handle result argument(s)
+  isl_val * res =  isl_pw_qpolynomial_fold_eval((*this).GetCopy(), (pnt).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_eval returned a NULL pointer.");
   }
@@ -221,14 +171,8 @@ inline Val PwQpolynomialFold::eval(const Point &pnt) const {
 
 inline PwQpolynomialFold PwQpolynomialFold::fold(const PwQpolynomialFold &pwf2) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  PwQpolynomialFold _cast_pwf2 = pwf2.asPwQpolynomialFold();
-  // Call isl_pw_qpolynomial_fold_fold
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_fold((self).Give(), (_cast_pwf2).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_fold((*this).GetCopy(), (pwf2).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_fold returned a NULL pointer.");
   }
@@ -237,37 +181,22 @@ inline PwQpolynomialFold PwQpolynomialFold::fold(const PwQpolynomialFold &pwf2) 
 
 inline Stat PwQpolynomialFold::foreachLiftedPiece(const std::function<isl_stat(isl_set *, isl_qpolynomial_fold *, void *)> && fn, void * user) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_foreach_lifted_piece
-  isl_stat res =  isl_pw_qpolynomial_fold_foreach_lifted_piece((self).Get(), get_fn_ptr<13>(fn), user);
-  // Handle result argument(s)
+  isl_stat res =  isl_pw_qpolynomial_fold_foreach_lifted_piece((*this).Get(), get_fn_ptr<9>(fn), user);
   ctx.unlock();
-  // Handle return
   return (Stat)res;
 }
 
 inline Stat PwQpolynomialFold::foreachPiece(const std::function<isl_stat(isl_set *, isl_qpolynomial_fold *, void *)> && fn, void * user) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_foreach_piece
-  isl_stat res =  isl_pw_qpolynomial_fold_foreach_piece((self).Get(), get_fn_ptr<14>(fn), user);
-  // Handle result argument(s)
+  isl_stat res =  isl_pw_qpolynomial_fold_foreach_piece((*this).Get(), get_fn_ptr<10>(fn), user);
   ctx.unlock();
-  // Handle return
   return (Stat)res;
 }
 
 inline Space PwQpolynomialFold::getDomainSpace() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_get_domain_space
-  isl_space * res =  isl_pw_qpolynomial_fold_get_domain_space((self).Get());
-  // Handle result argument(s)
+  isl_space * res =  isl_pw_qpolynomial_fold_get_domain_space((*this).Get());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_get_domain_space returned a NULL pointer.");
   }
@@ -276,13 +205,8 @@ inline Space PwQpolynomialFold::getDomainSpace() const {
 
 inline Space PwQpolynomialFold::getSpace() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_get_space
-  isl_space * res =  isl_pw_qpolynomial_fold_get_space((self).Get());
-  // Handle result argument(s)
+  isl_space * res =  isl_pw_qpolynomial_fold_get_space((*this).Get());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_get_space returned a NULL pointer.");
   }
@@ -291,14 +215,8 @@ inline Space PwQpolynomialFold::getSpace() const {
 
 inline PwQpolynomialFold PwQpolynomialFold::gist(const Set &context) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  Set _cast_context = context.asSet();
-  // Call isl_pw_qpolynomial_fold_gist
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_gist((self).Give(), (_cast_context).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_gist((*this).GetCopy(), (context).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_gist returned a NULL pointer.");
   }
@@ -307,14 +225,8 @@ inline PwQpolynomialFold PwQpolynomialFold::gist(const Set &context) const {
 
 inline PwQpolynomialFold PwQpolynomialFold::gistParams(const Set &context) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  Set _cast_context = context.asSet();
-  // Call isl_pw_qpolynomial_fold_gist_params
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_gist_params((self).Give(), (_cast_context).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_gist_params((*this).GetCopy(), (context).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_gist_params returned a NULL pointer.");
   }
@@ -323,27 +235,15 @@ inline PwQpolynomialFold PwQpolynomialFold::gistParams(const Set &context) const
 
 inline int PwQpolynomialFold::hasEqualSpace(const PwQpolynomialFold &pwf2) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  PwQpolynomialFold _cast_pwf2 = pwf2.asPwQpolynomialFold();
-  // Call isl_pw_qpolynomial_fold_has_equal_space
-  int res =  isl_pw_qpolynomial_fold_has_equal_space((self).Get(), (_cast_pwf2).Get());
-  // Handle result argument(s)
+  int res =  isl_pw_qpolynomial_fold_has_equal_space((*this).Get(), (pwf2).Get());
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline PwQpolynomialFold PwQpolynomialFold::intersectDomain(const Set &set) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  Set _cast_set = set.asSet();
-  // Call isl_pw_qpolynomial_fold_intersect_domain
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_intersect_domain((self).Give(), (_cast_set).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_intersect_domain((*this).GetCopy(), (set).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_intersect_domain returned a NULL pointer.");
   }
@@ -352,14 +252,8 @@ inline PwQpolynomialFold PwQpolynomialFold::intersectDomain(const Set &set) cons
 
 inline PwQpolynomialFold PwQpolynomialFold::intersectParams(const Set &set) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  Set _cast_set = set.asSet();
-  // Call isl_pw_qpolynomial_fold_intersect_params
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_intersect_params((self).Give(), (_cast_set).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_intersect_params((*this).GetCopy(), (set).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_intersect_params returned a NULL pointer.");
   }
@@ -368,25 +262,15 @@ inline PwQpolynomialFold PwQpolynomialFold::intersectParams(const Set &set) cons
 
 inline Bool PwQpolynomialFold::isZero() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_is_zero
-  isl_bool res =  isl_pw_qpolynomial_fold_is_zero((self).Get());
-  // Handle result argument(s)
+  isl_bool res =  isl_pw_qpolynomial_fold_is_zero((*this).Get());
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline Val PwQpolynomialFold::max() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_max
-  isl_val * res =  isl_pw_qpolynomial_fold_max((self).Give());
-  // Handle result argument(s)
+  isl_val * res =  isl_pw_qpolynomial_fold_max((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_max returned a NULL pointer.");
   }
@@ -395,13 +279,8 @@ inline Val PwQpolynomialFold::max() const {
 
 inline Val PwQpolynomialFold::min() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_min
-  isl_val * res =  isl_pw_qpolynomial_fold_min((self).Give());
-  // Handle result argument(s)
+  isl_val * res =  isl_pw_qpolynomial_fold_min((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_min returned a NULL pointer.");
   }
@@ -410,13 +289,8 @@ inline Val PwQpolynomialFold::min() const {
 
 inline PwQpolynomialFold PwQpolynomialFold::moveDims(DimType dst_type, unsigned int dst_pos, DimType src_type, unsigned int src_pos, unsigned int n) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_move_dims
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_move_dims((self).Give(), (enum isl_dim_type)dst_type, dst_pos, (enum isl_dim_type)src_type, src_pos, n);
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_move_dims((*this).GetCopy(), (enum isl_dim_type)dst_type, dst_pos, (enum isl_dim_type)src_type, src_pos, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_move_dims returned a NULL pointer.");
   }
@@ -425,26 +299,15 @@ inline PwQpolynomialFold PwQpolynomialFold::moveDims(DimType dst_type, unsigned 
 
 inline Bool PwQpolynomialFold::plainIsEqual(const PwQpolynomialFold &pwf2) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  PwQpolynomialFold _cast_pwf2 = pwf2.asPwQpolynomialFold();
-  // Call isl_pw_qpolynomial_fold_plain_is_equal
-  isl_bool res =  isl_pw_qpolynomial_fold_plain_is_equal((self).Get(), (_cast_pwf2).Get());
-  // Handle result argument(s)
+  isl_bool res =  isl_pw_qpolynomial_fold_plain_is_equal((*this).Get(), (pwf2).Get());
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline PwQpolynomialFold PwQpolynomialFold::projectDomainOnParams() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_project_domain_on_params
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_project_domain_on_params((self).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_project_domain_on_params((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_project_domain_on_params returned a NULL pointer.");
   }
@@ -453,14 +316,8 @@ inline PwQpolynomialFold PwQpolynomialFold::projectDomainOnParams() const {
 
 inline PwQpolynomialFold PwQpolynomialFold::resetSpace(const Space &dim) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  Space _cast_dim = dim.asSpace();
-  // Call isl_pw_qpolynomial_fold_reset_space
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_reset_space((self).Give(), (_cast_dim).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_reset_space((*this).GetCopy(), (dim).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_reset_space returned a NULL pointer.");
   }
@@ -469,14 +326,8 @@ inline PwQpolynomialFold PwQpolynomialFold::resetSpace(const Space &dim) const {
 
 inline PwQpolynomialFold PwQpolynomialFold::scaleVal(const Val &v) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  Val _cast_v = v.asVal();
-  // Call isl_pw_qpolynomial_fold_scale_val
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_scale_val((self).Give(), (_cast_v).Give());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_scale_val((*this).GetCopy(), (v).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_scale_val returned a NULL pointer.");
   }
@@ -485,13 +336,8 @@ inline PwQpolynomialFold PwQpolynomialFold::scaleVal(const Val &v) const {
 
 inline PwQpolynomialFold PwQpolynomialFold::setDimName(DimType type, unsigned int pos, std::string s) const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_set_dim_name
-  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_set_dim_name((self).Give(), (enum isl_dim_type)type, pos, s.c_str());
-  // Handle result argument(s)
+  isl_pw_qpolynomial_fold * res =  isl_pw_qpolynomial_fold_set_dim_name((*this).GetCopy(), (enum isl_dim_type)type, pos, s.c_str());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_pw_qpolynomial_fold_set_dim_name returned a NULL pointer.");
   }
@@ -500,13 +346,8 @@ inline PwQpolynomialFold PwQpolynomialFold::setDimName(DimType type, unsigned in
 
 inline size_t PwQpolynomialFold::size() const {
   ctx.lock();
-  PwQpolynomialFold self = asPwQpolynomialFold();
-  // Prepare arguments
-  // Call isl_pw_qpolynomial_fold_size
-  size_t res =  isl_pw_qpolynomial_fold_size((self).Get());
-  // Handle result argument(s)
+  size_t res =  isl_pw_qpolynomial_fold_size((*this).Get());
   ctx.unlock();
-  // Handle return
   return res;
 }
 

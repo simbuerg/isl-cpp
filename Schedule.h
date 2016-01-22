@@ -3,6 +3,7 @@
 
 
 #include "isl/schedule.h"
+#include "isl/Ctx.h"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
@@ -13,10 +14,11 @@
 #include "isl/IslFnPtr.h"
 
 namespace isl {
+class ScheduleNode;
 class UnionMap;
+class UnionPwMultiAff;
 
 class Schedule {
-protected:
   struct ptr {
     isl_schedule *p;
     explicit ptr(isl_schedule *p) : p(p) {}
@@ -28,10 +30,10 @@ protected:
     ptr(ptr && other) = delete;
     ptr &operator=(ptr && other) = delete;
   };
-
-public:
+protected:
   Ctx ctx;
   std::shared_ptr<ptr> This;
+public:
   explicit Schedule(Ctx ctx, isl_schedule *That) : ctx(ctx), This(std::make_shared<ptr>(That)) {}
   const Ctx &Context() const { return ctx; }
   std::shared_ptr<isl::Schedule::ptr> GetCopy() const;
@@ -46,9 +48,16 @@ public:
   /// \return a the wrapped isl object.
   isl_schedule *Get() const;
 
+
+  /// \brief Constructor for isl_schedule_read_from_str
+  ///
+  /// \param ctx
+  /// \param str
+  static Schedule readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~Schedule() = default;
 
-  virtual Schedule asSchedule() const;
+  Schedule asSchedule() const;
 
   /// \brief Generated from  ::<isl_schedule_foreach_band>
   ///
@@ -63,6 +72,19 @@ public:
   ///
   /// \returns A new UnionMap
   UnionMap getMap() const;
+
+  /// \brief Generated from  ::<isl_schedule_get_root>
+  ///
+  ///
+  /// \returns A new ScheduleNode
+  ScheduleNode getRoot() const;
+
+  /// \brief Generated from  ::<isl_schedule_pullback_union_pw_multi_aff>
+  ///
+  /// \param [in] upma
+  ///
+  /// \returns A new Schedule
+  Schedule pullbackUnionPwMultiAff(const UnionPwMultiAff &upma) const;
   Schedule(const Schedule &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Schedule &operator=(const Schedule &Other) = delete;
   Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.This) {}

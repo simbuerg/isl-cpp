@@ -26,7 +26,6 @@ inline BasicMapList BasicMapList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_basic_map_list *That = isl_basic_map_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_basic_map_list *BasicMapList::Give() {
 inline isl_basic_map_list *BasicMapList::Get() const {  return (isl_basic_map_list *)This;
 }
 
-inline BasicMapList BasicMapList::asBasicMapList() const {
-  return BasicMapList(ctx, GetCopy());
-}
 
 inline BasicMapList BasicMapList::add(const BasicMap &el) const {
   ctx.lock();
-  BasicMapList self = asBasicMapList();
-  // Prepare arguments
-  BasicMap _cast_el = el.asBasicMap();
-  // Call isl_basic_map_list_add
-  isl_basic_map_list * res =  isl_basic_map_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_basic_map_list * res =  isl_basic_map_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_basic_map_list_add returned a NULL pointer.");
   }

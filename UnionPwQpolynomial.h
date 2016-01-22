@@ -27,10 +27,9 @@ class Val;
 
 class UnionPwQpolynomial {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionPwQpolynomial(Ctx ctx, isl_union_pw_qpolynomial *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwQpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -46,22 +45,28 @@ public:
   /// \return a the wrapped isl object.
   isl_union_pw_qpolynomial *Get() const;
 
+
   /// \brief Constructor for isl_union_pw_qpolynomial_from_pw_qpolynomial
   ///
   /// \param pwqp
   static UnionPwQpolynomial fromPwQpolynomial(const PwQpolynomial &pwqp);
+
+
   /// \brief Constructor for isl_union_pw_qpolynomial_zero
   ///
   /// \param dim
   static UnionPwQpolynomial zero(const Space &dim);
+
+
   /// \brief Constructor for isl_union_pw_qpolynomial_read_from_str
   ///
   /// \param ctx
   /// \param str
   static UnionPwQpolynomial readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~UnionPwQpolynomial();
 
-  virtual UnionPwQpolynomial asUnionPwQpolynomial() const;
+  UnionPwQpolynomial asUnionPwQpolynomial() const;
 
   /// \brief Generated from  ::<isl_union_pw_qpolynomial_add>
   ///

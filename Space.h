@@ -19,10 +19,9 @@ class Id;
 
 class Space {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Space(Ctx ctx, isl_space *That) : ctx(ctx), This((void *)That) {}
   explicit Space(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -38,6 +37,7 @@ public:
   /// \return a the wrapped isl object.
   isl_space *Get() const;
 
+
   /// \brief Constructor for isl_space_alloc
   ///
   /// \param ctx
@@ -45,29 +45,38 @@ public:
   /// \param n_in
   /// \param n_out
   static Space alloc(const Ctx &ctx, unsigned int nparam, unsigned int n_in, unsigned int n_out);
+
+
   /// \brief Constructor for isl_space_set_alloc
   ///
   /// \param ctx
   /// \param nparam
   /// \param dim
   static Space setAlloc(const Ctx &ctx, unsigned int nparam, unsigned int dim);
+
+
   /// \brief Constructor for isl_space_params_alloc
   ///
   /// \param ctx
   /// \param nparam
   static Space paramsAlloc(const Ctx &ctx, unsigned int nparam);
+
+
   /// \brief Constructor for isl_space_map_from_set
   ///
   /// \param dim
   static Space mapFromSet(const Space &dim);
+
+
   /// \brief Constructor for isl_space_map_from_domain_and_range
   ///
   /// \param domain
   /// \param range
   static Space mapFromDomainAndRange(const Space &domain, const Space &range);
+public:
   virtual ~Space();
 
-  virtual Space asSpace() const;
+  Space asSpace() const;
 
   /// \brief Generated from  ::<isl_space_add_dims>
   ///

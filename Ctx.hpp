@@ -34,55 +34,32 @@ inline isl_ctx *Ctx::Give() {
 inline isl_ctx *Ctx::Get() const {  return (isl_ctx *)This.get()->p;
 }
 
-inline Ctx Ctx::asCtx() const {
-  return *this;
-}
 
 inline int Ctx::getTileScaleTileLoops() const {
   (*this).lock();
-  Ctx self = asCtx();
-  // Prepare arguments
-  // Call isl_options_get_tile_scale_tile_loops
-  int res =  isl_options_get_tile_scale_tile_loops((self).Get());
-  // Handle result argument(s)
+  int res =  isl_options_get_tile_scale_tile_loops((*this).Get());
   (*this).unlock();
-  // Handle return
   return res;
 }
 
 inline int Ctx::getTileShiftPointLoops() const {
   (*this).lock();
-  Ctx self = asCtx();
-  // Prepare arguments
-  // Call isl_options_get_tile_shift_point_loops
-  int res =  isl_options_get_tile_shift_point_loops((self).Get());
-  // Handle result argument(s)
+  int res =  isl_options_get_tile_shift_point_loops((*this).Get());
   (*this).unlock();
-  // Handle return
   return res;
 }
 
 inline Stat Ctx::setTileScaleTileLoops(int val) const {
   (*this).lock();
-  Ctx self = asCtx();
-  // Prepare arguments
-  // Call isl_options_set_tile_scale_tile_loops
-  isl_stat res =  isl_options_set_tile_scale_tile_loops((self).Get(), val);
-  // Handle result argument(s)
+  isl_stat res =  isl_options_set_tile_scale_tile_loops((*this).Get(), val);
   (*this).unlock();
-  // Handle return
   return (Stat)res;
 }
 
 inline Stat Ctx::setTileShiftPointLoops(int val) const {
   (*this).lock();
-  Ctx self = asCtx();
-  // Prepare arguments
-  // Call isl_options_set_tile_shift_point_loops
-  isl_stat res =  isl_options_set_tile_shift_point_loops((self).Get(), val);
-  // Handle result argument(s)
+  isl_stat res =  isl_options_set_tile_shift_point_loops((*this).Get(), val);
   (*this).unlock();
-  // Handle return
   return (Stat)res;
 }
 

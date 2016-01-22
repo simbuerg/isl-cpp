@@ -16,10 +16,9 @@ class Aff;
 
 class Term {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Term(Ctx ctx, isl_term *That) : ctx(ctx), This((void *)That) {}
   explicit Term(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -34,10 +33,10 @@ public:
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
   isl_term *Get() const;
-
+public:
   virtual ~Term();
 
-  virtual Term asTerm() const;
+  Term asTerm() const;
 
   /// \brief Generated from  ::<isl_term_dim>
   ///

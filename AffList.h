@@ -16,10 +16,9 @@ class Aff;
 
 class AffList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit AffList(Ctx ctx, isl_aff_list *That) : ctx(ctx), This((void *)That) {}
   explicit AffList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_aff_list *Get() const;
 
+
   /// \brief Constructor for isl_aff_list_alloc
   ///
   /// \param ctx
   /// \param n
   static AffList alloc(const Ctx &ctx, int n);
+public:
   virtual ~AffList();
 
-  virtual AffList asAffList() const;
+  AffList asAffList() const;
 
   /// \brief Generated from  ::<isl_aff_list_add>
   ///

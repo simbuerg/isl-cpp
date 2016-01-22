@@ -29,10 +29,9 @@ class Val;
 
 class PwQpolynomial {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit PwQpolynomial(Ctx ctx, isl_pw_qpolynomial *That) : ctx(ctx), This((void *)That) {}
   explicit PwQpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -48,31 +47,41 @@ public:
   /// \return a the wrapped isl object.
   isl_pw_qpolynomial *Get() const;
 
+
   /// \brief Constructor for isl_pw_qpolynomial_zero
   ///
   /// \param dim
   static PwQpolynomial zero(const Space &dim);
+
+
   /// \brief Constructor for isl_pw_qpolynomial_alloc
   ///
   /// \param set
   /// \param qp
   static PwQpolynomial alloc(const Set &set, const Qpolynomial &qp);
+
+
   /// \brief Constructor for isl_pw_qpolynomial_from_qpolynomial
   ///
   /// \param qp
   static PwQpolynomial fromQpolynomial(const Qpolynomial &qp);
+
+
   /// \brief Constructor for isl_pw_qpolynomial_from_pw_aff
   ///
   /// \param pwaff
   static PwQpolynomial fromPwAff(const PwAff &pwaff);
+
+
   /// \brief Constructor for isl_pw_qpolynomial_read_from_str
   ///
   /// \param ctx
   /// \param str
   static PwQpolynomial readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~PwQpolynomial();
 
-  virtual PwQpolynomial asPwQpolynomial() const;
+  PwQpolynomial asPwQpolynomial() const;
 
   /// \brief Generated from  ::<isl_pw_qpolynomial_add>
   ///

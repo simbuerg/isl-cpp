@@ -4,11 +4,12 @@
 
 #include "isl/aff.h"
 #include "isl/Bool.h"
+#include "isl/Ctx.h"
 #include "isl/DimType.h"
 #include "isl/Format.h"
-#include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include "isl/Stat.h"
+#include "isl/UnionPwAff.h"
 #include "isl/aff.h"
 #include "isl/set.h"
 #include <string>
@@ -21,6 +22,7 @@ class Aff;
 class Id;
 class LocalSpace;
 class MultiAff;
+class MultiPwAff;
 class PwMultiAff;
 class Set;
 class Space;
@@ -28,10 +30,9 @@ class Val;
 
 class PwAff {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit PwAff(Ctx ctx, isl_pw_aff *That) : ctx(ctx), This((void *)That) {}
   explicit PwAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -47,32 +48,54 @@ public:
   /// \return a the wrapped isl object.
   isl_pw_aff *Get() const;
 
+
   /// \brief Constructor for isl_pw_aff_from_aff
   ///
   /// \param aff
   static PwAff fromAff(const Aff &aff);
+
+
   /// \brief Constructor for isl_pw_aff_empty
   ///
   /// \param dim
   static PwAff empty(const Space &dim);
+
+
   /// \brief Constructor for isl_pw_aff_alloc
   ///
   /// \param set
   /// \param aff
   static PwAff alloc(const Set &set, const Aff &aff);
+
+
   /// \brief Constructor for isl_pw_aff_zero_on_domain
   ///
   /// \param ls
   static PwAff zeroOnDomain(const LocalSpace &ls);
+
+
   /// \brief Constructor for isl_pw_aff_var_on_domain
   ///
   /// \param ls
   /// \param type
   /// \param pos
   static PwAff varOnDomain(const LocalSpace &ls, DimType type, unsigned int pos);
+
+
+  /// \brief Constructor for isl_pw_aff_read_from_str
+  ///
+  /// \param ctx
+  /// \param str
+  static PwAff readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~PwAff();
 
-  virtual PwAff asPwAff() const;
+
+  PwAff asPwAff() const;
+
+  UnionPwAff asUnionPwAff() const;
+
+  UnionPwMultiAff asUnionPwMultiAff() const;
 
   /// \brief Generated from  ::<isl_pw_aff_add>
   ///
@@ -390,6 +413,13 @@ public:
   ///
   /// \returns A new PwAff
   PwAff pullbackMultiAff(const MultiAff &ma) const;
+
+  /// \brief Generated from  ::<isl_pw_aff_pullback_multi_pw_aff>
+  ///
+  /// \param [in] mpa
+  ///
+  /// \returns A new PwAff
+  PwAff pullbackMultiPwAff(const MultiPwAff &mpa) const;
 
   /// \brief Generated from  ::<isl_pw_aff_pullback_pw_multi_aff>
   ///

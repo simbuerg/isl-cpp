@@ -26,7 +26,6 @@ inline UnionSetList UnionSetList::alloc(const Ctx &ctx, int n) {
   const Ctx &_ctx = ctx.Context();
   _ctx.lock();
   isl_union_set_list *That = isl_union_set_list_alloc((ctx.Get()), n);
-  ctx.unlock();
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -55,20 +54,11 @@ inline isl_union_set_list *UnionSetList::Give() {
 inline isl_union_set_list *UnionSetList::Get() const {  return (isl_union_set_list *)This;
 }
 
-inline UnionSetList UnionSetList::asUnionSetList() const {
-  return UnionSetList(ctx, GetCopy());
-}
 
 inline UnionSetList UnionSetList::add(const UnionSet &el) const {
   ctx.lock();
-  UnionSetList self = asUnionSetList();
-  // Prepare arguments
-  UnionSet _cast_el = el.asUnionSet();
-  // Call isl_union_set_list_add
-  isl_union_set_list * res =  isl_union_set_list_add((self).Give(), (_cast_el).Give());
-  // Handle result argument(s)
+  isl_union_set_list * res =  isl_union_set_list_add((*this).GetCopy(), (el).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_union_set_list_add returned a NULL pointer.");
   }

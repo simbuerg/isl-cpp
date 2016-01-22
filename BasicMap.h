@@ -29,12 +29,14 @@ class Qpolynomial;
 class Space;
 class Val;
 
-class BasicMap : public Map {
+class BasicMap {
 protected:
-
+  Ctx ctx;
+  void * This;
 public:
-  explicit BasicMap(Ctx ctx, isl_basic_map *That) : Map(ctx, (void *)That) {/* empty */}
-  explicit BasicMap(Ctx ctx, void *That) : Map(ctx, (void *)That) {/* empty */}
+  explicit BasicMap(Ctx ctx, isl_basic_map *That) : ctx(ctx), This((void *)That) {}
+  explicit BasicMap(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  const Ctx &Context() const { return ctx; }
   isl_basic_map *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -47,47 +49,66 @@ public:
   /// \return a the wrapped isl object.
   isl_basic_map *Get() const;
 
+
   /// \brief Constructor for isl_basic_map_less_at
   ///
   /// \param dim
   /// \param pos
   static BasicMap lessAt(const Space &dim, unsigned int pos);
+
+
   /// \brief Constructor for isl_basic_map_more_at
   ///
   /// \param dim
   /// \param pos
   static BasicMap moreAt(const Space &dim, unsigned int pos);
+
+
   /// \brief Constructor for isl_basic_map_empty
   ///
   /// \param dim
   static BasicMap empty(const Space &dim);
+
+
   /// \brief Constructor for isl_basic_map_nat_universe
   ///
   /// \param dim
   static BasicMap natUniverse(const Space &dim);
+
+
   /// \brief Constructor for isl_basic_map_from_basic_set
   ///
   /// \param bset
   /// \param dim
   static BasicMap fromBasicSet(const BasicSet &bset, const Space &dim);
+
+
   /// \brief Constructor for isl_basic_map_read_from_str
   ///
   /// \param ctx
   /// \param str
   static BasicMap readFromStr(const Ctx &ctx, std::string str);
+
+
   /// \brief Constructor for isl_basic_map_from_domain
   ///
   /// \param bset
   static BasicMap fromDomain(const BasicSet &bset);
+
+
   /// \brief Constructor for isl_basic_map_from_range
   ///
   /// \param bset
   static BasicMap fromRange(const BasicSet &bset);
+
+
   /// \brief Constructor for isl_basic_map_from_domain_and_range
   ///
   /// \param domain
   /// \param range
   static BasicMap fromDomainAndRange(const BasicSet &domain, const BasicSet &range);
+
+
   /// \brief Constructor for isl_basic_map_from_constraint_matrices
   ///
   /// \param dim
@@ -99,29 +120,38 @@ public:
   /// \param c4
   /// \param c5
   static BasicMap fromConstraintMatrices(const Space &dim, const Mat &eq, const Mat &ineq, DimType c1, DimType c2, DimType c3, DimType c4, DimType c5);
+
+
   /// \brief Constructor for isl_basic_map_from_aff
   ///
   /// \param aff
   static BasicMap fromAff(const Aff &aff);
+
+
   /// \brief Constructor for isl_basic_map_from_multi_aff
   ///
   /// \param maff
   static BasicMap fromMultiAff(const MultiAff &maff);
+
+
   /// \brief Constructor for isl_basic_map_from_constraint
   ///
   /// \param constraint
   static BasicMap fromConstraint(const Constraint &constraint);
+
+
   /// \brief Constructor for isl_basic_map_from_qpolynomial
   ///
   /// \param qp
   static BasicMap fromQpolynomial(const Qpolynomial &qp);
+public:
   virtual ~BasicMap();
 
-  virtual BasicMap asBasicMap() const;
+  BasicMap asBasicMap() const;
 
-  virtual Map asMap() const override;
+  Map asMap() const;
 
-  virtual UnionMap asUnionMap() const override;
+  UnionMap asUnionMap() const;
 
   /// \brief Generated from  ::<isl_basic_map_add_constraint>
   ///
@@ -671,9 +701,9 @@ public:
   ///
   /// \returns A new BasicSet
   BasicSet wrap() const;
-  BasicMap(const BasicMap &Other) : Map(Other.Context(), Other.GetCopy()) {}
+  BasicMap(const BasicMap &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicMap &operator=(const BasicMap &Other);
-  BasicMap (BasicMap && Other) : Map(Other.Context(), Other.This) {}
+  BasicMap (BasicMap && Other) : ctx(Other.Context()), This(Other.This) {}
   BasicMap &operator=(BasicMap && Other) {
     isl_basic_map *New = Other.Give();
     isl_basic_map_free((isl_basic_map *)This);

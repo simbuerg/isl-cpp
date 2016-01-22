@@ -26,10 +26,9 @@ class Val;
 
 class UnionPwQpolynomialFold {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionPwQpolynomialFold(Ctx ctx, isl_union_pw_qpolynomial_fold *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwQpolynomialFold(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -45,18 +44,22 @@ public:
   /// \return a the wrapped isl object.
   isl_union_pw_qpolynomial_fold *Get() const;
 
+
   /// \brief Constructor for isl_union_pw_qpolynomial_fold_from_pw_qpolynomial_fold
   ///
   /// \param pwf
   static UnionPwQpolynomialFold fromPwQpolynomialFold(const PwQpolynomialFold &pwf);
+
+
   /// \brief Constructor for isl_union_pw_qpolynomial_fold_zero
   ///
   /// \param dim
   /// \param type
   static UnionPwQpolynomialFold zero(const Space &dim, Fold type);
+public:
   virtual ~UnionPwQpolynomialFold();
 
-  virtual UnionPwQpolynomialFold asUnionPwQpolynomialFold() const;
+  UnionPwQpolynomialFold asUnionPwQpolynomialFold() const;
 
   /// \brief Generated from  ::<isl_union_pw_qpolynomial_fold_add_union_pw_qpolynomial>
   ///

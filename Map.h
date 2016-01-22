@@ -30,12 +30,14 @@ class Set;
 class Space;
 class Val;
 
-class Map : public UnionMap {
+class Map {
 protected:
-
+  Ctx ctx;
+  void * This;
 public:
-  explicit Map(Ctx ctx, isl_map *That) : UnionMap(ctx, (void *)That) {/* empty */}
-  explicit Map(Ctx ctx, void *That) : UnionMap(ctx, (void *)That) {/* empty */}
+  explicit Map(Ctx ctx, isl_map *That) : ctx(ctx), This((void *)That) {}
+  explicit Map(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  const Ctx &Context() const { return ctx; }
   isl_map *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -48,93 +50,132 @@ public:
   /// \return a the wrapped isl object.
   isl_map *Get() const;
 
+
   /// \brief Constructor for isl_map_from_pw_aff
   ///
   /// \param pwaff
   static Map fromPwAff(const PwAff &pwaff);
-  /// \brief Constructor for isl_map_read_from_str
-  ///
-  /// \param ctx
-  /// \param str
-  static Map readFromStr(const Ctx &ctx, std::string str);
+
+
   /// \brief Constructor for isl_map_nat_universe
   ///
   /// \param dim
   static Map natUniverse(const Space &dim);
+
+
   /// \brief Constructor for isl_map_empty
   ///
   /// \param dim
   static Map empty(const Space &dim);
+
+
   /// \brief Constructor for isl_map_lex_le_first
   ///
   /// \param dim
   /// \param n
   static Map lexLeFirst(const Space &dim, unsigned int n);
+
+
   /// \brief Constructor for isl_map_lex_lt
   ///
   /// \param set_dim
   static Map lexLt(const Space &set_dim);
+
+
   /// \brief Constructor for isl_map_lex_le
   ///
   /// \param set_dim
   static Map lexLe(const Space &set_dim);
+
+
   /// \brief Constructor for isl_map_lex_gt_first
   ///
   /// \param dim
   /// \param n
   static Map lexGtFirst(const Space &dim, unsigned int n);
+
+
   /// \brief Constructor for isl_map_lex_ge_first
   ///
   /// \param dim
   /// \param n
   static Map lexGeFirst(const Space &dim, unsigned int n);
+
+
   /// \brief Constructor for isl_map_lex_gt
   ///
   /// \param set_dim
   static Map lexGt(const Space &set_dim);
+
+
   /// \brief Constructor for isl_map_lex_ge
   ///
   /// \param set_dim
   static Map lexGe(const Space &set_dim);
+
+
+  /// \brief Constructor for isl_map_read_from_str
+  ///
+  /// \param ctx
+  /// \param str
+  static Map readFromStr(const Ctx &ctx, std::string str);
+
+
   /// \brief Constructor for isl_map_from_basic_map
   ///
   /// \param bmap
   static Map fromBasicMap(const BasicMap &bmap);
+
+
   /// \brief Constructor for isl_map_from_domain
   ///
   /// \param set
   static Map fromDomain(const Set &set);
+
+
   /// \brief Constructor for isl_map_from_range
   ///
   /// \param set
   static Map fromRange(const Set &set);
+
+
   /// \brief Constructor for isl_map_from_domain_and_range
   ///
   /// \param domain
   /// \param range
   static Map fromDomainAndRange(const Set &domain, const Set &range);
+
+
   /// \brief Constructor for isl_map_from_set
   ///
   /// \param set
   /// \param dim
   static Map fromSet(const Set &set, const Space &dim);
+
+
   /// \brief Constructor for isl_map_from_aff
   ///
   /// \param aff
   static Map fromAff(const Aff &aff);
+
+
   /// \brief Constructor for isl_map_from_multi_aff
   ///
   /// \param maff
   static Map fromMultiAff(const MultiAff &maff);
+
+
   /// \brief Constructor for isl_map_from_union_map
   ///
   /// \param umap
   static Map fromUnionMap(const UnionMap &umap);
+public:
   virtual ~Map();
 
-  virtual Map asMap() const;
 
-  virtual UnionMap asUnionMap() const override;
+  Map asMap() const;
+
+  UnionMap asUnionMap() const;
 
   /// \brief Generated from  ::<isl_map_add_constraint>
   ///
@@ -988,9 +1029,9 @@ public:
   ///
   /// \returns A new Map
   Map zip() const;
-  Map(const Map &Other) : UnionMap(Other.Context(), Other.GetCopy()) {}
+  Map(const Map &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Map &operator=(const Map &Other);
-  Map (Map && Other) : UnionMap(Other.Context(), Other.This) {}
+  Map (Map && Other) : ctx(Other.Context()), This(Other.This) {}
   Map &operator=(Map && Other) {
     isl_map *New = Other.Give();
     isl_map_free((isl_map *)This);

@@ -17,10 +17,9 @@ class Vec;
 
 class Band {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Band(Ctx ctx, isl_band *That) : ctx(ctx), This((void *)That) {}
   explicit Band(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,10 +34,10 @@ public:
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
   isl_band *Get() const;
-
+public:
   virtual ~Band() = default;
 
-  virtual Band asBand() const;
+  Band asBand() const;
 
   /// \brief Generated from  ::<isl_band_get_partial_schedule>
   ///

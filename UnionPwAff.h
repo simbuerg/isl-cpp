@@ -3,21 +3,22 @@
 
 
 #include "isl/aff.h"
-#include "isl/IslBase.h"
+#include "isl/Ctx.h"
 #include "isl/IslException.h"
+#include "isl/UnionPwMultiAff.h"
 #include <string>
 #include <ostream>
 
 #include "isl/IslFnPtr.h"
 
 namespace isl {
+class PwAff;
 
 class UnionPwAff {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionPwAff(Ctx ctx, isl_union_pw_aff *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -33,9 +34,47 @@ public:
   /// \return a the wrapped isl object.
   isl_union_pw_aff *Get() const;
 
+
+  /// \brief Constructor for isl_union_pw_aff_from_pw_aff
+  ///
+  /// \param pa
+  static UnionPwAff fromPwAff(const PwAff &pa);
+
+
+  /// \brief Constructor for isl_union_pw_aff_read_from_str
+  ///
+  /// \param ctx
+  /// \param str
+  static UnionPwAff readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~UnionPwAff();
 
-  virtual UnionPwAff asUnionPwAff() const;
+
+
+  UnionPwAff asUnionPwAff() const;
+
+  UnionPwMultiAff asUnionPwMultiAff() const;
+
+  /// \brief Generated from  ::<isl_union_pw_aff_add>
+  ///
+  /// \param [in] upa2
+  ///
+  /// \returns A new UnionPwAff
+  UnionPwAff add(const UnionPwAff &upa2) const;
+
+  /// \brief Generated from  ::<isl_union_pw_aff_pullback_union_pw_multi_aff>
+  ///
+  /// \param [in] upma
+  ///
+  /// \returns A new UnionPwAff
+  UnionPwAff pullbackUnionPwMultiAff(const UnionPwMultiAff &upma) const;
+
+  /// \brief Generated from  ::<isl_union_pw_aff_union_add>
+  ///
+  /// \param [in] upa2
+  ///
+  /// \returns A new UnionPwAff
+  UnionPwAff unionAdd(const UnionPwAff &upa2) const;
   UnionPwAff(const UnionPwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwAff &operator=(const UnionPwAff &Other);
   UnionPwAff (UnionPwAff && Other) : ctx(Other.Context()), This(Other.This) {}

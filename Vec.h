@@ -18,10 +18,9 @@ class Val;
 
 class Vec {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit Vec(Ctx ctx, isl_vec *That) : ctx(ctx), This((void *)That) {}
   explicit Vec(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -37,14 +36,16 @@ public:
   /// \return a the wrapped isl object.
   isl_vec *Get() const;
 
+
   /// \brief Constructor for isl_vec_alloc
   ///
   /// \param ctx
   /// \param size
   static Vec alloc(const Ctx &ctx, unsigned int size);
+public:
   virtual ~Vec();
 
-  virtual Vec asVec() const;
+  Vec asVec() const;
 
   /// \brief Generated from  ::<isl_vec_add>
   ///

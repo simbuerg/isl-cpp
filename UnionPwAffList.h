@@ -16,10 +16,9 @@ class UnionPwAff;
 
 class UnionPwAffList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionPwAffList(Ctx ctx, isl_union_pw_aff_list *That) : ctx(ctx), This((void *)That) {}
   explicit UnionPwAffList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_union_pw_aff_list *Get() const;
 
+
   /// \brief Constructor for isl_union_pw_aff_list_alloc
   ///
   /// \param ctx
   /// \param n
   static UnionPwAffList alloc(const Ctx &ctx, int n);
+public:
   virtual ~UnionPwAffList();
 
-  virtual UnionPwAffList asUnionPwAffList() const;
+  UnionPwAffList asUnionPwAffList() const;
 
   /// \brief Generated from  ::<isl_union_pw_aff_list_add>
   ///

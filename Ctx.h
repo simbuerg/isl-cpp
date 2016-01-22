@@ -16,7 +16,6 @@
 namespace isl {
 
 class Ctx {
-protected:
   struct ptr {
     isl_ctx *p;
     explicit ptr(isl_ctx *p) : p(p) {}
@@ -28,9 +27,9 @@ protected:
     ptr(ptr && other) = delete;
     ptr &operator=(ptr && other) = delete;
   };
-
-public:
+protected:
   std::shared_ptr<ptr> This;
+public:
   explicit Ctx(std::shared_ptr<ptr> That) : This(That) {}
   const Ctx &Context() const { return *this; }
   /// \brief Wrap an existing isl object.
@@ -51,9 +50,11 @@ public:
   /// \return a the wrapped isl object.
   isl_ctx *Get() const;
 
+
   /// \brief Constructor for isl_ctx_alloc
   ///
   static Ctx alloc();
+public:
   virtual ~Ctx() = default;
 private:
   mutable std::recursive_mutex M;
@@ -73,7 +74,7 @@ public:
     return (err != isl_error_none) && goe != ISL_ON_ERROR_CONTINUE;
   }
 
-  virtual Ctx asCtx() const;
+  Ctx asCtx() const;
 
   /// \brief Generated from  ::<isl_options_get_tile_scale_tile_loops>
   ///

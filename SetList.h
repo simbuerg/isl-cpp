@@ -16,10 +16,9 @@ class Set;
 
 class SetList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit SetList(Ctx ctx, isl_set_list *That) : ctx(ctx), This((void *)That) {}
   explicit SetList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_set_list *Get() const;
 
+
   /// \brief Constructor for isl_set_list_alloc
   ///
   /// \param ctx
   /// \param n
   static SetList alloc(const Ctx &ctx, int n);
+public:
   virtual ~SetList();
 
-  virtual SetList asSetList() const;
+  SetList asSetList() const;
 
   /// \brief Generated from  ::<isl_set_list_add>
   ///

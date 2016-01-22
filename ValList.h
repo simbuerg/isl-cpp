@@ -16,10 +16,9 @@ class Val;
 
 class ValList {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit ValList(Ctx ctx, isl_val_list *That) : ctx(ctx), This((void *)That) {}
   explicit ValList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -35,14 +34,16 @@ public:
   /// \return a the wrapped isl object.
   isl_val_list *Get() const;
 
+
   /// \brief Constructor for isl_val_list_alloc
   ///
   /// \param ctx
   /// \param n
   static ValList alloc(const Ctx &ctx, int n);
+public:
   virtual ~ValList();
 
-  virtual ValList asValList() const;
+  ValList asValList() const;
 
   /// \brief Generated from  ::<isl_val_list_add>
   ///

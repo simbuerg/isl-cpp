@@ -30,8 +30,7 @@ inline LocalSpace &LocalSpace::operator=(const LocalSpace &Other) {
 inline LocalSpace LocalSpace::fromSpace(const Space &dim) {
   const Ctx &_ctx = dim.Context();
   _ctx.lock();
-  Space _cast_dim = dim.asSpace();
-  isl_local_space *That = isl_local_space_from_space((_cast_dim).Give());
+  isl_local_space *That = isl_local_space_from_space((dim).GetCopy());
 
   _ctx.unlock();
   if (_ctx.hasError()) {
@@ -60,19 +59,11 @@ inline isl_local_space *LocalSpace::Give() {
 inline isl_local_space *LocalSpace::Get() const {  return (isl_local_space *)This;
 }
 
-inline LocalSpace LocalSpace::asLocalSpace() const {
-  return LocalSpace(ctx, GetCopy());
-}
 
 inline LocalSpace LocalSpace::addDims(DimType type, unsigned int n) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_add_dims
-  isl_local_space * res =  isl_local_space_add_dims((self).Give(), (enum isl_dim_type)type, n);
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_add_dims((*this).GetCopy(), (enum isl_dim_type)type, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_add_dims returned a NULL pointer.");
   }
@@ -81,25 +72,15 @@ inline LocalSpace LocalSpace::addDims(DimType type, unsigned int n) const {
 
 inline int LocalSpace::dim(DimType type) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_dim
-  int res =  isl_local_space_dim((self).Get(), (enum isl_dim_type)type);
-  // Handle result argument(s)
+  int res =  isl_local_space_dim((*this).Get(), (enum isl_dim_type)type);
   ctx.unlock();
-  // Handle return
   return res;
 }
 
 inline LocalSpace LocalSpace::domain() const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_domain
-  isl_local_space * res =  isl_local_space_domain((self).Give());
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_domain((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_domain returned a NULL pointer.");
   }
@@ -108,13 +89,8 @@ inline LocalSpace LocalSpace::domain() const {
 
 inline LocalSpace LocalSpace::dropDims(DimType type, unsigned int first, unsigned int n) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_drop_dims
-  isl_local_space * res =  isl_local_space_drop_dims((self).Give(), (enum isl_dim_type)type, first, n);
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_drop_dims((*this).GetCopy(), (enum isl_dim_type)type, first, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_drop_dims returned a NULL pointer.");
   }
@@ -123,13 +99,8 @@ inline LocalSpace LocalSpace::dropDims(DimType type, unsigned int first, unsigne
 
 inline LocalSpace LocalSpace::fromDomain() const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_from_domain
-  isl_local_space * res =  isl_local_space_from_domain((self).Give());
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_from_domain((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_from_domain returned a NULL pointer.");
   }
@@ -138,13 +109,8 @@ inline LocalSpace LocalSpace::fromDomain() const {
 
 inline Id LocalSpace::getDimId(DimType type, unsigned int pos) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_get_dim_id
-  isl_id * res =  isl_local_space_get_dim_id((self).Get(), (enum isl_dim_type)type, pos);
-  // Handle result argument(s)
+  isl_id * res =  isl_local_space_get_dim_id((*this).Get(), (enum isl_dim_type)type, pos);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_get_dim_id returned a NULL pointer.");
   }
@@ -153,13 +119,8 @@ inline Id LocalSpace::getDimId(DimType type, unsigned int pos) const {
 
 inline std::string LocalSpace::getDimName(DimType type, unsigned int pos) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_get_dim_name
-  const char * res =  isl_local_space_get_dim_name((self).Get(), (enum isl_dim_type)type, pos);
-  // Handle result argument(s)
+  const char * res =  isl_local_space_get_dim_name((*this).Get(), (enum isl_dim_type)type, pos);
   ctx.unlock();
-  // Handle return
   std::string res_;
   if (ctx.hasError()) {
     handleError("isl_local_space_get_dim_name returned a NULL pointer.");
@@ -170,13 +131,8 @@ inline std::string LocalSpace::getDimName(DimType type, unsigned int pos) const 
 
 inline Aff LocalSpace::getDiv(int pos) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_get_div
-  isl_aff * res =  isl_local_space_get_div((self).Get(), pos);
-  // Handle result argument(s)
+  isl_aff * res =  isl_local_space_get_div((*this).Get(), pos);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_get_div returned a NULL pointer.");
   }
@@ -185,13 +141,8 @@ inline Aff LocalSpace::getDiv(int pos) const {
 
 inline Space LocalSpace::getSpace() const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_get_space
-  isl_space * res =  isl_local_space_get_space((self).Get());
-  // Handle result argument(s)
+  isl_space * res =  isl_local_space_get_space((*this).Get());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_get_space returned a NULL pointer.");
   }
@@ -200,37 +151,22 @@ inline Space LocalSpace::getSpace() const {
 
 inline Bool LocalSpace::hasDimId(DimType type, unsigned int pos) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_has_dim_id
-  isl_bool res =  isl_local_space_has_dim_id((self).Get(), (enum isl_dim_type)type, pos);
-  // Handle result argument(s)
+  isl_bool res =  isl_local_space_has_dim_id((*this).Get(), (enum isl_dim_type)type, pos);
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline Bool LocalSpace::hasDimName(DimType type, unsigned int pos) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_has_dim_name
-  isl_bool res =  isl_local_space_has_dim_name((self).Get(), (enum isl_dim_type)type, pos);
-  // Handle result argument(s)
+  isl_bool res =  isl_local_space_has_dim_name((*this).Get(), (enum isl_dim_type)type, pos);
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline LocalSpace LocalSpace::insertDims(DimType type, unsigned int first, unsigned int n) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_insert_dims
-  isl_local_space * res =  isl_local_space_insert_dims((self).Give(), (enum isl_dim_type)type, first, n);
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_insert_dims((*this).GetCopy(), (enum isl_dim_type)type, first, n);
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_insert_dims returned a NULL pointer.");
   }
@@ -239,14 +175,8 @@ inline LocalSpace LocalSpace::insertDims(DimType type, unsigned int first, unsig
 
 inline LocalSpace LocalSpace::intersect(const LocalSpace &ls2) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  LocalSpace _cast_ls2 = ls2.asLocalSpace();
-  // Call isl_local_space_intersect
-  isl_local_space * res =  isl_local_space_intersect((self).Give(), (_cast_ls2).Give());
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_intersect((*this).GetCopy(), (ls2).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_intersect returned a NULL pointer.");
   }
@@ -255,38 +185,22 @@ inline LocalSpace LocalSpace::intersect(const LocalSpace &ls2) const {
 
 inline Bool LocalSpace::isEqual(const LocalSpace &ls2) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  LocalSpace _cast_ls2 = ls2.asLocalSpace();
-  // Call isl_local_space_is_equal
-  isl_bool res =  isl_local_space_is_equal((self).Get(), (_cast_ls2).Get());
-  // Handle result argument(s)
+  isl_bool res =  isl_local_space_is_equal((*this).Get(), (ls2).Get());
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline Bool LocalSpace::isSet() const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_is_set
-  isl_bool res =  isl_local_space_is_set((self).Get());
-  // Handle result argument(s)
+  isl_bool res =  isl_local_space_is_set((*this).Get());
   ctx.unlock();
-  // Handle return
   return (Bool)res;
 }
 
 inline BasicMap LocalSpace::lifting() const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_lifting
-  isl_basic_map * res =  isl_local_space_lifting((self).Give());
-  // Handle result argument(s)
+  isl_basic_map * res =  isl_local_space_lifting((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_lifting returned a NULL pointer.");
   }
@@ -295,13 +209,8 @@ inline BasicMap LocalSpace::lifting() const {
 
 inline LocalSpace LocalSpace::range() const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_range
-  isl_local_space * res =  isl_local_space_range((self).Give());
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_range((*this).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_range returned a NULL pointer.");
   }
@@ -310,14 +219,8 @@ inline LocalSpace LocalSpace::range() const {
 
 inline LocalSpace LocalSpace::setDimId(DimType type, unsigned int pos, const Id &id) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  Id _cast_id = id.asId();
-  // Call isl_local_space_set_dim_id
-  isl_local_space * res =  isl_local_space_set_dim_id((self).Give(), (enum isl_dim_type)type, pos, (_cast_id).Give());
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_set_dim_id((*this).GetCopy(), (enum isl_dim_type)type, pos, (id).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_set_dim_id returned a NULL pointer.");
   }
@@ -326,13 +229,8 @@ inline LocalSpace LocalSpace::setDimId(DimType type, unsigned int pos, const Id 
 
 inline LocalSpace LocalSpace::setDimName(DimType type, unsigned int pos, std::string s) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  // Call isl_local_space_set_dim_name
-  isl_local_space * res =  isl_local_space_set_dim_name((self).Give(), (enum isl_dim_type)type, pos, s.c_str());
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_set_dim_name((*this).GetCopy(), (enum isl_dim_type)type, pos, s.c_str());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_set_dim_name returned a NULL pointer.");
   }
@@ -341,14 +239,8 @@ inline LocalSpace LocalSpace::setDimName(DimType type, unsigned int pos, std::st
 
 inline LocalSpace LocalSpace::setTupleId(DimType type, const Id &id) const {
   ctx.lock();
-  LocalSpace self = asLocalSpace();
-  // Prepare arguments
-  Id _cast_id = id.asId();
-  // Call isl_local_space_set_tuple_id
-  isl_local_space * res =  isl_local_space_set_tuple_id((self).Give(), (enum isl_dim_type)type, (_cast_id).Give());
-  // Handle result argument(s)
+  isl_local_space * res =  isl_local_space_set_tuple_id((*this).GetCopy(), (enum isl_dim_type)type, (id).GetCopy());
   ctx.unlock();
-  // Handle return
   if (ctx.hasError()) {
     handleError("isl_local_space_set_tuple_id returned a NULL pointer.");
   }

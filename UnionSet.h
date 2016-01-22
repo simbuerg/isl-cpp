@@ -18,6 +18,7 @@
 
 namespace isl {
 class BasicSet;
+class Point;
 class Schedule;
 class Set;
 class Space;
@@ -26,10 +27,9 @@ class UnionPwQpolynomialFold;
 
 class UnionSet {
 protected:
-
-public:
   Ctx ctx;
   void * This;
+public:
   explicit UnionSet(Ctx ctx, isl_union_set *That) : ctx(ctx), This((void *)That) {}
   explicit UnionSet(Ctx ctx, void *That) : ctx(ctx), This(That) {}
   const Ctx &Context() const { return ctx; }
@@ -45,30 +45,49 @@ public:
   /// \return a the wrapped isl object.
   isl_union_set *Get() const;
 
+
   /// \brief Constructor for isl_union_set_from_basic_set
   ///
   /// \param bset
   static UnionSet fromBasicSet(const BasicSet &bset);
+
+
   /// \brief Constructor for isl_union_set_from_set
   ///
   /// \param set
   static UnionSet fromSet(const Set &set);
+
+
   /// \brief Constructor for isl_union_set_empty
   ///
   /// \param dim
   static UnionSet empty(const Space &dim);
+
+
   /// \brief Constructor for isl_union_set_universe
   ///
   /// \param uset
   static UnionSet universe(const UnionSet &uset);
+
+
+  /// \brief Constructor for isl_union_set_from_point
+  ///
+  /// \param pnt
+  static UnionSet fromPoint(const Point &pnt);
+
+
   /// \brief Constructor for isl_union_set_read_from_str
   ///
   /// \param ctx
   /// \param str
   static UnionSet readFromStr(const Ctx &ctx, std::string str);
+public:
   virtual ~UnionSet();
 
-  virtual UnionSet asUnionSet() const;
+
+
+
+  UnionSet asUnionSet() const;
 
   /// \brief Generated from  ::<isl_union_set_add_set>
   ///
@@ -116,6 +135,12 @@ public:
   ///
   /// \returns A new UnionSet
   UnionSet coefficients() const;
+
+  /// \brief Generated from  ::<isl_union_set_compute_divs>
+  ///
+  ///
+  /// \returns A new UnionSet
+  UnionSet computeDivs() const;
 
   /// \brief Generated from  ::<isl_union_set_compute_schedule>
   ///
@@ -303,6 +328,12 @@ public:
   ///
   /// \returns A new BasicSet
   BasicSet sample() const;
+
+  /// \brief Generated from  ::<isl_union_set_sample_point>
+  ///
+  ///
+  /// \returns A new Point
+  Point samplePoint() const;
 
   /// \brief Generated from  ::<isl_union_set_solutions>
   ///
