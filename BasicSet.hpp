@@ -18,11 +18,11 @@
 #include "isl/Stat.h"
 #include "isl/constraint.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_basic_set *BasicSet::GetCopy() const {
   return isl_basic_set_copy((isl_basic_set *)This);
 }
@@ -115,9 +115,6 @@ inline isl_basic_set *BasicSet::Give() {
 /// \returns A the wrapped isl object.
 inline isl_basic_set *BasicSet::Get() const {  return (isl_basic_set *)This;
 }
-
-
-
 
 inline BasicSet BasicSet::addConstraint(const Constraint &constraint) const {
   ctx.lock();

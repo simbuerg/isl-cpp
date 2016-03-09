@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_map_list *UnionMapList::GetCopy() const {
   return isl_union_map_list_copy((isl_union_map_list *)This);
 }
@@ -53,7 +53,6 @@ inline isl_union_map_list *UnionMapList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_map_list *UnionMapList::Get() const {  return (isl_union_map_list *)This;
 }
-
 
 inline UnionMapList UnionMapList::add(const UnionMap &el) const {
   ctx.lock();

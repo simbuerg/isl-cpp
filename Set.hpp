@@ -25,11 +25,11 @@
 #include "isl/point.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_set *Set::GetCopy() const {
   return isl_set_copy((isl_set *)This);
 }
@@ -135,8 +135,6 @@ inline isl_set *Set::Give() {
 /// \returns A the wrapped isl object.
 inline isl_set *Set::Get() const {  return (isl_set *)This;
 }
-
-
 
 inline Set Set::addConstraint(const Constraint &constraint) const {
   ctx.lock();

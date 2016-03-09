@@ -10,7 +10,6 @@
 #include "isl/IslException.h"
 #include "isl/PwAff.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -28,20 +27,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Aff(Ctx ctx, isl_aff *That) : ctx(ctx), This((void *)That) {}
-  explicit Aff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Aff(Ctx ctx, isl_aff *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_aff *GetCopy() const;
+
+  __isl_give isl_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_aff *Give();
+  __isl_give isl_aff *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_aff *Get() const;
+  __isl_give isl_aff *Get() const;
 
 
   /// \brief Constructor for isl_aff_zero_on_domain
@@ -72,15 +72,6 @@ public:
   static Aff readFromStr(const Ctx &ctx, std::string str);
 public:
   virtual ~Aff();
-
-  Aff asAff() const;
-
-  PwAff asPwAff() const;
-
-  UnionPwAff asUnionPwAff() const;
-
-  UnionPwMultiAff asUnionPwMultiAff() const;
-
   /// \brief Generated from  ::<isl_aff_add>
   ///
   /// \param [in] aff2
@@ -449,6 +440,7 @@ public:
   ///
   /// \returns A new BasicSet
   BasicSet zeroBasicSet() const;
+
   Aff(const Aff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Aff &operator=(const Aff &Other);
   Aff (Aff && Other) : ctx(Other.Context()), This(Other.This) {}

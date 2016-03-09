@@ -8,7 +8,6 @@
 #include "isl/Stat.h"
 #include <mutex>
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
@@ -33,7 +32,6 @@ inline isl_ctx *Ctx::Give() {
 /// \returns A the wrapped isl object.
 inline isl_ctx *Ctx::Get() const {  return (isl_ctx *)This.get()->p;
 }
-
 
 inline int Ctx::getTileScaleTileLoops() const {
   (*this).lock();

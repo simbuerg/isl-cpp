@@ -9,7 +9,6 @@
 #include "isl/IslException.h"
 #include "isl/MultiVal.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -20,20 +19,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Val(Ctx ctx, isl_val *That) : ctx(ctx), This((void *)That) {}
-  explicit Val(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Val(Ctx ctx, isl_val *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_val *GetCopy() const;
+
+  __isl_give isl_val *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_val *Give();
+  __isl_give isl_val *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_val *Get() const;
+  __isl_give isl_val *Get() const;
 
 
   /// \brief Constructor for isl_val_zero
@@ -102,11 +102,6 @@ public:
   static Val readFromStr(const Ctx &ctx, std::string str);
 public:
   virtual ~Val();
-
-  Val asVal() const;
-
-  MultiVal asMultiVal() const;
-
   /// \brief Generated from  ::<isl_val_abs>
   ///
   ///
@@ -333,6 +328,7 @@ public:
   ///
   /// \returns A new Val
   Val trunc() const;
+
   Val(const Val &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Val &operator=(const Val &Other);
   Val (Val && Other) : ctx(Other.Context()), This(Other.This) {}

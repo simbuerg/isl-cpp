@@ -6,11 +6,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_ast_node *AstNode::GetCopy() const {
   return isl_ast_node_copy((isl_ast_node *)This);
 }
@@ -38,7 +38,6 @@ inline isl_ast_node *AstNode::Give() {
 /// \returns A the wrapped isl object.
 inline isl_ast_node *AstNode::Get() const {  return (isl_ast_node *)This;
 }
-
 
 } // namespace isl
 #endif //ISL_CXX_AstNode_IMPL_H

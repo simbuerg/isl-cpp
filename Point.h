@@ -9,7 +9,6 @@
 #include "isl/Format.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -22,20 +21,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Point(Ctx ctx, isl_point *That) : ctx(ctx), This((void *)That) {}
-  explicit Point(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Point(Ctx ctx, isl_point *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_point *GetCopy() const;
+
+  __isl_give isl_point *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_point *Give();
+  __isl_give isl_point *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_point *Get() const;
+  __isl_give isl_point *Get() const;
 
 
   /// \brief Constructor for isl_point_void
@@ -50,15 +50,6 @@ public:
   static Point zero(const Space &dim);
 public:
   virtual ~Point();
-
-  Point asPoint() const;
-
-  BasicSet asBasicSet() const;
-
-  Set asSet() const;
-
-  UnionSet asUnionSet() const;
-
   /// \brief Generated from  ::<isl_point_get_coordinate_val>
   ///
   /// \param [in] type
@@ -87,6 +78,7 @@ public:
   ///
   /// \returns A new Point
   Point setCoordinateVal(DimType type, int pos, const Val &v) const;
+
   Point(const Point &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Point &operator=(const Point &Other);
   Point (Point && Other) : ctx(Other.Context()), This(Other.This) {}

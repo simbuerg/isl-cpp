@@ -20,11 +20,11 @@
 #include "isl/Stat.h"
 #include "isl/map.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_map *UnionMap::GetCopy() const {
   return isl_union_map_copy((isl_union_map *)This);
 }
@@ -182,7 +182,6 @@ inline isl_union_map *UnionMap::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_map *UnionMap::Get() const {  return (isl_union_map *)This;
 }
-
 
 inline UnionMap UnionMap::affineHull() const {
   ctx.lock();

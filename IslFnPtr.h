@@ -6,7 +6,6 @@
 #include <chrono>
 #include <mutex>
 #include <functional>
-#include <iostream>
 #include <cmath>
 
 template <const size_t _UniqueId, typename _Res, typename... _ArgTypes>

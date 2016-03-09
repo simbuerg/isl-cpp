@@ -12,7 +12,6 @@
 #include "isl/polynomial.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -31,20 +30,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Qpolynomial(Ctx ctx, isl_qpolynomial *That) : ctx(ctx), This((void *)That) {}
-  explicit Qpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Qpolynomial(Ctx ctx, isl_qpolynomial *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_qpolynomial *GetCopy() const;
+
+  __isl_give isl_qpolynomial *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_qpolynomial *Give();
+  __isl_give isl_qpolynomial *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_qpolynomial *Get() const;
+  __isl_give isl_qpolynomial *Get() const;
 
 
   /// \brief Constructor for isl_qpolynomial_zero_on_domain
@@ -112,9 +112,6 @@ public:
   static Qpolynomial fromAff(const Aff &aff);
 public:
   virtual ~Qpolynomial();
-
-  Qpolynomial asQpolynomial() const;
-
   /// \brief Generated from  ::<isl_qpolynomial_add>
   ///
   /// \param [in] qp2
@@ -339,6 +336,7 @@ public:
   ///
   /// \returns A new Qpolynomial
   Qpolynomial substitute(DimType type, unsigned int first, unsigned int n, std::unique_ptr<Qpolynomial> * subs) const;
+
   Qpolynomial(const Qpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Qpolynomial &operator=(const Qpolynomial &Other);
   Qpolynomial (Qpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}

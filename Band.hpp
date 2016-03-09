@@ -9,11 +9,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_band *Band::GetCopy() const {
   return isl_band_copy((isl_band *)This);
 }
@@ -37,7 +37,6 @@ inline isl_band *Band::Give() {
 /// \returns A the wrapped isl object.
 inline isl_band *Band::Get() const {  return (isl_band *)This;
 }
-
 
 inline UnionMap Band::getPartialSchedule() const {
   ctx.lock();

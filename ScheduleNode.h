@@ -10,7 +10,6 @@
 #include "isl/ScheduleNodeType.h"
 #include "isl/Stat.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -31,20 +30,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit ScheduleNode(Ctx ctx, isl_schedule_node *That) : ctx(ctx), This((void *)That) {}
-  explicit ScheduleNode(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit ScheduleNode(Ctx ctx, isl_schedule_node *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_schedule_node *GetCopy() const;
+
+  __isl_give isl_schedule_node *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_schedule_node *Give();
+  __isl_give isl_schedule_node *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_schedule_node *Get() const;
+  __isl_give isl_schedule_node *Get() const;
 
 
   /// \brief Constructor for isl_schedule_node_from_domain
@@ -59,9 +59,6 @@ public:
   static ScheduleNode fromExtension(const UnionMap &extension);
 public:
   virtual ~ScheduleNode();
-
-  ScheduleNode asScheduleNode() const;
-
   /// \brief Generated from  ::<isl_schedule_node_align_params>
   ///
   /// \param [in] space
@@ -582,6 +579,7 @@ public:
   ///
   /// \returns A new ScheduleNode
   ScheduleNode root() const;
+
   ScheduleNode(const ScheduleNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ScheduleNode &operator=(const ScheduleNode &Other);
   ScheduleNode (ScheduleNode && Other) : ctx(Other.Context()), This(Other.This) {}

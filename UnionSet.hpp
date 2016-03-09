@@ -19,11 +19,11 @@
 #include "isl/point.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_set *UnionSet::GetCopy() const {
   return isl_union_set_copy((isl_union_set *)This);
 }
@@ -129,7 +129,6 @@ inline isl_union_set *UnionSet::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_set *UnionSet::Get() const {  return (isl_union_set *)This;
 }
-
 
 inline UnionSet UnionSet::addSet(const Set &set) const {
   ctx.lock();

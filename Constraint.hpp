@@ -13,11 +13,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_constraint *Constraint::GetCopy() const {
   return isl_constraint_copy((isl_constraint *)This);
 }
@@ -71,7 +71,6 @@ inline isl_constraint *Constraint::Give() {
 /// \returns A the wrapped isl object.
 inline isl_constraint *Constraint::Get() const {  return (isl_constraint *)This;
 }
-
 
 inline int Constraint::dim(DimType type) const {
   ctx.lock();

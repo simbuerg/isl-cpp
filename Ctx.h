@@ -9,7 +9,6 @@
 #include "isl/Stat.h"
 #include <mutex>
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -31,6 +30,7 @@ protected:
   std::shared_ptr<ptr> This;
 public:
   explicit Ctx(std::shared_ptr<ptr> That) : This(That) {}
+
   const Ctx &Context() const { return *this; }
   /// \brief Wrap an existing isl object.
   ///
@@ -45,10 +45,10 @@ public:
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_ctx *Give();
+  __isl_give isl_ctx *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_ctx *Get() const;
+  __isl_give isl_ctx *Get() const;
 
 
   /// \brief Constructor for isl_ctx_alloc
@@ -73,9 +73,6 @@ public:
     int goe = isl_options_get_on_error(ctx);
     return (err != isl_error_none) && goe != ISL_ON_ERROR_CONTINUE;
   }
-
-  Ctx asCtx() const;
-
   /// \brief Generated from  ::<isl_options_get_tile_scale_tile_loops>
   ///
   ///
@@ -101,6 +98,7 @@ public:
   ///
   /// \returns A new Stat
   Stat setTileShiftPointLoops(int val) const;
+
   Ctx(const Ctx &Other) : Ctx(Other.This) {}};
 } // namespace isl
 #endif //ISL_CXX_Ctx_H

@@ -11,11 +11,11 @@
 #include "isl/Format.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_point *Point::GetCopy() const {
   return isl_point_copy((isl_point *)This);
 }
@@ -69,10 +69,6 @@ inline isl_point *Point::Give() {
 /// \returns A the wrapped isl object.
 inline isl_point *Point::Get() const {  return (isl_point *)This;
 }
-
-
-
-
 
 inline Val Point::getCoordinateVal(DimType type, int pos) const {
   ctx.lock();

@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_constraint_list *ConstraintList::GetCopy() const {
   return isl_constraint_list_copy((isl_constraint_list *)This);
 }
@@ -53,7 +53,6 @@ inline isl_constraint_list *ConstraintList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_constraint_list *ConstraintList::Get() const {  return (isl_constraint_list *)This;
 }
-
 
 inline ConstraintList ConstraintList::add(const Constraint &el) const {
   ctx.lock();

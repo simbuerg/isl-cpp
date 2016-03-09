@@ -7,7 +7,6 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -20,20 +19,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Mat(Ctx ctx, isl_mat *That) : ctx(ctx), This((void *)That) {}
-  explicit Mat(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Mat(Ctx ctx, isl_mat *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_mat *GetCopy() const;
+
+  __isl_give isl_mat *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_mat *Give();
+  __isl_give isl_mat *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_mat *Get() const;
+  __isl_give isl_mat *Get() const;
 
 
   /// \brief Constructor for isl_mat_alloc
@@ -50,9 +50,6 @@ public:
   static Mat fromRowVec(const Vec &vec);
 public:
   virtual ~Mat();
-
-  Mat asMat() const;
-
   /// \brief Generated from  ::<isl_mat_add_rows>
   ///
   /// \param [in] n
@@ -195,6 +192,7 @@ public:
   ///
   /// \returns A new Mat
   Mat vecConcat(const Vec &bot) const;
+
   Mat(const Mat &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Mat &operator=(const Mat &Other);
   Mat (Mat && Other) : ctx(Other.Context()), This(Other.This) {}

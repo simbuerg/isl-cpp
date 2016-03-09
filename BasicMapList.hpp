@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_basic_map_list *BasicMapList::GetCopy() const {
   return isl_basic_map_list_copy((isl_basic_map_list *)This);
 }
@@ -53,7 +53,6 @@ inline isl_basic_map_list *BasicMapList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_basic_map_list *BasicMapList::Get() const {  return (isl_basic_map_list *)This;
 }
-
 
 inline BasicMapList BasicMapList::add(const BasicMap &el) const {
   ctx.lock();

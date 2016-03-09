@@ -13,7 +13,6 @@
 #include "isl/aff.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -33,20 +32,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit PwAff(Ctx ctx, isl_pw_aff *That) : ctx(ctx), This((void *)That) {}
-  explicit PwAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit PwAff(Ctx ctx, isl_pw_aff *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_pw_aff *GetCopy() const;
+
+  __isl_give isl_pw_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_pw_aff *Give();
+  __isl_give isl_pw_aff *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_pw_aff *Get() const;
+  __isl_give isl_pw_aff *Get() const;
 
 
   /// \brief Constructor for isl_pw_aff_from_aff
@@ -89,13 +89,6 @@ public:
   static PwAff readFromStr(const Ctx &ctx, std::string str);
 public:
   virtual ~PwAff();
-
-
-  PwAff asPwAff() const;
-
-  UnionPwAff asUnionPwAff() const;
-
-  UnionPwMultiAff asUnionPwMultiAff() const;
 
   /// \brief Generated from  ::<isl_pw_aff_add>
   ///
@@ -506,6 +499,7 @@ public:
   ///
   /// \returns A new Set
   Set zeroSet() const;
+
   PwAff(const PwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwAff &operator=(const PwAff &Other);
   PwAff (PwAff && Other) : ctx(Other.Context()), This(Other.This) {}

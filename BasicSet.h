@@ -12,7 +12,6 @@
 #include "isl/Stat.h"
 #include "isl/constraint.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -29,20 +28,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit BasicSet(Ctx ctx, isl_basic_set *That) : ctx(ctx), This((void *)That) {}
-  explicit BasicSet(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit BasicSet(Ctx ctx, isl_basic_set *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_basic_set *GetCopy() const;
+
+  __isl_give isl_basic_set *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_basic_set *Give();
+  __isl_give isl_basic_set *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_basic_set *Get() const;
+  __isl_give isl_basic_set *Get() const;
 
 
   /// \brief Constructor for isl_basic_set_read_from_str
@@ -83,13 +83,6 @@ public:
   static BasicSet fromConstraint(const Constraint &constraint);
 public:
   virtual ~BasicSet();
-
-
-  BasicSet asBasicSet() const;
-
-  Set asSet() const;
-
-  UnionSet asUnionSet() const;
 
   /// \brief Generated from  ::<isl_basic_set_add_constraint>
   ///
@@ -436,6 +429,7 @@ public:
   ///
   /// \returns A new BasicMap
   BasicMap unwrap() const;
+
   BasicSet(const BasicSet &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicSet &operator=(const BasicSet &Other);
   BasicSet (BasicSet && Other) : ctx(Other.Context()), This(Other.This) {}

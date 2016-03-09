@@ -7,7 +7,6 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -19,20 +18,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit IdList(Ctx ctx, isl_id_list *That) : ctx(ctx), This((void *)That) {}
-  explicit IdList(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit IdList(Ctx ctx, isl_id_list *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_id_list *GetCopy() const;
+
+  __isl_give isl_id_list *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_id_list *Give();
+  __isl_give isl_id_list *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_id_list *Get() const;
+  __isl_give isl_id_list *Get() const;
 
 
   /// \brief Constructor for isl_id_list_alloc
@@ -42,15 +42,13 @@ public:
   static IdList alloc(const Ctx &ctx, int n);
 public:
   virtual ~IdList();
-
-  IdList asIdList() const;
-
   /// \brief Generated from  ::<isl_id_list_add>
   ///
   /// \param [in] el
   ///
   /// \returns A new IdList
   IdList add(const Id &el) const;
+
   IdList(const IdList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   IdList &operator=(const IdList &Other);
   IdList (IdList && Other) : ctx(Other.Context()), This(Other.This) {}

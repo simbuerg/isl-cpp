@@ -24,11 +24,11 @@
 #include "isl/UnionMap.hpp"
 #include "isl/map.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_map *Map::GetCopy() const {
   return isl_map_copy((isl_map *)This);
 }
@@ -303,8 +303,6 @@ inline isl_map *Map::Give() {
 /// \returns A the wrapped isl object.
 inline isl_map *Map::Get() const {  return (isl_map *)This;
 }
-
-
 
 inline Map Map::addConstraint(const Constraint &constraint) const {
   ctx.lock();

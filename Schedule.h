@@ -9,7 +9,6 @@
 #include "isl/IslException.h"
 #include "isl/band.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -35,7 +34,9 @@ protected:
   std::shared_ptr<ptr> This;
 public:
   explicit Schedule(Ctx ctx, isl_schedule *That) : ctx(ctx), This(std::make_shared<ptr>(That)) {}
+
   const Ctx &Context() const { return ctx; }
+
   std::shared_ptr<isl::Schedule::ptr> GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
@@ -43,10 +44,10 @@ public:
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_schedule *Give();
+  __isl_give isl_schedule *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_schedule *Get() const;
+  __isl_give isl_schedule *Get() const;
 
 
   /// \brief Constructor for isl_schedule_read_from_str
@@ -56,9 +57,6 @@ public:
   static Schedule readFromStr(const Ctx &ctx, std::string str);
 public:
   virtual ~Schedule() = default;
-
-  Schedule asSchedule() const;
-
   /// \brief Generated from  ::<isl_schedule_foreach_band>
   ///
   /// \param [in] fn
@@ -85,6 +83,7 @@ public:
   ///
   /// \returns A new Schedule
   Schedule pullbackUnionPwMultiAff(const UnionPwMultiAff &upma) const;
+
   Schedule(const Schedule &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Schedule &operator=(const Schedule &Other) = delete;
   Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.This) {}

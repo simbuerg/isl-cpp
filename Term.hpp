@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_term *Term::GetCopy() const {
   return isl_term_copy((isl_term *)This);
 }
@@ -40,7 +40,6 @@ inline isl_term *Term::Give() {
 /// \returns A the wrapped isl object.
 inline isl_term *Term::Get() const {  return (isl_term *)This;
 }
-
 
 inline unsigned int Term::dim(DimType type) const {
   ctx.lock();

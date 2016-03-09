@@ -19,11 +19,11 @@
 #include "isl/polynomial.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_pw_qpolynomial_fold *PwQpolynomialFold::GetCopy() const {
   return isl_pw_qpolynomial_fold_copy((isl_pw_qpolynomial_fold *)This);
 }
@@ -90,7 +90,6 @@ inline isl_pw_qpolynomial_fold *PwQpolynomialFold::Give() {
 /// \returns A the wrapped isl object.
 inline isl_pw_qpolynomial_fold *PwQpolynomialFold::Get() const {  return (isl_pw_qpolynomial_fold *)This;
 }
-
 
 inline PwQpolynomialFold PwQpolynomialFold::add(const PwQpolynomialFold &pwf2) const {
   ctx.lock();

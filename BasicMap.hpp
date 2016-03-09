@@ -23,11 +23,11 @@
 #include "isl/Stat.h"
 #include "isl/constraint.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_basic_map *BasicMap::GetCopy() const {
   return isl_basic_map_copy((isl_basic_map *)This);
 }
@@ -237,9 +237,6 @@ inline isl_basic_map *BasicMap::Give() {
 /// \returns A the wrapped isl object.
 inline isl_basic_map *BasicMap::Get() const {  return (isl_basic_map *)This;
 }
-
-
-
 
 inline BasicMap BasicMap::addConstraint(const Constraint &constraint) const {
   ctx.lock();

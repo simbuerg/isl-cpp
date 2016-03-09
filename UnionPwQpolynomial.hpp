@@ -19,11 +19,11 @@
 #include "isl/Stat.h"
 #include "isl/polynomial.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_pw_qpolynomial *UnionPwQpolynomial::GetCopy() const {
   return isl_union_pw_qpolynomial_copy((isl_union_pw_qpolynomial *)This);
 }
@@ -90,7 +90,6 @@ inline isl_union_pw_qpolynomial *UnionPwQpolynomial::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_pw_qpolynomial *UnionPwQpolynomial::Get() const {  return (isl_union_pw_qpolynomial *)This;
 }
-
 
 inline UnionPwQpolynomial UnionPwQpolynomial::add(const UnionPwQpolynomial &upwqp2) const {
   ctx.lock();

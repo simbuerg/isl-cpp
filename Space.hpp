@@ -11,11 +11,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_space *Space::GetCopy() const {
   return isl_space_copy((isl_space *)This);
 }
@@ -108,7 +108,6 @@ inline isl_space *Space::Give() {
 /// \returns A the wrapped isl object.
 inline isl_space *Space::Get() const {  return (isl_space *)This;
 }
-
 
 inline Space Space::addDims(DimType type, unsigned int n) const {
   ctx.lock();

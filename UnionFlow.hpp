@@ -7,11 +7,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_flow *UnionFlow::GetCopy() const {
   return isl_union_flow_copy((isl_union_flow *)This);
 }
@@ -39,7 +39,6 @@ inline isl_union_flow *UnionFlow::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_flow *UnionFlow::Get() const {  return (isl_union_flow *)This;
 }
-
 
 inline UnionMap UnionFlow::getFullMayDependence() const {
   ctx.lock();

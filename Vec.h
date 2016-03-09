@@ -9,7 +9,6 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -21,20 +20,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Vec(Ctx ctx, isl_vec *That) : ctx(ctx), This((void *)That) {}
-  explicit Vec(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Vec(Ctx ctx, isl_vec *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_vec *GetCopy() const;
+
+  __isl_give isl_vec *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_vec *Give();
+  __isl_give isl_vec *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_vec *Get() const;
+  __isl_give isl_vec *Get() const;
 
 
   /// \brief Constructor for isl_vec_alloc
@@ -44,9 +44,6 @@ public:
   static Vec alloc(const Ctx &ctx, unsigned int size);
 public:
   virtual ~Vec();
-
-  Vec asVec() const;
-
   /// \brief Generated from  ::<isl_vec_add>
   ///
   /// \param [in] vec2
@@ -168,6 +165,7 @@ public:
   ///
   /// \returns A new Vec
   Vec zeroExtend(unsigned int size) const;
+
   Vec(const Vec &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Vec &operator=(const Vec &Other);
   Vec (Vec && Other) : ctx(Other.Context()), This(Other.This) {}

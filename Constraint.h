@@ -9,7 +9,6 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -24,20 +23,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Constraint(Ctx ctx, isl_constraint *That) : ctx(ctx), This((void *)That) {}
-  explicit Constraint(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Constraint(Ctx ctx, isl_constraint *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_constraint *GetCopy() const;
+
+  __isl_give isl_constraint *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_constraint *Give();
+  __isl_give isl_constraint *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_constraint *Get() const;
+  __isl_give isl_constraint *Get() const;
 
 
   /// \brief Constructor for isl_constraint_alloc_equality
@@ -52,9 +52,6 @@ public:
   static Constraint allocInequality(const LocalSpace &ls);
 public:
   virtual ~Constraint();
-
-  Constraint asConstraint() const;
-
   /// \brief Generated from  ::<isl_constraint_dim>
   ///
   /// \param [in] type
@@ -184,6 +181,7 @@ public:
   ///
   /// \returns A new Constraint
   Constraint setConstantVal(const Val &v) const;
+
   Constraint(const Constraint &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Constraint &operator=(const Constraint &Other);
   Constraint (Constraint && Other) : ctx(Other.Context()), This(Other.This) {}

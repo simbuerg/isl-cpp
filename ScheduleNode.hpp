@@ -20,11 +20,11 @@
 #include "isl/ScheduleNodeType.h"
 #include "isl/Stat.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_schedule_node *ScheduleNode::GetCopy() const {
   return isl_schedule_node_copy((isl_schedule_node *)This);
 }
@@ -78,7 +78,6 @@ inline isl_schedule_node *ScheduleNode::Give() {
 /// \returns A the wrapped isl object.
 inline isl_schedule_node *ScheduleNode::Get() const {  return (isl_schedule_node *)This;
 }
-
 
 inline ScheduleNode ScheduleNode::alignParams(const Space &space) const {
   ctx.lock();

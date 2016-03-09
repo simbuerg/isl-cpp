@@ -9,11 +9,11 @@
 #include "isl/IslException.h"
 #include "isl/MultiVal.hpp"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_val *Val::GetCopy() const {
   return isl_val_copy((isl_val *)This);
 }
@@ -171,8 +171,6 @@ inline isl_val *Val::Give() {
 /// \returns A the wrapped isl object.
 inline isl_val *Val::Get() const {  return (isl_val *)This;
 }
-
-
 
 inline Val Val::abs() const {
   ctx.lock();

@@ -12,11 +12,11 @@
 #include "isl/IslException.h"
 #include "isl/band.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline std::shared_ptr<isl::Schedule::ptr> Schedule::GetCopy() const {
   return Schedule::This;
 }
@@ -49,7 +49,6 @@ inline isl_schedule *Schedule::Give() {
 /// \returns A the wrapped isl object.
 inline isl_schedule *Schedule::Get() const {  return (isl_schedule *)This.get()->p;
 }
-
 
 inline int Schedule::foreachBand(const std::function<int(isl_band *, void *)> && fn, void * user) const {
   ctx.lock();

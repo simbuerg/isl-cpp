@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_id_list *IdList::GetCopy() const {
   return isl_id_list_copy((isl_id_list *)This);
 }
@@ -53,7 +53,6 @@ inline isl_id_list *IdList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_id_list *IdList::Get() const {  return (isl_id_list *)This;
 }
-
 
 inline IdList IdList::add(const Id &el) const {
   ctx.lock();

@@ -10,11 +10,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_vec *Vec::GetCopy() const {
   return isl_vec_copy((isl_vec *)This);
 }
@@ -55,7 +55,6 @@ inline isl_vec *Vec::Give() {
 /// \returns A the wrapped isl object.
 inline isl_vec *Vec::Get() const {  return (isl_vec *)This;
 }
-
 
 inline Vec Vec::add(const Vec &vec2) const {
   ctx.lock();

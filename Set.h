@@ -13,7 +13,6 @@
 #include "isl/point.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -36,20 +35,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Set(Ctx ctx, isl_set *That) : ctx(ctx), This((void *)That) {}
-  explicit Set(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Set(Ctx ctx, isl_set *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_set *GetCopy() const;
+
+  __isl_give isl_set *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_set *Give();
+  __isl_give isl_set *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_set *Get() const;
+  __isl_give isl_set *Get() const;
 
 
   /// \brief Constructor for isl_set_from_pw_aff
@@ -91,11 +91,6 @@ public:
 public:
   virtual ~Set();
 
-
-
-  Set asSet() const;
-
-  UnionSet asUnionSet() const;
 
   /// \brief Generated from  ::<isl_set_add_constraint>
   ///
@@ -744,6 +739,7 @@ public:
   ///
   /// \returns A new Map
   Map unwrap() const;
+
   Set(const Set &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Set &operator=(const Set &Other);
   Set (Set && Other) : ctx(Other.Context()), This(Other.This) {}

@@ -16,11 +16,11 @@
 #include "isl/Stat.h"
 #include "isl/polynomial.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_qpolynomial_fold *QpolynomialFold::GetCopy() const {
   return isl_qpolynomial_fold_copy((isl_qpolynomial_fold *)This);
 }
@@ -74,7 +74,6 @@ inline isl_qpolynomial_fold *QpolynomialFold::Give() {
 /// \returns A the wrapped isl object.
 inline isl_qpolynomial_fold *QpolynomialFold::Get() const {  return (isl_qpolynomial_fold *)This;
 }
-
 
 inline Val QpolynomialFold::eval(const Point &pnt) const {
   ctx.lock();

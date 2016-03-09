@@ -17,11 +17,11 @@
 #include "isl/IslException.h"
 #include "isl/PwAff.hpp"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_aff *Aff::GetCopy() const {
   return isl_aff_copy((isl_aff *)This);
 }
@@ -101,10 +101,6 @@ inline isl_aff *Aff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_aff *Aff::Get() const {  return (isl_aff *)This;
 }
-
-
-
-
 
 inline Aff Aff::add(const Aff &aff2) const {
   ctx.lock();

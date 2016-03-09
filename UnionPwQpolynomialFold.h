@@ -11,7 +11,6 @@
 #include "isl/Stat.h"
 #include "isl/polynomial.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -29,20 +28,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit UnionPwQpolynomialFold(Ctx ctx, isl_union_pw_qpolynomial_fold *That) : ctx(ctx), This((void *)That) {}
-  explicit UnionPwQpolynomialFold(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit UnionPwQpolynomialFold(Ctx ctx, isl_union_pw_qpolynomial_fold *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_union_pw_qpolynomial_fold *GetCopy() const;
+
+  __isl_give isl_union_pw_qpolynomial_fold *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_union_pw_qpolynomial_fold *Give();
+  __isl_give isl_union_pw_qpolynomial_fold *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_union_pw_qpolynomial_fold *Get() const;
+  __isl_give isl_union_pw_qpolynomial_fold *Get() const;
 
 
   /// \brief Constructor for isl_union_pw_qpolynomial_fold_from_pw_qpolynomial_fold
@@ -58,9 +58,6 @@ public:
   static UnionPwQpolynomialFold zero(const Space &dim, Fold type);
 public:
   virtual ~UnionPwQpolynomialFold();
-
-  UnionPwQpolynomialFold asUnionPwQpolynomialFold() const;
-
   /// \brief Generated from  ::<isl_union_pw_qpolynomial_fold_add_union_pw_qpolynomial>
   ///
   /// \param [in] upwqp
@@ -176,6 +173,7 @@ public:
   ///
   /// \returns A new UnionPwQpolynomialFold
   UnionPwQpolynomialFold scaleVal(const Val &v) const;
+
   UnionPwQpolynomialFold(const UnionPwQpolynomialFold &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwQpolynomialFold &operator=(const UnionPwQpolynomialFold &Other);
   UnionPwQpolynomialFold (UnionPwQpolynomialFold && Other) : ctx(Other.Context()), This(Other.This) {}

@@ -15,11 +15,11 @@
 #include "isl/IslException.h"
 #include "isl/MultiPwAff.hpp"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_multi_aff *MultiAff::GetCopy() const {
   return isl_multi_aff_copy((isl_multi_aff *)This);
 }
@@ -151,9 +151,6 @@ inline isl_multi_aff *MultiAff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_multi_aff *MultiAff::Get() const {  return (isl_multi_aff *)This;
 }
-
-
-
 
 inline MultiAff MultiAff::add(const MultiAff &multi2) const {
   ctx.lock();

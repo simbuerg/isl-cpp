@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_aff_list *AffList::GetCopy() const {
   return isl_aff_list_copy((isl_aff_list *)This);
 }
@@ -53,7 +53,6 @@ inline isl_aff_list *AffList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_aff_list *AffList::Get() const {  return (isl_aff_list *)This;
 }
-
 
 inline AffList AffList::add(const Aff &el) const {
   ctx.lock();

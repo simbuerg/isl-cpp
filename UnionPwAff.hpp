@@ -8,11 +8,11 @@
 #include "isl/IslException.h"
 #include "isl/UnionPwMultiAff.hpp"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_pw_aff *UnionPwAff::GetCopy() const {
   return isl_union_pw_aff_copy((isl_union_pw_aff *)This);
 }
@@ -66,8 +66,6 @@ inline isl_union_pw_aff *UnionPwAff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_pw_aff *UnionPwAff::Get() const {  return (isl_union_pw_aff *)This;
 }
-
-
 
 inline UnionPwAff UnionPwAff::add(const UnionPwAff &upa2) const {
   ctx.lock();

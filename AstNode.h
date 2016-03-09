@@ -6,7 +6,6 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -17,24 +16,23 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit AstNode(Ctx ctx, isl_ast_node *That) : ctx(ctx), This((void *)That) {}
-  explicit AstNode(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit AstNode(Ctx ctx, isl_ast_node *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_ast_node *GetCopy() const;
+
+  __isl_give isl_ast_node *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_ast_node *Give();
+  __isl_give isl_ast_node *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_ast_node *Get() const;
+  __isl_give isl_ast_node *Get() const;
 public:
   virtual ~AstNode();
-
-  AstNode asAstNode() const;
   AstNode(const AstNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstNode &operator=(const AstNode &Other);
   AstNode (AstNode && Other) : ctx(Other.Context()), This(Other.This) {}

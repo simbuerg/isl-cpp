@@ -4,7 +4,6 @@
 
 #include <memory>
 #include <vector>
-#include <iostream>
 
 namespace isl {
 static inline void handleError(std::string what) {

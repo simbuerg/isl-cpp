@@ -10,7 +10,6 @@
 #include "isl/IslException.h"
 #include "isl/MultiUnionPwAff.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -26,20 +25,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit MultiPwAff(Ctx ctx, isl_multi_pw_aff *That) : ctx(ctx), This((void *)That) {}
-  explicit MultiPwAff(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit MultiPwAff(Ctx ctx, isl_multi_pw_aff *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_multi_pw_aff *GetCopy() const;
+
+  __isl_give isl_multi_pw_aff *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_multi_pw_aff *Give();
+  __isl_give isl_multi_pw_aff *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_multi_pw_aff *Get() const;
+  __isl_give isl_multi_pw_aff *Get() const;
 
 
   /// \brief Constructor for isl_multi_pw_aff_from_pw_aff_list
@@ -81,11 +81,6 @@ public:
 public:
   virtual ~MultiPwAff();
 
-
-
-  MultiPwAff asMultiPwAff() const;
-
-  MultiUnionPwAff asMultiUnionPwAff() const;
 
   /// \brief Generated from  ::<isl_multi_pw_aff_add>
   ///
@@ -168,6 +163,7 @@ public:
   ///
   /// \returns A new MultiPwAff
   MultiPwAff rangeProduct(const MultiPwAff &multi2) const;
+
   MultiPwAff(const MultiPwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiPwAff &operator=(const MultiPwAff &Other);
   MultiPwAff (MultiPwAff && Other) : ctx(Other.Context()), This(Other.This) {}

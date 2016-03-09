@@ -12,7 +12,6 @@
 #include "isl/UnionMap.h"
 #include "isl/map.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -35,20 +34,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Map(Ctx ctx, isl_map *That) : ctx(ctx), This((void *)That) {}
-  explicit Map(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Map(Ctx ctx, isl_map *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_map *GetCopy() const;
+
+  __isl_give isl_map *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_map *Give();
+  __isl_give isl_map *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_map *Get() const;
+  __isl_give isl_map *Get() const;
 
 
   /// \brief Constructor for isl_map_from_pw_aff
@@ -171,11 +171,6 @@ public:
   static Map fromUnionMap(const UnionMap &umap);
 public:
   virtual ~Map();
-
-
-  Map asMap() const;
-
-  UnionMap asUnionMap() const;
 
   /// \brief Generated from  ::<isl_map_add_constraint>
   ///
@@ -1029,6 +1024,7 @@ public:
   ///
   /// \returns A new Map
   Map zip() const;
+
   Map(const Map &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Map &operator=(const Map &Other);
   Map (Map && Other) : ctx(Other.Context()), This(Other.This) {}

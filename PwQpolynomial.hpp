@@ -21,11 +21,11 @@
 #include "isl/polynomial.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_pw_qpolynomial *PwQpolynomial::GetCopy() const {
   return isl_pw_qpolynomial_copy((isl_pw_qpolynomial *)This);
 }
@@ -118,7 +118,6 @@ inline isl_pw_qpolynomial *PwQpolynomial::Give() {
 /// \returns A the wrapped isl object.
 inline isl_pw_qpolynomial *PwQpolynomial::Get() const {  return (isl_pw_qpolynomial *)This;
 }
-
 
 inline PwQpolynomial PwQpolynomial::add(const PwQpolynomial &pwqp2) const {
   ctx.lock();

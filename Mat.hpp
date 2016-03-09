@@ -9,11 +9,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_mat *Mat::GetCopy() const {
   return isl_mat_copy((isl_mat *)This);
 }
@@ -67,7 +67,6 @@ inline isl_mat *Mat::Give() {
 /// \returns A the wrapped isl object.
 inline isl_mat *Mat::Get() const {  return (isl_mat *)This;
 }
-
 
 inline Mat Mat::addRows(unsigned int n) const {
   ctx.lock();

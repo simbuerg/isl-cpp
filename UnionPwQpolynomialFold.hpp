@@ -18,11 +18,11 @@
 #include "isl/Stat.h"
 #include "isl/polynomial.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_pw_qpolynomial_fold *UnionPwQpolynomialFold::GetCopy() const {
   return isl_union_pw_qpolynomial_fold_copy((isl_union_pw_qpolynomial_fold *)This);
 }
@@ -76,7 +76,6 @@ inline isl_union_pw_qpolynomial_fold *UnionPwQpolynomialFold::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_pw_qpolynomial_fold *UnionPwQpolynomialFold::Get() const {  return (isl_union_pw_qpolynomial_fold *)This;
 }
-
 
 inline UnionPwQpolynomialFold UnionPwQpolynomialFold::addUnionPwQpolynomial(const UnionPwQpolynomial &upwqp) const {
   ctx.lock();

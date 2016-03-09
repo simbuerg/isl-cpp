@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_set_list *UnionSetList::GetCopy() const {
   return isl_union_set_list_copy((isl_union_set_list *)This);
 }
@@ -53,7 +53,6 @@ inline isl_union_set_list *UnionSetList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_set_list *UnionSetList::Get() const {  return (isl_union_set_list *)This;
 }
-
 
 inline UnionSetList UnionSetList::add(const UnionSet &el) const {
   ctx.lock();

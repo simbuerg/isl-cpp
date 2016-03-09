@@ -22,11 +22,11 @@
 #include "isl/aff.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_pw_aff *PwAff::GetCopy() const {
   return isl_pw_aff_copy((isl_pw_aff *)This);
 }
@@ -132,9 +132,6 @@ inline isl_pw_aff *PwAff::Give() {
 /// \returns A the wrapped isl object.
 inline isl_pw_aff *PwAff::Get() const {  return (isl_pw_aff *)This;
 }
-
-
-
 
 inline PwAff PwAff::add(const PwAff &pwaff2) const {
   ctx.lock();

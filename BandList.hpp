@@ -9,11 +9,11 @@
 #include "isl/IslException.h"
 #include "isl/band.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_band_list *BandList::GetCopy() const {
   return isl_band_list_copy((isl_band_list *)This);
 }
@@ -54,7 +54,6 @@ inline isl_band_list *BandList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_band_list *BandList::Get() const {  return (isl_band_list *)This;
 }
-
 
 inline BandList BandList::add(const Band &el) const {
   ctx.lock();

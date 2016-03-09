@@ -14,7 +14,6 @@
 #include "isl/polynomial.h"
 #include "isl/set.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -32,20 +31,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit PwQpolynomial(Ctx ctx, isl_pw_qpolynomial *That) : ctx(ctx), This((void *)That) {}
-  explicit PwQpolynomial(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit PwQpolynomial(Ctx ctx, isl_pw_qpolynomial *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_pw_qpolynomial *GetCopy() const;
+
+  __isl_give isl_pw_qpolynomial *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_pw_qpolynomial *Give();
+  __isl_give isl_pw_qpolynomial *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_pw_qpolynomial *Get() const;
+  __isl_give isl_pw_qpolynomial *Get() const;
 
 
   /// \brief Constructor for isl_pw_qpolynomial_zero
@@ -80,9 +80,6 @@ public:
   static PwQpolynomial readFromStr(const Ctx &ctx, std::string str);
 public:
   virtual ~PwQpolynomial();
-
-  PwQpolynomial asPwQpolynomial() const;
-
   /// \brief Generated from  ::<isl_pw_qpolynomial_add>
   ///
   /// \param [in] pwqp2
@@ -352,6 +349,7 @@ public:
   ///
   /// \returns A new PwQpolynomial
   PwQpolynomial toPolynomial(int sign) const;
+
   PwQpolynomial(const PwQpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwQpolynomial &operator=(const PwQpolynomial &Other);
   PwQpolynomial (PwQpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}

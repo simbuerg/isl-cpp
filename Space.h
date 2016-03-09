@@ -10,7 +10,6 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include "isl/IslFnPtr.h"
 
@@ -22,20 +21,21 @@ protected:
   Ctx ctx;
   void * This;
 public:
-  explicit Space(Ctx ctx, isl_space *That) : ctx(ctx), This((void *)That) {}
-  explicit Space(Ctx ctx, void *That) : ctx(ctx), This(That) {}
+  explicit Space(Ctx ctx, isl_space *That) : ctx(ctx), This(That) {}
+
   const Ctx &Context() const { return ctx; }
-  isl_space *GetCopy() const;
+
+  __isl_give isl_space *GetCopy() const;
   /// \brief Release ownership of the wrapped object.
   ///
   /// You are on your own now buddy.
   /// The wrapper cannot be used anymore after calling Give()
   ///
   /// \returns the wrapped isl object.
-  isl_space *Give();
+  __isl_give isl_space *Give();
   /// \brief unwrap the stored isl object.
   /// \return a the wrapped isl object.
-  isl_space *Get() const;
+  __isl_give isl_space *Get() const;
 
 
   /// \brief Constructor for isl_space_alloc
@@ -75,9 +75,6 @@ public:
   static Space mapFromDomainAndRange(const Space &domain, const Space &range);
 public:
   virtual ~Space();
-
-  Space asSpace() const;
-
   /// \brief Generated from  ::<isl_space_add_dims>
   ///
   /// \param [in] type
@@ -456,6 +453,7 @@ public:
   ///
   /// \returns A new Space
   Space zip() const;
+
   Space(const Space &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Space &operator=(const Space &Other);
   Space (Space && Other) : ctx(Other.Context()), This(Other.This) {}

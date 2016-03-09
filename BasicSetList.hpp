@@ -8,11 +8,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_basic_set_list *BasicSetList::GetCopy() const {
   return isl_basic_set_list_copy((isl_basic_set_list *)This);
 }
@@ -53,7 +53,6 @@ inline isl_basic_set_list *BasicSetList::Give() {
 /// \returns A the wrapped isl object.
 inline isl_basic_set_list *BasicSetList::Get() const {  return (isl_basic_set_list *)This;
 }
-
 
 inline BasicSetList BasicSetList::add(const BasicSet &el) const {
   ctx.lock();

@@ -9,11 +9,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_union_access_info *UnionAccessInfo::GetCopy() const {
   return isl_union_access_info_copy((isl_union_access_info *)This);
 }
@@ -54,7 +54,6 @@ inline isl_union_access_info *UnionAccessInfo::Give() {
 /// \returns A the wrapped isl object.
 inline isl_union_access_info *UnionAccessInfo::Get() const {  return (isl_union_access_info *)This;
 }
-
 
 inline UnionFlow UnionAccessInfo::computeFlow() const {
   ctx.lock();

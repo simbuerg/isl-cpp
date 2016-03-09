@@ -6,11 +6,11 @@
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
 #include <string>
-#include <ostream>
 
 #include <cassert>
 
 namespace isl {
+
 inline isl_ast_print_options *AstPrintOptions::GetCopy() const {
   return isl_ast_print_options_copy((isl_ast_print_options *)This);
 }
@@ -38,7 +38,6 @@ inline isl_ast_print_options *AstPrintOptions::Give() {
 /// \returns A the wrapped isl object.
 inline isl_ast_print_options *AstPrintOptions::Get() const {  return (isl_ast_print_options *)This;
 }
-
 
 } // namespace isl
 #endif //ISL_CXX_AstPrintOptions_IMPL_H
