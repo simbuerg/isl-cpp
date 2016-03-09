@@ -547,13 +547,6 @@ inline Bool Space::tupleIsEqual(DimType type1, const Space &space2, DimType type
   return (Bool)res;
 }
 
-inline int Space::tupleMatch(DimType type1, const Space &space2, DimType type2) const {
-  ctx.lock();
-  int res =  isl_space_tuple_match((*this).Get(), (enum isl_dim_type)type1, (space2).Get(), (enum isl_dim_type)type2);
-  ctx.unlock();
-  return res;
-}
-
 inline Space Space::uncurry() const {
   ctx.lock();
   isl_space * res =  isl_space_uncurry((*this).GetCopy());

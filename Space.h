@@ -433,15 +433,6 @@ public:
   /// \returns A new Bool
   Bool tupleIsEqual(DimType type1, const Space &space2, DimType type2) const;
 
-  /// \brief Generated from  ::<isl_space_tuple_match>
-  ///
-  /// \param [in] type1
-  /// \param [in] space2
-  /// \param [in] type2
-  ///
-  /// \returns A new int
-  int tupleMatch(DimType type1, const Space &space2, DimType type2) const;
-
   /// \brief Generated from  ::<isl_space_uncurry>
   ///
   ///
