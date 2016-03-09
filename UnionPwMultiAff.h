@@ -87,6 +87,12 @@ public:
   /// \returns A new UnionPwMultiAff
   UnionPwMultiAff pullbackUnionPwMultiAff(const UnionPwMultiAff &upma2) const;
 
+  /// \brief Generated from  ::<isl_union_pw_multi_aff_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   /// \brief Generated from  ::<isl_union_pw_multi_aff_union_add>
   ///
   /// \param [in] upma2

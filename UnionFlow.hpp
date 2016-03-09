@@ -100,5 +100,18 @@ inline UnionMap UnionFlow::getMustNoSource() const {
   return UnionMap(ctx, res);
 }
 
+inline std::string UnionFlow::toStr() const {
+  ctx.lock();
+  char * res =  isl_union_flow_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_union_flow_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 } // namespace isl
 #endif //ISL_CXX_UnionFlow_IMPL_H

@@ -188,5 +188,18 @@ inline MultiVal MultiVal::rangeProduct(const MultiVal &multi2) const {
   return MultiVal(ctx, res);
 }
 
+inline std::string MultiVal::toStr() const {
+  ctx.lock();
+  char * res =  isl_multi_val_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_multi_val_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 } // namespace isl
 #endif //ISL_CXX_MultiVal_IMPL_H

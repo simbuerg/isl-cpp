@@ -421,6 +421,12 @@ public:
   /// \returns A new Space
   Space setTupleName(DimType type, std::string s) const;
 
+  /// \brief Generated from  ::<isl_space_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   /// \brief Generated from  ::<isl_space_tuple_is_equal>
   ///
   /// \param [in] type1

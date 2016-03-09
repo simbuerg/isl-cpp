@@ -105,5 +105,18 @@ inline UnionAccessInfo UnionAccessInfo::setScheduleMap(const UnionMap &schedule_
   return UnionAccessInfo(ctx, res);
 }
 
+inline std::string UnionAccessInfo::toStr() const {
+  ctx.lock();
+  char * res =  isl_union_access_info_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_union_access_info_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 } // namespace isl
 #endif //ISL_CXX_UnionAccessInfo_IMPL_H

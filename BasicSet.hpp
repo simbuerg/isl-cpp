@@ -223,6 +223,12 @@ inline BasicSet BasicSet::dropConstraintsNotInvolvingDims(DimType type, unsigned
   return BasicSet(ctx, res);
 }
 
+inline void BasicSet::dump() const {
+  ctx.lock();
+   isl_basic_set_dump((*this).Get());
+  ctx.unlock();
+}
+
 inline BasicSet BasicSet::eliminate(DimType type, unsigned int first, unsigned int n) const {
   ctx.lock();
   isl_basic_set * res =  isl_basic_set_eliminate((*this).GetCopy(), (enum isl_dim_type)type, first, n);

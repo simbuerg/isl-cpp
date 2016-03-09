@@ -87,6 +87,19 @@ inline UnionPwAff UnionPwAff::pullbackUnionPwMultiAff(const UnionPwMultiAff &upm
   return UnionPwAff(ctx, res);
 }
 
+inline std::string UnionPwAff::toStr() const {
+  ctx.lock();
+  char * res =  isl_union_pw_aff_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_union_pw_aff_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 inline UnionPwAff UnionPwAff::unionAdd(const UnionPwAff &upa2) const {
   ctx.lock();
   isl_union_pw_aff * res =  isl_union_pw_aff_union_add((*this).GetCopy(), (upa2).GetCopy());

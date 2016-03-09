@@ -70,6 +70,22 @@ inline isl_point *Point::Give() {
 inline isl_point *Point::Get() const {  return (isl_point *)This;
 }
 
+inline Point Point::addUi(DimType type, int pos, unsigned int val) const {
+  ctx.lock();
+  isl_point * res =  isl_point_add_ui((*this).GetCopy(), (enum isl_dim_type)type, pos, val);
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_point_add_ui returned a NULL pointer.");
+  }
+  return Point(ctx, res);
+}
+
+inline void Point::dump() const {
+  ctx.lock();
+   isl_point_dump((*this).Get());
+  ctx.unlock();
+}
+
 inline Val Point::getCoordinateVal(DimType type, int pos) const {
   ctx.lock();
   isl_val * res =  isl_point_get_coordinate_val((*this).Get(), (enum isl_dim_type)type, pos);
@@ -103,6 +119,16 @@ inline Point Point::setCoordinateVal(DimType type, int pos, const Val &v) const 
   ctx.unlock();
   if (ctx.hasError()) {
     handleError("isl_point_set_coordinate_val returned a NULL pointer.");
+  }
+  return Point(ctx, res);
+}
+
+inline Point Point::subUi(DimType type, int pos, unsigned int val) const {
+  ctx.lock();
+  isl_point * res =  isl_point_sub_ui((*this).GetCopy(), (enum isl_dim_type)type, pos, val);
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_point_sub_ui returned a NULL pointer.");
   }
   return Point(ctx, res);
 }

@@ -64,6 +64,12 @@ public:
   /// \returns A new UnionPwAff
   UnionPwAff pullbackUnionPwMultiAff(const UnionPwMultiAff &upma) const;
 
+  /// \brief Generated from  ::<isl_union_pw_aff_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   /// \brief Generated from  ::<isl_union_pw_aff_union_add>
   ///
   /// \param [in] upa2

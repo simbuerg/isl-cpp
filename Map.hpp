@@ -1381,6 +1381,19 @@ inline Map Map::subtractRange(const Set &dom) const {
   return Map(ctx, res);
 }
 
+inline std::string Map::toStr() const {
+  ctx.lock();
+  char * res =  isl_map_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_map_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 inline Map Map::transitiveClosure(int * exact) const {
   ctx.lock();
   isl_map * res =  isl_map_transitive_closure((*this).GetCopy(), exact);

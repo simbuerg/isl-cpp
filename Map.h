@@ -987,6 +987,12 @@ public:
   /// \returns A new Map
   Map subtractRange(const Set &dom) const;
 
+  /// \brief Generated from  ::<isl_map_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   /// \brief Generated from  ::<isl_map_transitive_closure>
   ///
   /// \param [in] exact

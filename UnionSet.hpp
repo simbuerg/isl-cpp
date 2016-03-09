@@ -237,6 +237,12 @@ inline UnionSet UnionSet::detectEqualities() const {
   return UnionSet(ctx, res);
 }
 
+inline void UnionSet::dump() const {
+  ctx.lock();
+   isl_union_set_dump((*this).Get());
+  ctx.unlock();
+}
+
 inline Set UnionSet::extractSet(const Space &dim) const {
   ctx.lock();
   isl_set * res =  isl_union_set_extract_set((*this).Get(), (dim).GetCopy());
@@ -491,6 +497,19 @@ inline UnionSet UnionSet::subtract(const UnionSet &uset2) const {
     handleError("isl_union_set_subtract returned a NULL pointer.");
   }
   return UnionSet(ctx, res);
+}
+
+inline std::string UnionSet::toStr() const {
+  ctx.lock();
+  char * res =  isl_union_set_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_union_set_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
 }
 
 inline UnionSet UnionSet::union_(const UnionSet &uset2) const {

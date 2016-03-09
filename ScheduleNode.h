@@ -580,6 +580,12 @@ public:
   /// \returns A new ScheduleNode
   ScheduleNode root() const;
 
+  /// \brief Generated from  ::<isl_schedule_node_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   ScheduleNode(const ScheduleNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ScheduleNode &operator=(const ScheduleNode &Other);
   ScheduleNode (ScheduleNode && Other) : ctx(Other.Context()), This(Other.This) {}

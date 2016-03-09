@@ -782,6 +782,19 @@ inline UnionMap UnionMap::subtractRange(const UnionSet &dom) const {
   return UnionMap(ctx, res);
 }
 
+inline std::string UnionMap::toStr() const {
+  ctx.lock();
+  char * res =  isl_union_map_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_union_map_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 inline UnionMap UnionMap::transitiveClosure(int * exact) const {
   ctx.lock();
   isl_union_map * res =  isl_union_map_transitive_closure((*this).GetCopy(), exact);

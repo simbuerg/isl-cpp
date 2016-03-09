@@ -70,6 +70,12 @@ public:
   /// \returns A new UnionMap
   UnionMap getMustNoSource() const;
 
+  /// \brief Generated from  ::<isl_union_flow_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   UnionFlow(const UnionFlow &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionFlow &operator=(const UnionFlow &Other);
   UnionFlow (UnionFlow && Other) : ctx(Other.Context()), This(Other.This) {}

@@ -815,5 +815,18 @@ inline ScheduleNode ScheduleNode::root() const {
   return ScheduleNode(ctx, res);
 }
 
+inline std::string ScheduleNode::toStr() const {
+  ctx.lock();
+  char * res =  isl_schedule_node_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_schedule_node_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 } // namespace isl
 #endif //ISL_CXX_ScheduleNode_IMPL_H

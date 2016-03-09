@@ -512,6 +512,12 @@ public:
   /// \returns A new UnionMap
   UnionMap subtractRange(const UnionSet &dom) const;
 
+  /// \brief Generated from  ::<isl_union_map_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   /// \brief Generated from  ::<isl_union_map_transitive_closure>
   ///
   /// \param [in] exact

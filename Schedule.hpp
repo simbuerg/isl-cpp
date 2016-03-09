@@ -87,5 +87,18 @@ inline Schedule Schedule::pullbackUnionPwMultiAff(const UnionPwMultiAff &upma) c
   return Schedule(ctx, res);
 }
 
+inline std::string Schedule::toStr() const {
+  ctx.lock();
+  char * res =  isl_schedule_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_schedule_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 } // namespace isl
 #endif //ISL_CXX_Schedule_IMPL_H

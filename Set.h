@@ -253,6 +253,12 @@ public:
   /// \returns A new Set
   Set dropConstraintsInvolvingDims(DimType type, unsigned int first, unsigned int n) const;
 
+  /// \brief Generated from  ::<isl_set_dump>
+  ///
+  ///
+  /// \returns A new void
+  void dump() const;
+
   /// \brief Generated from  ::<isl_set_flat_product>
   ///
   /// \param [in] set2
@@ -720,6 +726,12 @@ public:
   ///
   /// \returns A new Set
   Set sum(const Set &set2) const;
+
+  /// \brief Generated from  ::<isl_set_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
 
   /// \brief Generated from  ::<isl_set_union>
   ///

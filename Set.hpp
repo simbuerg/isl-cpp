@@ -348,6 +348,12 @@ inline Set Set::dropConstraintsInvolvingDims(DimType type, unsigned int first, u
   return Set(ctx, res);
 }
 
+inline void Set::dump() const {
+  ctx.lock();
+   isl_set_dump((*this).Get());
+  ctx.unlock();
+}
+
 inline Set Set::flatProduct(const Set &set2) const {
   ctx.lock();
   isl_set * res =  isl_set_flat_product((*this).GetCopy(), (set2).GetCopy());
@@ -976,6 +982,19 @@ inline Set Set::sum(const Set &set2) const {
     handleError("isl_set_sum returned a NULL pointer.");
   }
   return Set(ctx, res);
+}
+
+inline std::string Set::toStr() const {
+  ctx.lock();
+  char * res =  isl_set_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_set_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
 }
 
 inline Set Set::union_(const Set &set2) const {

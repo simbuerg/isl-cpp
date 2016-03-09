@@ -368,6 +368,19 @@ inline MultiUnionPwAff MultiUnionPwAff::rangeProduct(const MultiUnionPwAff &mult
   return MultiUnionPwAff(ctx, res);
 }
 
+inline std::string MultiUnionPwAff::toStr() const {
+  ctx.lock();
+  char * res =  isl_multi_union_pw_aff_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_multi_union_pw_aff_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 inline MultiUnionPwAff MultiUnionPwAff::unionAdd(const MultiUnionPwAff &mupa2) const {
   ctx.lock();
   isl_multi_union_pw_aff * res =  isl_multi_union_pw_aff_union_add((*this).GetCopy(), (mupa2).GetCopy());

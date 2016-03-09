@@ -84,6 +84,12 @@ public:
   /// \returns A new Schedule
   Schedule pullbackUnionPwMultiAff(const UnionPwMultiAff &upma) const;
 
+  /// \brief Generated from  ::<isl_schedule_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   Schedule(const Schedule &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Schedule &operator=(const Schedule &Other) = delete;
   Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.This) {}

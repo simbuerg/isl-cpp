@@ -244,6 +244,12 @@ public:
   /// \returns A new MultiUnionPwAff
   MultiUnionPwAff rangeProduct(const MultiUnionPwAff &multi2) const;
 
+  /// \brief Generated from  ::<isl_multi_union_pw_aff_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   /// \brief Generated from  ::<isl_multi_union_pw_aff_union_add>
   ///
   /// \param [in] mupa2

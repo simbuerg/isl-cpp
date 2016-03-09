@@ -203,6 +203,12 @@ public:
   /// \returns A new MultiAff
   MultiAff rangeProduct(const MultiAff &multi2) const;
 
+  /// \brief Generated from  ::<isl_multi_aff_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   MultiAff(const MultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiAff &operator=(const MultiAff &Other);
   MultiAff (MultiAff && Other) : ctx(Other.Context()), This(Other.This) {}

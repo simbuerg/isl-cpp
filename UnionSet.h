@@ -160,6 +160,12 @@ public:
   /// \returns A new UnionSet
   UnionSet detectEqualities() const;
 
+  /// \brief Generated from  ::<isl_union_set_dump>
+  ///
+  ///
+  /// \returns A new void
+  void dump() const;
+
   /// \brief Generated from  ::<isl_union_set_extract_set>
   ///
   /// \param [in] dim
@@ -344,6 +350,12 @@ public:
   ///
   /// \returns A new UnionSet
   UnionSet subtract(const UnionSet &uset2) const;
+
+  /// \brief Generated from  ::<isl_union_set_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
 
   /// \brief Generated from  ::<isl_union_set_union>
   ///

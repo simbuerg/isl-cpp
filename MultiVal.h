@@ -135,6 +135,12 @@ public:
   /// \returns A new MultiVal
   MultiVal rangeProduct(const MultiVal &multi2) const;
 
+  /// \brief Generated from  ::<isl_multi_val_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   MultiVal(const MultiVal &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiVal &operator=(const MultiVal &Other);
   MultiVal (MultiVal && Other) : ctx(Other.Context()), This(Other.This) {}

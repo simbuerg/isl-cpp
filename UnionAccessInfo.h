@@ -76,6 +76,12 @@ public:
   /// \returns A new UnionAccessInfo
   UnionAccessInfo setScheduleMap(const UnionMap &schedule_map) const;
 
+  /// \brief Generated from  ::<isl_union_access_info_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   UnionAccessInfo(const UnionAccessInfo &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionAccessInfo &operator=(const UnionAccessInfo &Other);
   UnionAccessInfo (UnionAccessInfo && Other) : ctx(Other.Context()), This(Other.This) {}

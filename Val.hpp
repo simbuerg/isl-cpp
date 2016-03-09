@@ -449,6 +449,19 @@ inline Val Val::sub(const Val &v2) const {
   return Val(ctx, res);
 }
 
+inline std::string Val::toStr() const {
+  ctx.lock();
+  char * res =  isl_val_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_val_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 inline Val Val::trunc() const {
   ctx.lock();
   isl_val * res =  isl_val_trunc((*this).GetCopy());

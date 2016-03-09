@@ -50,6 +50,21 @@ public:
   static Point zero(const Space &dim);
 public:
   virtual ~Point();
+  /// \brief Generated from  ::<isl_point_add_ui>
+  ///
+  /// \param [in] type
+  /// \param [in] pos
+  /// \param [in] val
+  ///
+  /// \returns A new Point
+  Point addUi(DimType type, int pos, unsigned int val) const;
+
+  /// \brief Generated from  ::<isl_point_dump>
+  ///
+  ///
+  /// \returns A new void
+  void dump() const;
+
   /// \brief Generated from  ::<isl_point_get_coordinate_val>
   ///
   /// \param [in] type
@@ -78,6 +93,15 @@ public:
   ///
   /// \returns A new Point
   Point setCoordinateVal(DimType type, int pos, const Val &v) const;
+
+  /// \brief Generated from  ::<isl_point_sub_ui>
+  ///
+  /// \param [in] type
+  /// \param [in] pos
+  /// \param [in] val
+  ///
+  /// \returns A new Point
+  Point subUi(DimType type, int pos, unsigned int val) const;
 
   Point(const Point &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Point &operator=(const Point &Other);

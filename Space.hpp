@@ -539,6 +539,19 @@ inline Space Space::setTupleName(DimType type, std::string s) const {
   return Space(ctx, res);
 }
 
+inline std::string Space::toStr() const {
+  ctx.lock();
+  char * res =  isl_space_to_str((*this).Get());
+  ctx.unlock();
+  std::string res_;
+  if (ctx.hasError()) {
+    handleError("isl_space_to_str returned a NULL pointer.");
+  }
+  res_ = res;
+  free((void *)res);
+  return res_;
+}
+
 inline Bool Space::tupleIsEqual(DimType type1, const Space &space2, DimType type2) const {
   ctx.lock();
   isl_bool res =  isl_space_tuple_is_equal((*this).Get(), (enum isl_dim_type)type1, (space2).Get(), (enum isl_dim_type)type2);

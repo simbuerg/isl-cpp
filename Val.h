@@ -323,6 +323,12 @@ public:
   /// \returns A new Val
   Val sub(const Val &v2) const;
 
+  /// \brief Generated from  ::<isl_val_to_str>
+  ///
+  ///
+  /// \returns A new std::string
+  std::string toStr() const;
+
   /// \brief Generated from  ::<isl_val_trunc>
   ///
   ///

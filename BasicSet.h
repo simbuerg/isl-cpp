@@ -162,6 +162,12 @@ public:
   /// \returns A new BasicSet
   BasicSet dropConstraintsNotInvolvingDims(DimType type, unsigned int first, unsigned int n) const;
 
+  /// \brief Generated from  ::<isl_basic_set_dump>
+  ///
+  ///
+  /// \returns A new void
+  void dump() const;
+
   /// \brief Generated from  ::<isl_basic_set_eliminate>
   ///
   /// \param [in] type
