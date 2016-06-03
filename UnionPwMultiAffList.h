@@ -51,7 +51,7 @@ public:
 
   UnionPwMultiAffList(const UnionPwMultiAffList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwMultiAffList &operator=(const UnionPwMultiAffList &Other);
-  UnionPwMultiAffList (UnionPwMultiAffList && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionPwMultiAffList (UnionPwMultiAffList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionPwMultiAffList &operator=(UnionPwMultiAffList && Other) {
     isl_union_pw_multi_aff_list *New = Other.Give();
     isl_union_pw_multi_aff_list_free((isl_union_pw_multi_aff_list *)This);

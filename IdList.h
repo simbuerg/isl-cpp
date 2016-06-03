@@ -51,7 +51,7 @@ public:
 
   IdList(const IdList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   IdList &operator=(const IdList &Other);
-  IdList (IdList && Other) : ctx(Other.Context()), This(Other.This) {}
+  IdList (IdList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   IdList &operator=(IdList && Other) {
     isl_id_list *New = Other.Give();
     isl_id_list_free((isl_id_list *)This);

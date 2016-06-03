@@ -105,7 +105,7 @@ public:
 
   Point(const Point &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Point &operator=(const Point &Other);
-  Point (Point && Other) : ctx(Other.Context()), This(Other.This) {}
+  Point (Point && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Point &operator=(Point && Other) {
     isl_point *New = Other.Give();
     isl_point_free((isl_point *)This);

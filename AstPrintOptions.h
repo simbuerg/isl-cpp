@@ -35,7 +35,7 @@ public:
   virtual ~AstPrintOptions();
   AstPrintOptions(const AstPrintOptions &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstPrintOptions &operator=(const AstPrintOptions &Other);
-  AstPrintOptions (AstPrintOptions && Other) : ctx(Other.Context()), This(Other.This) {}
+  AstPrintOptions (AstPrintOptions && Other) : ctx(Other.Context()), This(Other.Give()) {}
   AstPrintOptions &operator=(AstPrintOptions && Other) {
     isl_ast_print_options *New = Other.Give();
     isl_ast_print_options_free((isl_ast_print_options *)This);

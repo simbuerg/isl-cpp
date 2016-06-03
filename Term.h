@@ -59,7 +59,7 @@ public:
 
   Term(const Term &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Term &operator=(const Term &Other);
-  Term (Term && Other) : ctx(Other.Context()), This(Other.This) {}
+  Term (Term && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Term &operator=(Term && Other) {
     isl_term *New = Other.Give();
     isl_term_free((isl_term *)This);

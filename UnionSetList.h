@@ -51,7 +51,7 @@ public:
 
   UnionSetList(const UnionSetList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionSetList &operator=(const UnionSetList &Other);
-  UnionSetList (UnionSetList && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionSetList (UnionSetList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionSetList &operator=(UnionSetList && Other) {
     isl_union_set_list *New = Other.Give();
     isl_union_set_list_free((isl_union_set_list *)This);

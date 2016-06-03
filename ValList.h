@@ -51,7 +51,7 @@ public:
 
   ValList(const ValList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ValList &operator=(const ValList &Other);
-  ValList (ValList && Other) : ctx(Other.Context()), This(Other.This) {}
+  ValList (ValList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   ValList &operator=(ValList && Other) {
     isl_val_list *New = Other.Give();
     isl_val_list_free((isl_val_list *)This);

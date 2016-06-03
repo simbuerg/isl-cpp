@@ -35,7 +35,7 @@ public:
   virtual ~AstExpr();
   AstExpr(const AstExpr &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstExpr &operator=(const AstExpr &Other);
-  AstExpr (AstExpr && Other) : ctx(Other.Context()), This(Other.This) {}
+  AstExpr (AstExpr && Other) : ctx(Other.Context()), This(Other.Give()) {}
   AstExpr &operator=(AstExpr && Other) {
     isl_ast_expr *New = Other.Give();
     isl_ast_expr_free((isl_ast_expr *)This);

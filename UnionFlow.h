@@ -78,7 +78,7 @@ public:
 
   UnionFlow(const UnionFlow &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionFlow &operator=(const UnionFlow &Other);
-  UnionFlow (UnionFlow && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionFlow (UnionFlow && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionFlow &operator=(UnionFlow && Other) {
     isl_union_flow *New = Other.Give();
     isl_union_flow_free((isl_union_flow *)This);

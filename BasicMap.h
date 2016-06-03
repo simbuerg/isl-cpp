@@ -697,7 +697,7 @@ public:
 
   BasicMap(const BasicMap &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicMap &operator=(const BasicMap &Other);
-  BasicMap (BasicMap && Other) : ctx(Other.Context()), This(Other.This) {}
+  BasicMap (BasicMap && Other) : ctx(Other.Context()), This(Other.Give()) {}
   BasicMap &operator=(BasicMap && Other) {
     isl_basic_map *New = Other.Give();
     isl_basic_map_free((isl_basic_map *)This);

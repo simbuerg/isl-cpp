@@ -339,7 +339,7 @@ public:
 
   Qpolynomial(const Qpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Qpolynomial &operator=(const Qpolynomial &Other);
-  Qpolynomial (Qpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}
+  Qpolynomial (Qpolynomial && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Qpolynomial &operator=(Qpolynomial && Other) {
     isl_qpolynomial *New = Other.Give();
     isl_qpolynomial_free((isl_qpolynomial *)This);

@@ -35,7 +35,7 @@ public:
   virtual ~AstNode();
   AstNode(const AstNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstNode &operator=(const AstNode &Other);
-  AstNode (AstNode && Other) : ctx(Other.Context()), This(Other.This) {}
+  AstNode (AstNode && Other) : ctx(Other.Context()), This(Other.Give()) {}
   AstNode &operator=(AstNode && Other) {
     isl_ast_node *New = Other.Give();
     isl_ast_node_free((isl_ast_node *)This);

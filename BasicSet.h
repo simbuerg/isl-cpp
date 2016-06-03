@@ -438,7 +438,7 @@ public:
 
   BasicSet(const BasicSet &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicSet &operator=(const BasicSet &Other);
-  BasicSet (BasicSet && Other) : ctx(Other.Context()), This(Other.This) {}
+  BasicSet (BasicSet && Other) : ctx(Other.Context()), This(Other.Give()) {}
   BasicSet &operator=(BasicSet && Other) {
     isl_basic_set *New = Other.Give();
     isl_basic_set_free((isl_basic_set *)This);

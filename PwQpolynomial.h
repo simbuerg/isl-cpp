@@ -352,7 +352,7 @@ public:
 
   PwQpolynomial(const PwQpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwQpolynomial &operator=(const PwQpolynomial &Other);
-  PwQpolynomial (PwQpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}
+  PwQpolynomial (PwQpolynomial && Other) : ctx(Other.Context()), This(Other.Give()) {}
   PwQpolynomial &operator=(PwQpolynomial && Other) {
     isl_pw_qpolynomial *New = Other.Give();
     isl_pw_qpolynomial_free((isl_pw_qpolynomial *)This);

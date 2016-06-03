@@ -184,7 +184,7 @@ public:
 
   Constraint(const Constraint &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Constraint &operator=(const Constraint &Other);
-  Constraint (Constraint && Other) : ctx(Other.Context()), This(Other.This) {}
+  Constraint (Constraint && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Constraint &operator=(Constraint && Other) {
     isl_constraint *New = Other.Give();
     isl_constraint_free((isl_constraint *)This);

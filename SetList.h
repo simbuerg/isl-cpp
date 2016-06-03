@@ -51,7 +51,7 @@ public:
 
   SetList(const SetList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   SetList &operator=(const SetList &Other);
-  SetList (SetList && Other) : ctx(Other.Context()), This(Other.This) {}
+  SetList (SetList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   SetList &operator=(SetList && Other) {
     isl_set_list *New = Other.Give();
     isl_set_list_free((isl_set_list *)This);

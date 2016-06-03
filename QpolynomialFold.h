@@ -148,7 +148,7 @@ public:
 
   QpolynomialFold(const QpolynomialFold &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   QpolynomialFold &operator=(const QpolynomialFold &Other);
-  QpolynomialFold (QpolynomialFold && Other) : ctx(Other.Context()), This(Other.This) {}
+  QpolynomialFold (QpolynomialFold && Other) : ctx(Other.Context()), This(Other.Give()) {}
   QpolynomialFold &operator=(QpolynomialFold && Other) {
     isl_qpolynomial_fold *New = Other.Give();
     isl_qpolynomial_fold_free((isl_qpolynomial_fold *)This);

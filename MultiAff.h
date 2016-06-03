@@ -211,7 +211,7 @@ public:
 
   MultiAff(const MultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiAff &operator=(const MultiAff &Other);
-  MultiAff (MultiAff && Other) : ctx(Other.Context()), This(Other.This) {}
+  MultiAff (MultiAff && Other) : ctx(Other.Context()), This(Other.Give()) {}
   MultiAff &operator=(MultiAff && Other) {
     isl_multi_aff *New = Other.Give();
     isl_multi_aff_free((isl_multi_aff *)This);

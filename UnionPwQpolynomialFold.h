@@ -176,7 +176,7 @@ public:
 
   UnionPwQpolynomialFold(const UnionPwQpolynomialFold &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwQpolynomialFold &operator=(const UnionPwQpolynomialFold &Other);
-  UnionPwQpolynomialFold (UnionPwQpolynomialFold && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionPwQpolynomialFold (UnionPwQpolynomialFold && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionPwQpolynomialFold &operator=(UnionPwQpolynomialFold && Other) {
     isl_union_pw_qpolynomial_fold *New = Other.Give();
     isl_union_pw_qpolynomial_fold_free((isl_union_pw_qpolynomial_fold *)This);

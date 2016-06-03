@@ -143,7 +143,7 @@ public:
 
   MultiVal(const MultiVal &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiVal &operator=(const MultiVal &Other);
-  MultiVal (MultiVal && Other) : ctx(Other.Context()), This(Other.This) {}
+  MultiVal (MultiVal && Other) : ctx(Other.Context()), This(Other.Give()) {}
   MultiVal &operator=(MultiVal && Other) {
     isl_multi_val *New = Other.Give();
     isl_multi_val_free((isl_multi_val *)This);

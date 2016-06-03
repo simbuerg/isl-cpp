@@ -52,6 +52,12 @@ public:
   __isl_give isl_set *Get() const;
 
 
+  /// \brief Constructor for isl_set_from_union_set
+  ///
+  /// \param uset
+  static Set fromUnionSet(const UnionSet &uset);
+
+
   /// \brief Constructor for isl_set_from_pw_aff
   ///
   /// \param pwaff
@@ -82,12 +88,6 @@ public:
   /// \param pnt1
   /// \param pnt2
   static Set boxFromPoints(const Point &pnt1, const Point &pnt2);
-
-
-  /// \brief Constructor for isl_set_from_union_set
-  ///
-  /// \param uset
-  static Set fromUnionSet(const UnionSet &uset);
 public:
   virtual ~Set();
 
@@ -754,7 +754,7 @@ public:
 
   Set(const Set &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Set &operator=(const Set &Other);
-  Set (Set && Other) : ctx(Other.Context()), This(Other.This) {}
+  Set (Set && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Set &operator=(Set && Other) {
     isl_set *New = Other.Give();
     isl_set_free((isl_set *)This);

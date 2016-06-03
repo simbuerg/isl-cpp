@@ -51,7 +51,7 @@ public:
 
   AffList(const AffList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AffList &operator=(const AffList &Other);
-  AffList (AffList && Other) : ctx(Other.Context()), This(Other.This) {}
+  AffList (AffList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   AffList &operator=(AffList && Other) {
     isl_aff_list *New = Other.Give();
     isl_aff_list_free((isl_aff_list *)This);

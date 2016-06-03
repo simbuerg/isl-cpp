@@ -443,7 +443,7 @@ public:
 
   Aff(const Aff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Aff &operator=(const Aff &Other);
-  Aff (Aff && Other) : ctx(Other.Context()), This(Other.This) {}
+  Aff (Aff && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Aff &operator=(Aff && Other) {
     isl_aff *New = Other.Give();
     isl_aff_free((isl_aff *)This);

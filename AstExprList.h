@@ -51,7 +51,7 @@ public:
 
   AstExprList(const AstExprList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstExprList &operator=(const AstExprList &Other);
-  AstExprList (AstExprList && Other) : ctx(Other.Context()), This(Other.This) {}
+  AstExprList (AstExprList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   AstExprList &operator=(AstExprList && Other) {
     isl_ast_expr_list *New = Other.Give();
     isl_ast_expr_list_free((isl_ast_expr_list *)This);

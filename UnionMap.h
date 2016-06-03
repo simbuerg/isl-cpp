@@ -552,7 +552,7 @@ public:
 
   UnionMap(const UnionMap &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionMap &operator=(const UnionMap &Other);
-  UnionMap (UnionMap && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionMap (UnionMap && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionMap &operator=(UnionMap && Other) {
     isl_union_map *New = Other.Give();
     isl_union_map_free((isl_union_map *)This);

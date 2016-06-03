@@ -51,7 +51,7 @@ public:
 
   AstNodeList(const AstNodeList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   AstNodeList &operator=(const AstNodeList &Other);
-  AstNodeList (AstNodeList && Other) : ctx(Other.Context()), This(Other.This) {}
+  AstNodeList (AstNodeList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   AstNodeList &operator=(AstNodeList && Other) {
     isl_ast_node_list *New = Other.Give();
     isl_ast_node_list_free((isl_ast_node_list *)This);

@@ -462,7 +462,7 @@ public:
 
   Space(const Space &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Space &operator=(const Space &Other);
-  Space (Space && Other) : ctx(Other.Context()), This(Other.This) {}
+  Space (Space && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Space &operator=(Space && Other) {
     isl_space *New = Other.Give();
     isl_space_free((isl_space *)This);

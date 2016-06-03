@@ -70,7 +70,7 @@ public:
 
   Band(const Band &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Band &operator=(const Band &Other);
-  Band (Band && Other) : ctx(Other.Context()), This(Other.This) {}
+  Band (Band && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Band &operator=(Band && Other) {
     isl_band *New = Other.Give();
     isl_band_free((isl_band *)This);

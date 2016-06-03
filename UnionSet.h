@@ -372,7 +372,7 @@ public:
 
   UnionSet(const UnionSet &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionSet &operator=(const UnionSet &Other);
-  UnionSet (UnionSet && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionSet (UnionSet && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionSet &operator=(UnionSet && Other) {
     isl_union_set *New = Other.Give();
     isl_union_set_free((isl_union_set *)This);

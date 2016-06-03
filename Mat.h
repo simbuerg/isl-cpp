@@ -195,7 +195,7 @@ public:
 
   Mat(const Mat &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Mat &operator=(const Mat &Other);
-  Mat (Mat && Other) : ctx(Other.Context()), This(Other.This) {}
+  Mat (Mat && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Mat &operator=(Mat && Other) {
     isl_mat *New = Other.Give();
     isl_mat_free((isl_mat *)This);

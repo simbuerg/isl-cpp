@@ -51,7 +51,7 @@ public:
 
   BasicMapList(const BasicMapList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicMapList &operator=(const BasicMapList &Other);
-  BasicMapList (BasicMapList && Other) : ctx(Other.Context()), This(Other.This) {}
+  BasicMapList (BasicMapList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   BasicMapList &operator=(BasicMapList && Other) {
     isl_basic_map_list *New = Other.Give();
     isl_basic_map_list_free((isl_basic_map_list *)This);

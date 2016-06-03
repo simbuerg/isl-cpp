@@ -323,7 +323,7 @@ public:
 
   PwMultiAff(const PwMultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwMultiAff &operator=(const PwMultiAff &Other);
-  PwMultiAff (PwMultiAff && Other) : ctx(Other.Context()), This(Other.This) {}
+  PwMultiAff (PwMultiAff && Other) : ctx(Other.Context()), This(Other.Give()) {}
   PwMultiAff &operator=(PwMultiAff && Other) {
     isl_pw_multi_aff *New = Other.Give();
     isl_pw_multi_aff_free((isl_pw_multi_aff *)This);

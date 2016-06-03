@@ -267,7 +267,7 @@ public:
 
   PwQpolynomialFold(const PwQpolynomialFold &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwQpolynomialFold &operator=(const PwQpolynomialFold &Other);
-  PwQpolynomialFold (PwQpolynomialFold && Other) : ctx(Other.Context()), This(Other.This) {}
+  PwQpolynomialFold (PwQpolynomialFold && Other) : ctx(Other.Context()), This(Other.Give()) {}
   PwQpolynomialFold &operator=(PwQpolynomialFold && Other) {
     isl_pw_qpolynomial_fold *New = Other.Give();
     isl_pw_qpolynomial_fold_free((isl_pw_qpolynomial_fold *)This);

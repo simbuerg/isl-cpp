@@ -199,7 +199,7 @@ public:
 
   UnionPwQpolynomial(const UnionPwQpolynomial &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwQpolynomial &operator=(const UnionPwQpolynomial &Other);
-  UnionPwQpolynomial (UnionPwQpolynomial && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionPwQpolynomial (UnionPwQpolynomial && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionPwQpolynomial &operator=(UnionPwQpolynomial && Other) {
     isl_union_pw_qpolynomial *New = Other.Give();
     isl_union_pw_qpolynomial_free((isl_union_pw_qpolynomial *)This);

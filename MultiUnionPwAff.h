@@ -259,7 +259,7 @@ public:
 
   MultiUnionPwAff(const MultiUnionPwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   MultiUnionPwAff &operator=(const MultiUnionPwAff &Other);
-  MultiUnionPwAff (MultiUnionPwAff && Other) : ctx(Other.Context()), This(Other.This) {}
+  MultiUnionPwAff (MultiUnionPwAff && Other) : ctx(Other.Context()), This(Other.Give()) {}
   MultiUnionPwAff &operator=(MultiUnionPwAff && Other) {
     isl_multi_union_pw_aff *New = Other.Give();
     isl_multi_union_pw_aff_free((isl_multi_union_pw_aff *)This);

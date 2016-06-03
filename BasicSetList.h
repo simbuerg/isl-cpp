@@ -51,7 +51,7 @@ public:
 
   BasicSetList(const BasicSetList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BasicSetList &operator=(const BasicSetList &Other);
-  BasicSetList (BasicSetList && Other) : ctx(Other.Context()), This(Other.This) {}
+  BasicSetList (BasicSetList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   BasicSetList &operator=(BasicSetList && Other) {
     isl_basic_set_list *New = Other.Give();
     isl_basic_set_list_free((isl_basic_set_list *)This);

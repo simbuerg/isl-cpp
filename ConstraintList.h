@@ -51,7 +51,7 @@ public:
 
   ConstraintList(const ConstraintList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ConstraintList &operator=(const ConstraintList &Other);
-  ConstraintList (ConstraintList && Other) : ctx(Other.Context()), This(Other.This) {}
+  ConstraintList (ConstraintList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   ConstraintList &operator=(ConstraintList && Other) {
     isl_constraint_list *New = Other.Give();
     isl_constraint_list_free((isl_constraint_list *)This);

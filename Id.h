@@ -51,7 +51,7 @@ public:
 
   Id(const Id &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Id &operator=(const Id &Other);
-  Id (Id && Other) : ctx(Other.Context()), This(Other.This) {}
+  Id (Id && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Id &operator=(Id && Other) {
     isl_id *New = Other.Give();
     isl_id_free((isl_id *)This);

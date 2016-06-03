@@ -51,7 +51,7 @@ public:
 
   UnionMapList(const UnionMapList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionMapList &operator=(const UnionMapList &Other);
-  UnionMapList (UnionMapList && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionMapList (UnionMapList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionMapList &operator=(UnionMapList && Other) {
     isl_union_map_list *New = Other.Give();
     isl_union_map_list_free((isl_union_map_list *)This);

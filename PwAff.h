@@ -502,7 +502,7 @@ public:
 
   PwAff(const PwAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwAff &operator=(const PwAff &Other);
-  PwAff (PwAff && Other) : ctx(Other.Context()), This(Other.This) {}
+  PwAff (PwAff && Other) : ctx(Other.Context()), This(Other.Give()) {}
   PwAff &operator=(PwAff && Other) {
     isl_pw_aff *New = Other.Give();
     isl_pw_aff_free((isl_pw_aff *)This);

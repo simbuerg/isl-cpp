@@ -84,7 +84,7 @@ public:
 
   UnionAccessInfo(const UnionAccessInfo &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionAccessInfo &operator=(const UnionAccessInfo &Other);
-  UnionAccessInfo (UnionAccessInfo && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionAccessInfo (UnionAccessInfo && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionAccessInfo &operator=(UnionAccessInfo && Other) {
     isl_union_access_info *New = Other.Give();
     isl_union_access_info_free((isl_union_access_info *)This);

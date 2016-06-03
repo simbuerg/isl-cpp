@@ -1033,7 +1033,7 @@ public:
 
   Map(const Map &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Map &operator=(const Map &Other);
-  Map (Map && Other) : ctx(Other.Context()), This(Other.This) {}
+  Map (Map && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Map &operator=(Map && Other) {
     isl_map *New = Other.Give();
     isl_map_free((isl_map *)This);

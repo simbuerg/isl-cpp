@@ -102,7 +102,7 @@ public:
 
   UnionPwMultiAff(const UnionPwMultiAff &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   UnionPwMultiAff &operator=(const UnionPwMultiAff &Other);
-  UnionPwMultiAff (UnionPwMultiAff && Other) : ctx(Other.Context()), This(Other.This) {}
+  UnionPwMultiAff (UnionPwMultiAff && Other) : ctx(Other.Context()), This(Other.Give()) {}
   UnionPwMultiAff &operator=(UnionPwMultiAff && Other) {
     isl_union_pw_multi_aff *New = Other.Give();
     isl_union_pw_multi_aff_free((isl_union_pw_multi_aff *)This);

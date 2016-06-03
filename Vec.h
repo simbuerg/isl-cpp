@@ -168,7 +168,7 @@ public:
 
   Vec(const Vec &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Vec &operator=(const Vec &Other);
-  Vec (Vec && Other) : ctx(Other.Context()), This(Other.This) {}
+  Vec (Vec && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Vec &operator=(Vec && Other) {
     isl_vec *New = Other.Give();
     isl_vec_free((isl_vec *)This);

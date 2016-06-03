@@ -39,6 +39,19 @@ inline Set &Set::operator=(const Set &Other) {
   This = New;
   return *this;
 }
+inline Set Set::fromUnionSet(const UnionSet &uset) {
+  const Ctx &_ctx = uset.Context();
+  _ctx.lock();
+  isl_set *That = isl_set_from_union_set((uset).GetCopy());
+
+  _ctx.unlock();
+  if (_ctx.hasError()) {
+    handleError("isl_set_from_union_set returned a NULL pointer.");
+  }
+
+  return Set(_ctx, That);
+}
+
 inline Set Set::fromPwAff(const PwAff &pwaff) {
   const Ctx &_ctx = pwaff.Context();
   _ctx.lock();
@@ -99,19 +112,6 @@ inline Set Set::boxFromPoints(const Point &pnt1, const Point &pnt2) {
   _ctx.unlock();
   if (_ctx.hasError()) {
     handleError("isl_set_box_from_points returned a NULL pointer.");
-  }
-
-  return Set(_ctx, That);
-}
-
-inline Set Set::fromUnionSet(const UnionSet &uset) {
-  const Ctx &_ctx = uset.Context();
-  _ctx.lock();
-  isl_set *That = isl_set_from_union_set((uset).GetCopy());
-
-  _ctx.unlock();
-  if (_ctx.hasError()) {
-    handleError("isl_set_from_union_set returned a NULL pointer.");
   }
 
   return Set(_ctx, That);

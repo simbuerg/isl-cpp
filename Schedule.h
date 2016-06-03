@@ -92,7 +92,7 @@ public:
 
   Schedule(const Schedule &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Schedule &operator=(const Schedule &Other) = delete;
-  Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.This) {}
+  Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Schedule &operator=(Schedule && Other) {
     std::swap(This, Other.This);
     return *this;

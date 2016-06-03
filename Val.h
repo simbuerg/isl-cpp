@@ -337,7 +337,7 @@ public:
 
   Val(const Val &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Val &operator=(const Val &Other);
-  Val (Val && Other) : ctx(Other.Context()), This(Other.This) {}
+  Val (Val && Other) : ctx(Other.Context()), This(Other.Give()) {}
   Val &operator=(Val && Other) {
     isl_val *New = Other.Give();
     isl_val_free((isl_val *)This);

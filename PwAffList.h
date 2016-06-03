@@ -51,7 +51,7 @@ public:
 
   PwAffList(const PwAffList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   PwAffList &operator=(const PwAffList &Other);
-  PwAffList (PwAffList && Other) : ctx(Other.Context()), This(Other.This) {}
+  PwAffList (PwAffList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   PwAffList &operator=(PwAffList && Other) {
     isl_pw_aff_list *New = Other.Give();
     isl_pw_aff_list_free((isl_pw_aff_list *)This);

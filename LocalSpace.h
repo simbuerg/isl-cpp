@@ -196,7 +196,7 @@ public:
 
   LocalSpace(const LocalSpace &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   LocalSpace &operator=(const LocalSpace &Other);
-  LocalSpace (LocalSpace && Other) : ctx(Other.Context()), This(Other.This) {}
+  LocalSpace (LocalSpace && Other) : ctx(Other.Context()), This(Other.Give()) {}
   LocalSpace &operator=(LocalSpace && Other) {
     isl_local_space *New = Other.Give();
     isl_local_space_free((isl_local_space *)This);

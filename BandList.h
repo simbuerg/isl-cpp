@@ -60,7 +60,7 @@ public:
 
   BandList(const BandList &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   BandList &operator=(const BandList &Other);
-  BandList (BandList && Other) : ctx(Other.Context()), This(Other.This) {}
+  BandList (BandList && Other) : ctx(Other.Context()), This(Other.Give()) {}
   BandList &operator=(BandList && Other) {
     isl_band_list *New = Other.Give();
     isl_band_list_free((isl_band_list *)This);

@@ -588,7 +588,7 @@ public:
 
   ScheduleNode(const ScheduleNode &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   ScheduleNode &operator=(const ScheduleNode &Other);
-  ScheduleNode (ScheduleNode && Other) : ctx(Other.Context()), This(Other.This) {}
+  ScheduleNode (ScheduleNode && Other) : ctx(Other.Context()), This(Other.Give()) {}
   ScheduleNode &operator=(ScheduleNode && Other) {
     isl_schedule_node *New = Other.Give();
     isl_schedule_node_free((isl_schedule_node *)This);
