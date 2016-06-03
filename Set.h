@@ -36,6 +36,7 @@ protected:
   void * This;
 public:
   explicit Set(Ctx ctx, isl_set *That) : ctx(ctx), This(That) {}
+  Set() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

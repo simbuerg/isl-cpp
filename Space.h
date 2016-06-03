@@ -22,6 +22,7 @@ protected:
   void * This;
 public:
   explicit Space(Ctx ctx, isl_space *That) : ctx(ctx), This(That) {}
+  Space() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

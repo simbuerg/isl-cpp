@@ -30,6 +30,7 @@ protected:
   void * This;
 public:
   explicit BasicSet(Ctx ctx, isl_basic_set *That) : ctx(ctx), This(That) {}
+  BasicSet() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

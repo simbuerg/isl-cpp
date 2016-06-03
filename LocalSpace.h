@@ -24,6 +24,7 @@ protected:
   void * This;
 public:
   explicit LocalSpace(Ctx ctx, isl_local_space *That) : ctx(ctx), This(That) {}
+  LocalSpace() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

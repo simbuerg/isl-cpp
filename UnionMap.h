@@ -33,6 +33,7 @@ protected:
   void * This;
 public:
   explicit UnionMap(Ctx ctx, isl_union_map *That) : ctx(ctx), This(That) {}
+  UnionMap() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

@@ -31,6 +31,7 @@ protected:
   void * This;
 public:
   explicit ScheduleNode(Ctx ctx, isl_schedule_node *That) : ctx(ctx), This(That) {}
+  ScheduleNode() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

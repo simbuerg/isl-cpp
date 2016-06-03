@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit ValList(Ctx ctx, isl_val_list *That) : ctx(ctx), This(That) {}
+  ValList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

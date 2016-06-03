@@ -29,6 +29,7 @@ protected:
   void * This;
 public:
   explicit UnionPwQpolynomialFold(Ctx ctx, isl_union_pw_qpolynomial_fold *That) : ctx(ctx), This(That) {}
+  UnionPwQpolynomialFold() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

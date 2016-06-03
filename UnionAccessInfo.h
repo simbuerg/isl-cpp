@@ -20,6 +20,7 @@ protected:
   void * This;
 public:
   explicit UnionAccessInfo(Ctx ctx, isl_union_access_info *That) : ctx(ctx), This(That) {}
+  UnionAccessInfo() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

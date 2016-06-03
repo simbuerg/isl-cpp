@@ -21,6 +21,7 @@ protected:
   void * This;
 public:
   explicit Vec(Ctx ctx, isl_vec *That) : ctx(ctx), This(That) {}
+  Vec() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

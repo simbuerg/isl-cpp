@@ -30,6 +30,7 @@ protected:
   void * This;
 public:
   explicit UnionPwQpolynomial(Ctx ctx, isl_union_pw_qpolynomial *That) : ctx(ctx), This(That) {}
+  UnionPwQpolynomial() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

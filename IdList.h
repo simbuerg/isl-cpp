@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit IdList(Ctx ctx, isl_id_list *That) : ctx(ctx), This(That) {}
+  IdList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

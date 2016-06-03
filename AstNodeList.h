@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit AstNodeList(Ctx ctx, isl_ast_node_list *That) : ctx(ctx), This(That) {}
+  AstNodeList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

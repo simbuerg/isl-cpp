@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit AffList(Ctx ctx, isl_aff_list *That) : ctx(ctx), This(That) {}
+  AffList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

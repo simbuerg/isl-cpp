@@ -34,6 +34,7 @@ protected:
   std::shared_ptr<ptr> This;
 public:
   explicit Schedule(Ctx ctx, isl_schedule *That) : ctx(ctx), This(std::make_shared<ptr>(That)) {}
+  Schedule() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 
@@ -92,7 +93,7 @@ public:
 
   Schedule(const Schedule &Other) : ctx(Other.Context()), This(Other.GetCopy()) {}
   Schedule &operator=(const Schedule &Other) = delete;
-  Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.Give()) {}
+  Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.This) {}
   Schedule &operator=(Schedule && Other) {
     std::swap(This, Other.This);
     return *this;

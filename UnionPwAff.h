@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit UnionPwAff(Ctx ctx, isl_union_pw_aff *That) : ctx(ctx), This(That) {}
+  UnionPwAff() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit AstExprList(Ctx ctx, isl_ast_expr_list *That) : ctx(ctx), This(That) {}
+  AstExprList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

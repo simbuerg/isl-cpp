@@ -28,6 +28,7 @@ protected:
   void * This;
 public:
   explicit Aff(Ctx ctx, isl_aff *That) : ctx(ctx), This(That) {}
+  Aff() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

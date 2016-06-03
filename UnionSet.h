@@ -30,6 +30,7 @@ protected:
   void * This;
 public:
   explicit UnionSet(Ctx ctx, isl_union_set *That) : ctx(ctx), This(That) {}
+  UnionSet() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

@@ -31,6 +31,7 @@ protected:
   void * This;
 public:
   explicit Qpolynomial(Ctx ctx, isl_qpolynomial *That) : ctx(ctx), This(That) {}
+  Qpolynomial() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

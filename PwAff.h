@@ -33,6 +33,7 @@ protected:
   void * This;
 public:
   explicit PwAff(Ctx ctx, isl_pw_aff *That) : ctx(ctx), This(That) {}
+  PwAff() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

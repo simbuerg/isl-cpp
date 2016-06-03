@@ -18,6 +18,7 @@ protected:
   void * This;
 public:
   explicit UnionFlow(Ctx ctx, isl_union_flow *That) : ctx(ctx), This(That) {}
+  UnionFlow() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

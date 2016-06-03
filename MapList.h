@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit MapList(Ctx ctx, isl_map_list *That) : ctx(ctx), This(That) {}
+  MapList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

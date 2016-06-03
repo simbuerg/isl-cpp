@@ -30,6 +30,7 @@ protected:
   void * This;
 public:
   explicit PwQpolynomialFold(Ctx ctx, isl_pw_qpolynomial_fold *That) : ctx(ctx), This(That) {}
+  PwQpolynomialFold() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

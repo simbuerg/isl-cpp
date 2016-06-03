@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit UnionSetList(Ctx ctx, isl_union_set_list *That) : ctx(ctx), This(That) {}
+  UnionSetList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

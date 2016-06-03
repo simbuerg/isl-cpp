@@ -27,6 +27,7 @@ protected:
   void * This;
 public:
   explicit QpolynomialFold(Ctx ctx, isl_qpolynomial_fold *That) : ctx(ctx), This(That) {}
+  QpolynomialFold() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

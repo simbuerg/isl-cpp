@@ -23,6 +23,7 @@ protected:
   void * This;
 public:
   explicit MultiVal(Ctx ctx, isl_multi_val *That) : ctx(ctx), This(That) {}
+  MultiVal() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

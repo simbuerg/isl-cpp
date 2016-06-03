@@ -22,6 +22,7 @@ protected:
   void * This;
 public:
   explicit Point(Ctx ctx, isl_point *That) : ctx(ctx), This(That) {}
+  Point() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

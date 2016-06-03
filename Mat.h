@@ -20,6 +20,7 @@ protected:
   void * This;
 public:
   explicit Mat(Ctx ctx, isl_mat *That) : ctx(ctx), This(That) {}
+  Mat() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

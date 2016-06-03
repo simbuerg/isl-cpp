@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit SetList(Ctx ctx, isl_set_list *That) : ctx(ctx), This(That) {}
+  SetList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

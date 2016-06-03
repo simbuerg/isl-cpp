@@ -26,6 +26,7 @@ protected:
   void * This;
 public:
   explicit MultiAff(Ctx ctx, isl_multi_aff *That) : ctx(ctx), This(That) {}
+  MultiAff() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

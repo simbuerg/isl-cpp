@@ -17,6 +17,7 @@ protected:
   void * This;
 public:
   explicit AstPrintOptions(Ctx ctx, isl_ast_print_options *That) : ctx(ctx), This(That) {}
+  AstPrintOptions() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

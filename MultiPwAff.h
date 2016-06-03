@@ -26,6 +26,7 @@ protected:
   void * This;
 public:
   explicit MultiPwAff(Ctx ctx, isl_multi_pw_aff *That) : ctx(ctx), This(That) {}
+  MultiPwAff() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

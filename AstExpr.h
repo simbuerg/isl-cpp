@@ -17,6 +17,7 @@ protected:
   void * This;
 public:
   explicit AstExpr(Ctx ctx, isl_ast_expr *That) : ctx(ctx), This(That) {}
+  AstExpr() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

@@ -22,6 +22,7 @@ protected:
   void * This;
 public:
   explicit UnionPwMultiAff(Ctx ctx, isl_union_pw_multi_aff *That) : ctx(ctx), This(That) {}
+  UnionPwMultiAff() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

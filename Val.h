@@ -20,6 +20,7 @@ protected:
   void * This;
 public:
   explicit Val(Ctx ctx, isl_val *That) : ctx(ctx), This(That) {}
+  Val() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

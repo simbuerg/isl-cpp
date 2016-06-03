@@ -20,6 +20,7 @@ protected:
   void * This;
 public:
   explicit BandList(Ctx ctx, isl_band_list *That) : ctx(ctx), This(That) {}
+  BandList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

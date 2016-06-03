@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit Term(Ctx ctx, isl_term *That) : ctx(ctx), This(That) {}
+  Term() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

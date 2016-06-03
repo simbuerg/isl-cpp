@@ -34,6 +34,7 @@ protected:
   void * This;
 public:
   explicit BasicMap(Ctx ctx, isl_basic_map *That) : ctx(ctx), This(That) {}
+  BasicMap() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

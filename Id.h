@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit Id(Ctx ctx, isl_id *That) : ctx(ctx), This(That) {}
+  Id() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

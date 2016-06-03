@@ -32,6 +32,7 @@ protected:
   void * This;
 public:
   explicit PwQpolynomial(Ctx ctx, isl_pw_qpolynomial *That) : ctx(ctx), This(That) {}
+  PwQpolynomial() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

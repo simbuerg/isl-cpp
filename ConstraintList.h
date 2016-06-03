@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit ConstraintList(Ctx ctx, isl_constraint_list *That) : ctx(ctx), This(That) {}
+  ConstraintList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 

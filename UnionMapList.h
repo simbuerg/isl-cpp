@@ -19,6 +19,7 @@ protected:
   void * This;
 public:
   explicit UnionMapList(Ctx ctx, isl_union_map_list *That) : ctx(ctx), This(That) {}
+  UnionMapList() : ctx(Ctx(nullptr)), This(nullptr) {}
 
   const Ctx &Context() const { return ctx; }
 
