@@ -114,6 +114,13 @@ public:
   virtual ~UnionMap();
 
 
+  /// \brief Generated from  ::<isl_union_map_add_map>
+  ///
+  /// \param [in] map
+  ///
+  /// \returns A new UnionMap
+  UnionMap addMap(const Map &map) const;
+
   /// \brief Generated from  ::<isl_union_map_affine_hull>
   ///
   ///

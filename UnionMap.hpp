@@ -183,6 +183,16 @@ inline isl_union_map *UnionMap::Give() {
 inline isl_union_map *UnionMap::Get() const {  return (isl_union_map *)This;
 }
 
+inline UnionMap UnionMap::addMap(const Map &map) const {
+  ctx.lock();
+  isl_union_map * res =  isl_union_map_add_map((*this).GetCopy(), (map).GetCopy());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_union_map_add_map returned a NULL pointer.");
+  }
+  return UnionMap(ctx, res);
+}
+
 inline UnionMap UnionMap::affineHull() const {
   ctx.lock();
   isl_union_map * res =  isl_union_map_affine_hull((*this).GetCopy());
