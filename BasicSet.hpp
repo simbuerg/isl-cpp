@@ -9,6 +9,7 @@
 #include "isl/Mat.hpp"
 #include "isl/Point.hpp"
 #include "isl/Space.hpp"
+#include "isl/Val.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
 #include "isl/DimType.h"
@@ -247,6 +248,16 @@ inline Mat BasicSet::equalitiesMatrix(DimType c1, DimType c2, DimType c3, DimTyp
     handleError("isl_basic_set_equalities_matrix returned a NULL pointer.");
   }
   return Mat(ctx, res);
+}
+
+inline BasicSet BasicSet::fixVal(DimType type, unsigned int pos, const Val &v) const {
+  ctx.lock();
+  isl_basic_set * res =  isl_basic_set_fix_val((*this).GetCopy(), (enum isl_dim_type)type, pos, (v).GetCopy());
+  ctx.unlock();
+  if (ctx.hasError()) {
+    handleError("isl_basic_set_fix_val returned a NULL pointer.");
+  }
+  return BasicSet(ctx, res);
 }
 
 inline BasicSet BasicSet::flatProduct(const BasicSet &bset2) const {

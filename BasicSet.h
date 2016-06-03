@@ -22,6 +22,7 @@ class Id;
 class Mat;
 class Point;
 class Space;
+class Val;
 
 class BasicSet {
 protected:
@@ -186,6 +187,15 @@ public:
   ///
   /// \returns A new Mat
   Mat equalitiesMatrix(DimType c1, DimType c2, DimType c3, DimType c4) const;
+
+  /// \brief Generated from  ::<isl_basic_set_fix_val>
+  ///
+  /// \param [in] type
+  /// \param [in] pos
+  /// \param [in] v
+  ///
+  /// \returns A new BasicSet
+  BasicSet fixVal(DimType type, unsigned int pos, const Val &v) const;
 
   /// \brief Generated from  ::<isl_basic_set_flat_product>
   ///
