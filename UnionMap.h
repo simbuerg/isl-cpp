@@ -7,6 +7,7 @@
 #include "isl/flow.h"
 #include "isl/Bool.h"
 #include "isl/Ctx.h"
+#include "isl/DimType.h"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
@@ -205,6 +206,13 @@ public:
   ///
   /// \returns A new UnionMap
   UnionMap detectEqualities() const;
+
+  /// \brief Generated from  ::<isl_union_map_dim>
+  ///
+  /// \param [in] type
+  ///
+  /// \returns A new unsigned int
+  unsigned int dim(DimType type) const;
 
   /// \brief Generated from  ::<isl_union_map_domain>
   ///

@@ -14,6 +14,7 @@
 #include "isl/Val.hpp"
 #include "isl/Bool.h"
 #include "isl/Ctx.hpp"
+#include "isl/DimType.h"
 #include "isl/Format.h"
 #include "isl/IslBase.h"
 #include "isl/IslException.h"
@@ -337,6 +338,13 @@ inline UnionMap UnionMap::detectEqualities() const {
     handleError("isl_union_map_detect_equalities returned a NULL pointer.");
   }
   return UnionMap(ctx, res);
+}
+
+inline unsigned int UnionMap::dim(DimType type) const {
+  ctx.lock();
+  unsigned int res =  isl_union_map_dim((*this).Get(), (enum isl_dim_type)type);
+  ctx.unlock();
+  return res;
 }
 
 inline UnionSet UnionMap::domain() const {
