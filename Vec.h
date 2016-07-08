@@ -174,6 +174,7 @@ public:
     isl_vec *New = Other.Give();
     isl_vec_free((isl_vec *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

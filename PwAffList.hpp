@@ -18,6 +18,7 @@ inline isl_pw_aff_list *PwAffList::GetCopy() const {
 }
 inline PwAffList &PwAffList::operator=(const PwAffList &Other) {
   isl_pw_aff_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_pw_aff_list_free((isl_pw_aff_list *)This);
   This = New;
   return *this;

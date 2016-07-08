@@ -1039,6 +1039,7 @@ public:
     isl_map *New = Other.Give();
     isl_map_free((isl_map *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

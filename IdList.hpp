@@ -18,6 +18,7 @@ inline isl_id_list *IdList::GetCopy() const {
 }
 inline IdList &IdList::operator=(const IdList &Other) {
   isl_id_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_id_list_free((isl_id_list *)This);
   This = New;
   return *this;

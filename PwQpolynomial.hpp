@@ -31,6 +31,7 @@ inline isl_pw_qpolynomial *PwQpolynomial::GetCopy() const {
 }
 inline PwQpolynomial &PwQpolynomial::operator=(const PwQpolynomial &Other) {
   isl_pw_qpolynomial *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_pw_qpolynomial_free((isl_pw_qpolynomial *)This);
   This = New;
   return *this;

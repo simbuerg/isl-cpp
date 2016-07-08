@@ -23,6 +23,7 @@ inline isl_constraint *Constraint::GetCopy() const {
 }
 inline Constraint &Constraint::operator=(const Constraint &Other) {
   isl_constraint *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_constraint_free((isl_constraint *)This);
   This = New;
   return *this;

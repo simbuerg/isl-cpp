@@ -202,6 +202,7 @@ public:
     isl_local_space *New = Other.Give();
     isl_local_space_free((isl_local_space *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

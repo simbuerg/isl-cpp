@@ -22,6 +22,7 @@ inline isl_multi_val *MultiVal::GetCopy() const {
 }
 inline MultiVal &MultiVal::operator=(const MultiVal &Other) {
   isl_multi_val *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_multi_val_free((isl_multi_val *)This);
   This = New;
   return *this;

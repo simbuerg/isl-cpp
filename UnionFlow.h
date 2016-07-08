@@ -84,6 +84,7 @@ public:
     isl_union_flow *New = Other.Give();
     isl_union_flow_free((isl_union_flow *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

@@ -182,6 +182,7 @@ public:
     isl_union_pw_qpolynomial_fold *New = Other.Give();
     isl_union_pw_qpolynomial_fold_free((isl_union_pw_qpolynomial_fold *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

@@ -25,6 +25,7 @@ inline isl_multi_aff *MultiAff::GetCopy() const {
 }
 inline MultiAff &MultiAff::operator=(const MultiAff &Other) {
   isl_multi_aff *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_multi_aff_free((isl_multi_aff *)This);
   This = New;
   return *this;

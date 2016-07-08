@@ -57,6 +57,7 @@ public:
     isl_basic_map_list *New = Other.Give();
     isl_basic_map_list_free((isl_basic_map_list *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

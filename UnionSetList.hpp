@@ -18,6 +18,7 @@ inline isl_union_set_list *UnionSetList::GetCopy() const {
 }
 inline UnionSetList &UnionSetList::operator=(const UnionSetList &Other) {
   isl_union_set_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_union_set_list_free((isl_union_set_list *)This);
   This = New;
   return *this;

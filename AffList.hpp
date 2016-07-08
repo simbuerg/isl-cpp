@@ -18,6 +18,7 @@ inline isl_aff_list *AffList::GetCopy() const {
 }
 inline AffList &AffList::operator=(const AffList &Other) {
   isl_aff_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_aff_list_free((isl_aff_list *)This);
   This = New;
   return *this;

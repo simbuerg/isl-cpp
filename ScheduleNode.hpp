@@ -30,6 +30,7 @@ inline isl_schedule_node *ScheduleNode::GetCopy() const {
 }
 inline ScheduleNode &ScheduleNode::operator=(const ScheduleNode &Other) {
   isl_schedule_node *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_schedule_node_free((isl_schedule_node *)This);
   This = New;
   return *this;

@@ -16,6 +16,7 @@ inline isl_ast_print_options *AstPrintOptions::GetCopy() const {
 }
 inline AstPrintOptions &AstPrintOptions::operator=(const AstPrintOptions &Other) {
   isl_ast_print_options *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_ast_print_options_free((isl_ast_print_options *)This);
   This = New;
   return *this;

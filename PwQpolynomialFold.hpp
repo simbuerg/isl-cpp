@@ -29,6 +29,7 @@ inline isl_pw_qpolynomial_fold *PwQpolynomialFold::GetCopy() const {
 }
 inline PwQpolynomialFold &PwQpolynomialFold::operator=(const PwQpolynomialFold &Other) {
   isl_pw_qpolynomial_fold *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_pw_qpolynomial_fold_free((isl_pw_qpolynomial_fold *)This);
   This = New;
   return *this;

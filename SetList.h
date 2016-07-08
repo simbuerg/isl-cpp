@@ -57,6 +57,7 @@ public:
     isl_set_list *New = Other.Give();
     isl_set_list_free((isl_set_list *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

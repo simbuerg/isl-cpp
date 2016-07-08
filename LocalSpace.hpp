@@ -23,6 +23,7 @@ inline isl_local_space *LocalSpace::GetCopy() const {
 }
 inline LocalSpace &LocalSpace::operator=(const LocalSpace &Other) {
   isl_local_space *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_local_space_free((isl_local_space *)This);
   This = New;
   return *this;

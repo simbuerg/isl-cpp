@@ -66,6 +66,7 @@ public:
     isl_band_list *New = Other.Give();
     isl_band_list_free((isl_band_list *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

@@ -149,6 +149,7 @@ public:
     isl_multi_val *New = Other.Give();
     isl_multi_val_free((isl_multi_val *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

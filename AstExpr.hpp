@@ -16,6 +16,7 @@ inline isl_ast_expr *AstExpr::GetCopy() const {
 }
 inline AstExpr &AstExpr::operator=(const AstExpr &Other) {
   isl_ast_expr *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_ast_expr_free((isl_ast_expr *)This);
   This = New;
   return *this;

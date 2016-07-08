@@ -18,6 +18,7 @@ inline isl_union_map_list *UnionMapList::GetCopy() const {
 }
 inline UnionMapList &UnionMapList::operator=(const UnionMapList &Other) {
   isl_union_map_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_union_map_list_free((isl_union_map_list *)This);
   This = New;
   return *this;

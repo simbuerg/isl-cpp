@@ -34,6 +34,7 @@ inline isl_map *Map::GetCopy() const {
 }
 inline Map &Map::operator=(const Map &Other) {
   isl_map *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_map_free((isl_map *)This);
   This = New;
   return *this;

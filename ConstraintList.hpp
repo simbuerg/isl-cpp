@@ -18,6 +18,7 @@ inline isl_constraint_list *ConstraintList::GetCopy() const {
 }
 inline ConstraintList &ConstraintList::operator=(const ConstraintList &Other) {
   isl_constraint_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_constraint_list_free((isl_constraint_list *)This);
   This = New;
   return *this;

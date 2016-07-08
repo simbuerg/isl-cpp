@@ -18,6 +18,7 @@ inline isl_val_list *ValList::GetCopy() const {
 }
 inline ValList &ValList::operator=(const ValList &Other) {
   isl_val_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_val_list_free((isl_val_list *)This);
   This = New;
   return *this;

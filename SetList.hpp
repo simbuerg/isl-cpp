@@ -18,6 +18,7 @@ inline isl_set_list *SetList::GetCopy() const {
 }
 inline SetList &SetList::operator=(const SetList &Other) {
   isl_set_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_set_list_free((isl_set_list *)This);
   This = New;
   return *this;

@@ -18,6 +18,7 @@ inline isl_basic_map_list *BasicMapList::GetCopy() const {
 }
 inline BasicMapList &BasicMapList::operator=(const BasicMapList &Other) {
   isl_basic_map_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_basic_map_list_free((isl_basic_map_list *)This);
   This = New;
   return *this;

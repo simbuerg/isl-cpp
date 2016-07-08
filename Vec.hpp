@@ -20,6 +20,7 @@ inline isl_vec *Vec::GetCopy() const {
 }
 inline Vec &Vec::operator=(const Vec &Other) {
   isl_vec *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_vec_free((isl_vec *)This);
   This = New;
   return *this;

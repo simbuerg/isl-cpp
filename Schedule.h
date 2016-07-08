@@ -96,6 +96,7 @@ public:
   Schedule (Schedule && Other) : ctx(Other.Context()), This(Other.This) {}
   Schedule &operator=(Schedule && Other) {
     std::swap(This, Other.This);
+    ctx = Other.Context();
     return *this;
   }
 };

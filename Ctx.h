@@ -99,6 +99,9 @@ public:
   /// \returns A new Stat
   Stat setTileShiftPointLoops(int val) const;
 
-  Ctx(const Ctx &Other) : Ctx(Other.This) {}};
+  Ctx(const Ctx &Other) : This(Other.This) {}  Ctx&operator=(const Ctx &Other) {
+    This = Other.This;
+    return *this;
+  }};
 } // namespace isl
 #endif //ISL_CXX_Ctx_H

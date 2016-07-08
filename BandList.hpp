@@ -19,6 +19,7 @@ inline isl_band_list *BandList::GetCopy() const {
 }
 inline BandList &BandList::operator=(const BandList &Other) {
   isl_band_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_band_list_free((isl_band_list *)This);
   This = New;
   return *this;

@@ -29,6 +29,7 @@ inline isl_union_set *UnionSet::GetCopy() const {
 }
 inline UnionSet &UnionSet::operator=(const UnionSet &Other) {
   isl_union_set *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_union_set_free((isl_union_set *)This);
   This = New;
   return *this;

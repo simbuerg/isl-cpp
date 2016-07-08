@@ -265,6 +265,7 @@ public:
     isl_multi_union_pw_aff *New = Other.Give();
     isl_multi_union_pw_aff_free((isl_multi_union_pw_aff *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

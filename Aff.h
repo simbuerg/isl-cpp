@@ -449,6 +449,7 @@ public:
     isl_aff *New = Other.Give();
     isl_aff_free((isl_aff *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

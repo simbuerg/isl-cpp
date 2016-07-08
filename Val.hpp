@@ -19,6 +19,7 @@ inline isl_val *Val::GetCopy() const {
 }
 inline Val &Val::operator=(const Val &Other) {
   isl_val *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_val_free((isl_val *)This);
   This = New;
   return *this;

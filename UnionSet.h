@@ -378,6 +378,7 @@ public:
     isl_union_set *New = Other.Give();
     isl_union_set_free((isl_union_set *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

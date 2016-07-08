@@ -760,6 +760,7 @@ public:
     isl_set *New = Other.Give();
     isl_set_free((isl_set *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

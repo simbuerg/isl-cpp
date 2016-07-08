@@ -18,6 +18,7 @@ inline isl_term *Term::GetCopy() const {
 }
 inline Term &Term::operator=(const Term &Other) {
   isl_term *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_term_free((isl_term *)This);
   This = New;
   return *this;

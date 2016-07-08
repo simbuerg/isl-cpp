@@ -30,6 +30,7 @@ inline isl_qpolynomial *Qpolynomial::GetCopy() const {
 }
 inline Qpolynomial &Qpolynomial::operator=(const Qpolynomial &Other) {
   isl_qpolynomial *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_qpolynomial_free((isl_qpolynomial *)This);
   This = New;
   return *this;

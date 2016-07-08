@@ -65,6 +65,7 @@ public:
     isl_term *New = Other.Give();
     isl_term_free((isl_term *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

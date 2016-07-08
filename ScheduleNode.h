@@ -594,6 +594,7 @@ public:
     isl_schedule_node *New = Other.Give();
     isl_schedule_node_free((isl_schedule_node *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

@@ -90,6 +90,7 @@ public:
     isl_union_access_info *New = Other.Give();
     isl_union_access_info_free((isl_union_access_info *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

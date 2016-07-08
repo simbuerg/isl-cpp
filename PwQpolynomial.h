@@ -358,6 +358,7 @@ public:
     isl_pw_qpolynomial *New = Other.Give();
     isl_pw_qpolynomial_free((isl_pw_qpolynomial *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

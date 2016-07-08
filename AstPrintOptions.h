@@ -41,6 +41,7 @@ public:
     isl_ast_print_options *New = Other.Give();
     isl_ast_print_options_free((isl_ast_print_options *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

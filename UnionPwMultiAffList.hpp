@@ -18,6 +18,7 @@ inline isl_union_pw_multi_aff_list *UnionPwMultiAffList::GetCopy() const {
 }
 inline UnionPwMultiAffList &UnionPwMultiAffList::operator=(const UnionPwMultiAffList &Other) {
   isl_union_pw_multi_aff_list *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_union_pw_multi_aff_list_free((isl_union_pw_multi_aff_list *)This);
   This = New;
   return *this;

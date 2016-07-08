@@ -29,6 +29,7 @@ inline isl_basic_set *BasicSet::GetCopy() const {
 }
 inline BasicSet &BasicSet::operator=(const BasicSet &Other) {
   isl_basic_set *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_basic_set_free((isl_basic_set *)This);
   This = New;
   return *this;

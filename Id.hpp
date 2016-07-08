@@ -18,6 +18,7 @@ inline isl_id *Id::GetCopy() const {
 }
 inline Id &Id::operator=(const Id &Other) {
   isl_id *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_id_free((isl_id *)This);
   This = New;
   return *this;

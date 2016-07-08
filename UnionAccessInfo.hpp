@@ -19,6 +19,7 @@ inline isl_union_access_info *UnionAccessInfo::GetCopy() const {
 }
 inline UnionAccessInfo &UnionAccessInfo::operator=(const UnionAccessInfo &Other) {
   isl_union_access_info *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_union_access_info_free((isl_union_access_info *)This);
   This = New;
   return *this;

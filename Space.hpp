@@ -21,6 +21,7 @@ inline isl_space *Space::GetCopy() const {
 }
 inline Space &Space::operator=(const Space &Other) {
   isl_space *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_space_free((isl_space *)This);
   This = New;
   return *this;

@@ -27,6 +27,7 @@ inline isl_aff *Aff::GetCopy() const {
 }
 inline Aff &Aff::operator=(const Aff &Other) {
   isl_aff *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_aff_free((isl_aff *)This);
   This = New;
   return *this;

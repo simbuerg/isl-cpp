@@ -21,6 +21,7 @@ inline isl_point *Point::GetCopy() const {
 }
 inline Point &Point::operator=(const Point &Other) {
   isl_point *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_point_free((isl_point *)This);
   This = New;
   return *this;

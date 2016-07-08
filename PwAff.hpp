@@ -32,6 +32,7 @@ inline isl_pw_aff *PwAff::GetCopy() const {
 }
 inline PwAff &PwAff::operator=(const PwAff &Other) {
   isl_pw_aff *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_pw_aff_free((isl_pw_aff *)This);
   This = New;
   return *this;

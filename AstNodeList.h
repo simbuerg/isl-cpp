@@ -57,6 +57,7 @@ public:
     isl_ast_node_list *New = Other.Give();
     isl_ast_node_list_free((isl_ast_node_list *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

@@ -111,6 +111,7 @@ public:
     isl_point *New = Other.Give();
     isl_point_free((isl_point *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

@@ -35,6 +35,7 @@ inline isl_set *Set::GetCopy() const {
 }
 inline Set &Set::operator=(const Set &Other) {
   isl_set *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_set_free((isl_set *)This);
   This = New;
   return *this;

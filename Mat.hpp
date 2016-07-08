@@ -19,6 +19,7 @@ inline isl_mat *Mat::GetCopy() const {
 }
 inline Mat &Mat::operator=(const Mat &Other) {
   isl_mat *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_mat_free((isl_mat *)This);
   This = New;
   return *this;

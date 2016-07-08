@@ -16,6 +16,7 @@ inline isl_ast_node *AstNode::GetCopy() const {
 }
 inline AstNode &AstNode::operator=(const AstNode &Other) {
   isl_ast_node *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_ast_node_free((isl_ast_node *)This);
   This = New;
   return *this;

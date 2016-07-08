@@ -31,6 +31,7 @@ inline isl_multi_union_pw_aff *MultiUnionPwAff::GetCopy() const {
 }
 inline MultiUnionPwAff &MultiUnionPwAff::operator=(const MultiUnionPwAff &Other) {
   isl_multi_union_pw_aff *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_multi_union_pw_aff_free((isl_multi_union_pw_aff *)This);
   This = New;
   return *this;

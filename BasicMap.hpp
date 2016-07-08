@@ -33,6 +33,7 @@ inline isl_basic_map *BasicMap::GetCopy() const {
 }
 inline BasicMap &BasicMap::operator=(const BasicMap &Other) {
   isl_basic_map *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_basic_map_free((isl_basic_map *)This);
   This = New;
   return *this;

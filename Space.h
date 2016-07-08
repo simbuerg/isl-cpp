@@ -468,6 +468,7 @@ public:
     isl_space *New = Other.Give();
     isl_space_free((isl_space *)This);
     This = New;
+    ctx = Other.Context();
     return *this;
   }
   /// \brief Implement lt via pointer comparison of the

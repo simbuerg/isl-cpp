@@ -29,6 +29,7 @@ inline isl_pw_multi_aff *PwMultiAff::GetCopy() const {
 }
 inline PwMultiAff &PwMultiAff::operator=(const PwMultiAff &Other) {
   isl_pw_multi_aff *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_pw_multi_aff_free((isl_pw_multi_aff *)This);
   This = New;
   return *this;

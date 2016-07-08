@@ -17,6 +17,7 @@ inline isl_union_flow *UnionFlow::GetCopy() const {
 }
 inline UnionFlow &UnionFlow::operator=(const UnionFlow &Other) {
   isl_union_flow *New = Other.GetCopy();
+  ctx = Other.Context();
   isl_union_flow_free((isl_union_flow *)This);
   This = New;
   return *this;
